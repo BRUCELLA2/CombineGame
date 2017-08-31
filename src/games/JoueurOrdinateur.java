@@ -34,7 +34,25 @@ public class JoueurOrdinateur extends Joueur{
 	 * @see #setAffichage(Affichage)
 	 */
 	private ArrayList<String> listResultats = new ArrayList<>();
-
+	
+	/**
+	 * Liste les maximums pour chaque chiffre constituant le nombre mystère<br>
+	 * 
+	 * @see #getValeurMax()
+	 * @see #setValeurMax(ArrayList)
+	 * 
+	 */
+	private ArrayList<Integer> valeurMax = new ArrayList<>();
+	
+	/**
+	 * Liste les minimums pour chaque chiffre constituant le nombre mystère<br>
+	 * 
+	 * @see #getValeurMin()
+	 * @see #setValeurMin(ArrayList)
+	 * 
+	 */
+	private ArrayList<Integer> valeurMin = new ArrayList<>();
+	
 //***** CONSTRUCTEURS *****/
 	
 	/**
@@ -43,9 +61,15 @@ public class JoueurOrdinateur extends Joueur{
 	 * @param pNomJoueur Nom du JoueurOrdinateur
 	 * @param pAffichage Affichage utilisé par l'objet JoueurOrdinateur
 	 */
-	public JoueurOrdinateur(String pNomJoueur, Affichage pAffichage) {
+	//TODO mettre en constante globale le nb de chiffres mystères
+	public JoueurOrdinateur(String pNomJoueur, Affichage pAffichage, int pNbChiffresMysteres) {
 		
 		super(pNomJoueur, pAffichage);
+		
+		for(int i=0; i < pNbChiffresMysteres; i++) {
+			this.getValeurMax().add(9);
+			this.getValeurMin().add(0);
+		}
 	}
 
 //***** GETTERS *****/
@@ -76,6 +100,27 @@ public class JoueurOrdinateur extends Joueur{
 		return this.listResultats;
 	}
 	
+	/**
+	 * Retourne la liste des valeurs maximum des chiffres constituants le nombre mystère
+	 * 
+	 * @return la liste des valeurs maximum des chiffres constituants le nombre mystère
+	 * 
+	 * @see #setValeurMax(ArrayList)
+	 */
+	public ArrayList<Integer> getValeurMax(){
+		return this.valeurMax;
+	}
+	
+	/**
+	 * Retourne la liste des valeurs minimums des chiffres constituants le nombre mystère
+	 * 
+	 * @return la liste des valeurs minimums des chiffres constituants le nombre mystère
+	 * 
+	 * @see #setValeurMin(ArrayList)
+	 */
+	public ArrayList<Integer> getValeurMin(){
+		return this.valeurMin;
+	}
 //***** SETTERS *****/
 	
 	/**
@@ -106,6 +151,28 @@ public class JoueurOrdinateur extends Joueur{
 		this.listResultats = pListResultats;
 	}
 	
+	/**
+	 * Permet de définir la liste des valeurs maximales pour les chiffres constituant le nombre mystère
+	 * 
+	 * @param pValeurMax Liste des valeurs maximales pour les chiffres constituant le nombre mystère
+	 * 
+	 * @see #getValeurMax()
+	 */
+	public void setValeurMax(ArrayList<Integer> pValeurMax) {
+		this.valeurMax = pValeurMax;
+	}
+	
+	/**
+	 * Permet de définir la liste des valeurs minimales pour les chiffres constituant le nombre mystère
+	 * 
+	 * @param pValeurMin Liste des valeurs minimales pour les chiffres constituant le nombre mystère
+	 * 
+	 * @see #getValeurMin()
+	 */
+	public void setValeurMin(ArrayList<Integer> pValeurMin) {
+		this.valeurMin = pValeurMin;
+	}
+	
 //***** METHODES *****/
 	
 	/**
@@ -133,7 +200,8 @@ public class JoueurOrdinateur extends Joueur{
 			nombre.add(new Integer((int) ((9-0)*Math.random())));
 		}
 		*/
-		//TODO IA a améliorer en utilisant la dichotomie.
+		
+		/* VERSION IA MEDIUM
 		for(int i=0; i < pNbChiffre; i++) {
 			
 			if(derniereProposition.isEmpty()) {
@@ -148,6 +216,33 @@ public class JoueurOrdinateur extends Joueur{
 					break;
 				case '-':
 					nombre.add(new Integer((int) ((derniereProposition.get(i).intValue()-0)*Math.random())));
+					break;
+				case '=':
+					nombre.add(new Integer(derniereProposition.get(i).intValue()));
+					break;
+					
+				default:
+					break;
+				}
+			}
+		}*/
+		
+		for(int i=0; i < pNbChiffre; i++) {
+			
+			if(derniereProposition.isEmpty()) {
+				nombre.add(new Integer((int) ((9-0)*Math.random())));
+			}
+			else {
+				
+				switch(this.getListResultats().get(this.getListResultats().size()-1).charAt(i)) {
+				
+				case '+':
+					this.getValeurMin().set(i,derniereProposition.get(i));
+					nombre.add(new Integer((((this.getValeurMax().get(i).intValue()+1)-derniereProposition.get(i).intValue())/2) + derniereProposition.get(i)));
+					break;
+				case '-':
+					this.getValeurMax().set(i,derniereProposition.get(i));
+					nombre.add(new Integer(derniereProposition.get(i).intValue() - ((derniereProposition.get(i).intValue()-(this.getValeurMin().get(i).intValue()-1))/2)));
 					break;
 				case '=':
 					nombre.add(new Integer(derniereProposition.get(i).intValue()));

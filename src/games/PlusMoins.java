@@ -106,6 +106,7 @@ public class PlusMoins extends Game{
 			this.getAffichage().affiche(nombre);
 			this.getAffichage().afficheln(resultat);
 			
+			//TODO Refaire la comparaison directement avec les arraylist pour prendre en compte le nb de chiffres en paramètrage du jeu
 			if(comparaison.equals("====")) { //$NON-NLS-1$
 				this.victoire();	
 			}
@@ -133,7 +134,7 @@ public class PlusMoins extends Game{
 	public void playDefenser() {
 
 		JoueurHumain joueurHumain = new JoueurHumain("Joueur", this.getAffichage()); //$NON-NLS-1$
-		JoueurOrdinateur joueurOrdinateur = new JoueurOrdinateur("Ordinateur", this.getAffichage()); //$NON-NLS-1$
+		JoueurOrdinateur joueurOrdinateur = new JoueurOrdinateur("Ordinateur", this.getAffichage(), this.getNbChiffresMysteres()); //$NON-NLS-1$
 		this.setNombreMystere(joueurHumain.creerNombreMystere(this.getNbChiffresMysteres()));
 		//TODO warning a prendre en compte
 		@SuppressWarnings("resource")
@@ -174,9 +175,68 @@ public class PlusMoins extends Game{
 	 *
 	 */
 	@Override
+	//TODO A refaire, ne correspond pas à l'énoncé.
 	public void playDuel() {
-		// TODO Auto-generated method stub
-		System.out.println("duel"); //$NON-NLS-1$
+		
+		JoueurHumain joueurHumain= new JoueurHumain("Joueur", this.getAffichage()); //$NON-NLS-1$
+		this.joueurs.add(joueurHumain);
+		JoueurOrdinateur joueurOrdinateur = new JoueurOrdinateur("Ordinateur", this.getAffichage(), this.getNbChiffresMysteres()); //$NON-NLS-1$
+		this.joueurs.add(joueurOrdinateur);
+		String compNbHumain = new String();
+		String compNbOrdinateur= new String();
+		
+		this.genereNombreMystere();
+		this.getAffichage().afficheln("Un nombre a été généré. A vous de le deviner. Que le meilleur gagne"); //$NON-NLS-1$
+		
+		while(!this.isFinPartie()) {
+			
+			for(Joueur joueur : this.getJoueurs()) {
+				
+				ArrayList<Integer> nombre = new ArrayList<>();			
+				nombre = joueur.donneNombre(this.getNbChiffresMysteres());
+				
+				
+				if(joueur instanceof JoueurHumain) {
+					compNbHumain = this.compareNombre(nombre);
+					String resultat = " -> Réponse : " + compNbHumain; //$NON-NLS-1$
+					
+					this.getAffichage().affiche(("Votre proposition : ")); //$NON-NLS-1$
+					this.getAffichage().affiche(nombre);
+					this.getAffichage().afficheln(resultat);
+					
+					if(compNbHumain.equals("====")) { //$NON-NLS-1$
+						this.victoire();	
+					}
+					
+					//TODO Mettre nb de coups comme variable du joueur ? 1 coup = 1 tour donc pas nécessaire ?
+					/*if(!comparaison.equals("====") && this.getNbCoups() == 1) { //$NON-NLS-1$
+						this.defaite();
+					}*/
+				}
+				else if (!this.isFinPartie()) {
+					compNbOrdinateur = this.compareNombre(nombre);
+					joueurOrdinateur.addResultat(compNbOrdinateur);
+					String resultat = " -> Réponse : " + compNbOrdinateur; //$NON-NLS-1$
+					
+					this.getAffichage().affiche(("L'ordinateur a proposé un nombre. "));//$NON-NLS-1$
+					this.getAffichage().afficheln(resultat);
+					
+					if(compNbOrdinateur.equals("====")) { //$NON-NLS-1$
+						this.getAffichage().afficheln("L'ordinateur a proposé les valeurs suivantes :"); //$NON-NLS-1$
+						for(ArrayList<Integer> proposition : joueurOrdinateur.getListNumberProposed()) {
+							this.getAffichage().affiche(proposition);
+							this.getAffichage().affiche("\n"); //$NON-NLS-1$
+						}
+
+						this.defaite();	
+					}
+				}
+			}
+			if(!compNbHumain.equals("====") && !compNbOrdinateur.equals("====") && this.getNbCoups() == 1) { //$NON-NLS-1$ //$NON-NLS-2$
+				this.egalite();
+			}
+			this.setNbCoups(this.getNbCoups()-1);
+		}
 	}
 	
 }

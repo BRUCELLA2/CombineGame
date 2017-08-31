@@ -63,6 +63,7 @@ public abstract class Game {
 	 * @see #genereNombreMystere()
 	 * 
 	 */
+	//TODO A supprimer ? à transformer en liste d'ArrayList pour gérer le mode duel ? A dupliquer pour gérer 2 nombres mystères ?
 	ArrayList<Integer> nombreMystere = new ArrayList<>();
 	
 	/**
@@ -381,6 +382,17 @@ public abstract class Game {
 	protected void victoire() {
 
 		this.getAffichage().afficheln("\n Bravo ! Vous avez gagné"); //$NON-NLS-1$
+		this.setFinPartie(true);
+	}
+	
+	/**
+	 * Cette méthode permet de mettre un terme à la partie en indiquant une égalité entre le joueur et l'ordinateur.<br>
+	 * Le message est "Personne n'a gagné"
+	 * 
+	 */
+	protected void egalite() {
+		
+		this.getAffichage().afficheln("\n Personne n'a gagné"); //$NON-NLS-1$
 		this.setFinPartie(true);
 	}
 	

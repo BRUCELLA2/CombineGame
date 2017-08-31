@@ -135,7 +135,7 @@ public class Affichage {
 	 * @param pArrayList ArrayList d'entier à afficher
 	 */
 	@SuppressWarnings("static-method")
-	public void Afficheln(ArrayList<Integer> pArrayList) {
+	public void afficheln(ArrayList<Integer> pArrayList) {
 		
 		String str = ""; //$NON-NLS-1$
 		ListIterator<Integer> li = pArrayList.listIterator();
