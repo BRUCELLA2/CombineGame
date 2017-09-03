@@ -11,7 +11,7 @@ import display.Display;
  * <br>
  * 
  * @author BRUCELLA2
- * @version 1.0
+ * @version 1.0.1
  *
  */
 public abstract class Player {
@@ -101,25 +101,23 @@ public abstract class Player {
 	/**
 	 * This method is used to obtain a number in the form of an ArrayList of integer.<br>
 	 * <br>
-	 * This number has a limited number of digits (provided in parameters).<br>
+	 * This number has a limited number of digits.<br>
 	 * This method is redefined in the different daughter's classes.
 	 * 
-	 * @param pDigitsNumber Number of digits constituting the number returned
 	 * @return A number in the form of an ArrayList of integer
 	 * 
 	 * @see #getNumberInput(int)
 	 */
-	public abstract ArrayList<Integer> giveNumber(int pDigitsNumber);
+	public abstract ArrayList<Integer> giveNumber();
 	
 	/**
 	 * This method allows to get the number entered by the user and return is as an ArrayList of integer.<br>
 	 * <br>
 	 * 
-	 * @param pDigitsNumber Number of digits constituting the number returned
 	 * @return A number in the form of an ArrayList of integer
 	 */
 	//TODO Move this method in HumanPlayer
-	protected ArrayList<Integer> getNumberInput(int pDigitsNumber){
+	protected ArrayList<Integer> getNumberInput(){
 		
 		String str;
 		ArrayList<Integer> number = new ArrayList<>();
@@ -129,8 +127,8 @@ public abstract class Player {
 		Scanner scan = new Scanner(System.in);
 		str = scan.nextLine();
 			
-		if (str.length() == pDigitsNumber) {
-			for(int i = 0; i < pDigitsNumber; i++) {
+		if (str.length() == CombineGame.NB_DIGITS_MYSTERY) {
+			for(int i = 0; i < CombineGame.NB_DIGITS_MYSTERY; i++) {
 				if(Character.isDigit(str.charAt(i))) {
 					number.add(new Integer(Character.getNumericValue(str.charAt(i))));
 				}

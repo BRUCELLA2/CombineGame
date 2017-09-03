@@ -8,7 +8,7 @@ import display.Display;
  * <b>This class represents a human player</b>
  * 
  * @author BRUCELLA2
- * @version 1.0
+ * @version 1.0.1
  */
 public class HumanPlayer extends Player {
 	
@@ -31,17 +31,16 @@ public class HumanPlayer extends Player {
 	 * <br>
 	 * This number is retrieved as String and transformed into an ArrayList of integer.  
 	 * 
-	 * @param pDigitsNumber Number of digits constituting the number returned
 	 * @return A number in the form of an ArrayList of integer
 	 */
 	@Override
-	public ArrayList<Integer> giveNumber(int pDigitsNumber) {
+	public ArrayList<Integer> giveNumber() {
 		
 		ArrayList<Integer> number = new ArrayList<>();
 		
 		do {
 			this.getDisplay().println("Donnez le nombre mystère : "); //$NON-NLS-1$
-			number = this.getNumberInput(pDigitsNumber);
+			number = this.getNumberInput();
 		}
 		while(number.isEmpty());
 		
@@ -53,16 +52,15 @@ public class HumanPlayer extends Player {
 	 * <br>
 	 * This number obtained as String is transformed into an integer ArrayList.  
 	 * 
-	 * @param pDigitsNumber Number of digits constituting the number returned
 	 * @return A number in the form of an ArrayList of integer
 	 */
-	public ArrayList<Integer> createMysteryNumber(int pDigitsNumber){
+	public ArrayList<Integer> createMysteryNumber(){
 		
 		ArrayList<Integer> number = new ArrayList<>();
 		
 		do {
 			this.getDisplay().println("Donnez le nombre mystère : "); //$NON-NLS-1$
-			number = this.getNumberInput(pDigitsNumber);
+			number = this.getNumberInput();
 		}while(number.isEmpty());
 		
 		return number;	

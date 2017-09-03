@@ -8,7 +8,7 @@ import display.Display;
  * <b>This class represents a player simulated by the computer.</b><br>
  * 
  * @author BRUCELLA2
- * @version 1.0.1
+ * @version 1.0.2
  *
  */
 public class ComputerPlayer extends Player{
@@ -60,15 +60,14 @@ public class ComputerPlayer extends Player{
 	 * 
 	 * @param pPlayerName ComputerPlayer's name
 	 * @param pDisplay The display to used
-	 * @param nbDigitsMysteryNumber Number of digits constituting the mystery number 
 	 */
 	//TODO mettre en constante globale le nb de chiffres mystères
-	public ComputerPlayer(String pPlayerName, Display pDisplay, int nbDigitsMysteryNumber) {
+	public ComputerPlayer(String pPlayerName, Display pDisplay) {
 		
 		super(pPlayerName, pDisplay);
 		
-		for(int i=0; i < nbDigitsMysteryNumber; i++) {
-			this.getMaxValues().add(9);
+		for(int i=0; i < CombineGame.NB_DIGITS_MYSTERY; i++) {
+			this.getMaxValues().add(CombineGame.MAX_VALUE_DIGIT);
 			this.getMinValues().add(0);
 		}
 	}
@@ -183,11 +182,10 @@ public class ComputerPlayer extends Player{
 	 * <br>
 	 * This number is added to the list of proposed numbers.<br>
 	 * 
-	 * @param pDigitsNumber Number of digits constituting the number that will be returned.
 	 * 
 	 */
 	@Override
-	public ArrayList<Integer> giveNumber(int pDigitsNumber) {
+	public ArrayList<Integer> giveNumber() {
 		
 		ArrayList<Integer> number = new ArrayList<>();
 		ArrayList<Integer> lastProposition;
@@ -230,10 +228,10 @@ public class ComputerPlayer extends Player{
 			}
 		}*/
 		
-		for(int i=0; i < pDigitsNumber; i++) {
+		for(int i=0; i < CombineGame.NB_DIGITS_MYSTERY; i++) {
 			
 			if(lastProposition.isEmpty()) {
-				number.add(new Integer((int) ((9-0)*Math.random())));
+				number.add(new Integer((int) ((CombineGame.MAX_VALUE_DIGIT-0)*Math.random())));
 			}
 			else {
 				
@@ -276,7 +274,7 @@ public class ComputerPlayer extends Player{
 	/**
 	 * This method allows to add the number proposed in the last proposal to the list of results.<br>
 	 * <br>
-	 *  A proposal is an ArrayList of the integer. This method is used internally by {@link #giveNumber(int)}
+	 *  A proposal is an ArrayList of the integer. This method is used internally by {@link #giveNumber()}
 	 * 
 	 * @param pLastProposition number proposed in the last proposal
 	 */

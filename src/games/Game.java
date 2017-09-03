@@ -19,7 +19,7 @@ import games.constants.GameNames;
  * 
  * 
  * @author BRUCELLA2
- * @version 1.0.1
+ * @version 1.0.2
  * 
  */
 public abstract class Game {
@@ -64,15 +64,6 @@ public abstract class Game {
 	 */
 	//TODO A supprimer ? à transformer en liste d'ArrayList pour gérer le mode duel ? A dupliquer pour gérer 2 nombres mystères ?
 	ArrayList<Integer> mysteryNumber = new ArrayList<>();
-	
-	/**
-	 * Number of digits constituting the mystery number<br>
-	 *
-	 * @see #getNbDigitsMysteryNumber()
-	 * @see #setNbDigitsMysteryNumber(int)
-	 */
-	//TODO a rendre final si possible et à récupérer du fichier de paramétrage
-	int nbDigitsMysteryNumber = 4;
 	
 	/**
 	 * Number of remaining attempts to complete the game<br>
@@ -137,7 +128,7 @@ public abstract class Game {
 		this.setDisplay(pDisplay);
 		this.setEndGame(false);
 		this.setGameMode(pGameMode);
-		this.setNbRemainingTries(4);
+		this.setNbRemainingTries(CombineGame.NB_MAX_TRIES);
 		
 		if(this.getGameMode() == GameModes.CHALLENGER) {
 			this.playChallenger();
@@ -188,18 +179,6 @@ public abstract class Game {
 		return this.mysteryNumber;
 	}
 	
-	/**
-	 * Return the number of digits constituting the mystery number<br>
-	 * <br>
-	 * This number of digits is set when the game is launched.
-	 * 
-	 * @return the number of digits constituting the mystery number
-	 * 
-	 * @see #setNbDigitsMysteryNumber(int)
-	 */
-	public int getNbDigitsMysteryNumber() {
-		return this.nbDigitsMysteryNumber;
-	}
 	
 	/**
 	 * Returns the number of remaining tries before the end of the game.<br>
@@ -283,17 +262,6 @@ public abstract class Game {
 	}
 	
 	/**
-	 * Allows to define the number of digits constituting the mystery number.
-	 * 
-	 * @param pNbDigitsMysteryNumber number of digits constituting the mystery number.
-	 * 
-	 * @see #getNbDigitsMysteryNumber()
-	 */
-	public void setNbDigitsMysteryNumber(int pNbDigitsMysteryNumber) {
-		this.nbDigitsMysteryNumber = pNbDigitsMysteryNumber;
-	}
-	
-	/**
 	 * Allows to define the number of remaining tries before the end of the game.
 	 * 
 	 * @param pNbRemainingTries number of remaining tries before the end of the game.
@@ -348,8 +316,8 @@ public abstract class Game {
 	 */
 	public void mysteryNumberGeneration(){
 		
-		for(int i=0; i < this.getNbDigitsMysteryNumber(); i++) {
-			this.getMysteryNumber().add(new Integer((int) ((9-0)*Math.random())));
+		for(int i=0; i < CombineGame.NB_DIGITS_MYSTERY; i++) {
+			this.getMysteryNumber().add(new Integer((int) ((CombineGame.NB_DIGITS_MYSTERY-0)*Math.random())));
 		}
 	}
 	

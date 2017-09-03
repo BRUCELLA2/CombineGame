@@ -1,5 +1,8 @@
 package games;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.Properties;
 import java.util.Scanner;
 
 import display.Display;
@@ -13,13 +16,57 @@ import games.constants.GameNames;
  * When the choice of game and mode is made by the user, the game itself is called with the game mode as an argument.<br>
  * 
  * @author BRUCELLA2
- * @version 1.0
- * 
+ * @version 1.0.1
  * 
  */
 public class CombineGame {
 	
 //***** VARIABLES *****/
+	/**
+	 * Indicates if CombineGame will run in developer mode.<br>
+	 * <br>
+	 * In this mode, the solution of the games is display at the start.<br>
+	 * <br>
+	 * This variable is customizable in config.properties file
+	 * 
+	 * @see #initProperties()
+	 */
+	public static boolean DEVELOPER_MODE;
+	
+	/**
+	 * Number of digits constituting the mystery number.<br>
+	 * <br>
+	 * This variable is customizable in config.properties file
+	 * 
+	 * @see #initProperties()
+	 */
+	public static int NB_DIGITS_MYSTERY;
+	
+	/**
+	 * Number of tries at the start of a game.<br>
+	 * <br>
+	 * This variable is customizable in config.properties file
+	 * 
+	 * @see #initProperties()
+	 */
+	public static int NB_MAX_TRIES;
+	
+	/**
+	 * Maximum value for a digit.<br>
+	 * <br>
+	 * This variable is customizable in config.properties file
+	 * 
+	 * @see #initProperties()
+	 */
+	public static int MAX_VALUE_DIGIT;
+	/**
+	 * Number of colors for mastermind game<br>
+	 * <br>
+	 * This variable is customizable in config.properties file
+	 * 
+	 * @see #initProperties()
+	 */
+	public static int NB_COLORS;
 	
 	/**
 	 * display is used to display the different elements of the game (for example the menu)
@@ -76,6 +123,7 @@ public class CombineGame {
 	/**
 	 * CombineGame class's constructor.<br>
 	 * <br>
+	 * Initialization of global variables using the method {@link #initProperties()}
 	 * Initialization of the different variables and launch of CombineGame using the method {@link #launchCombineGame()}
 	 * 
 	 * @see #launchCombineGame()
@@ -89,8 +137,9 @@ public class CombineGame {
 		this.setModeChosen(null);
 		this.setExecuteCombineGame(true);
 		
-		this.launchCombineGame();
+		initProperties();
 		
+		this.launchCombineGame();		
 	}
 	
 	/**
@@ -421,5 +470,27 @@ public class CombineGame {
 		}while(!endGameChoice);
 		
 		return choice;
+	}
+	
+	/**
+	 * This method read the properties file (config.properties) and initialize the global variables with the properties values.
+	 * 
+	 */
+	private void initProperties() {
+		
+		Properties prop = new Properties();
+		
+		try(InputStream input = getClass().getClassLoader().getResourceAsStream("resources/config.properties")){ //$NON-NLS-1$
+			prop.load(input);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		
+		DEVELOPER_MODE = Boolean.valueOf(prop.getProperty("DEVELOPER_MODE")).booleanValue(); //$NON-NLS-1$
+		NB_DIGITS_MYSTERY = Integer.valueOf(prop.getProperty("NB_DIGITS_MYSTERY")).intValue(); //$NON-NLS-1$
+		NB_MAX_TRIES = Integer.valueOf(prop.getProperty("NB_MAX_TRIES")).intValue(); //$NON-NLS-1$
+		MAX_VALUE_DIGIT = Integer.valueOf(prop.getProperty("MAX_VALUE_DIGIT")).intValue(); //$NON-NLS-1$
+		NB_COLORS = Integer.valueOf(prop.getProperty("NB_COLORS")).intValue(); //$NON-NLS-1$
+		
 	}
 }
