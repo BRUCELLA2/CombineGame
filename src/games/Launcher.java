@@ -1,7 +1,7 @@
 package games;
 
 /**
- * Classe principale qui lance combineGame 
+ * <b>Main Class which start combineGame</b>
  * 
  * 
  * @author BRUCELLA2
@@ -12,12 +12,12 @@ package games;
 public class Launcher {
 	
 	/**
-	 * Méthode main du projet.
+	 * Main methode of the project.
 	 * 
-	 * Le lancement des jeux de combinaisons : CombineGame est effectué depuis cette méthode.
+	 * The start of combineGame (combinations games) is done from this method.
 	 * 
 	 * @author BRUCELLA2 
-	 * @param args un tableau de chaine de caractères qui contient les arguments en ligne de commande
+	 * @param args A string array containing command line arguments
 	 *
 	 */
 	public static void main(String[] args) {

@@ -2,15 +2,15 @@ package games;
 
 import java.util.Scanner;
 
-import affichage.Affichage;
-import games.constantes.ModesDeJeu;
-import games.constantes.NomsDeJeu;
+import display.Display;
+import games.constants.GameModes;
+import games.constants.GameNames;
 
 /**
- * <b>CombineGame permet de lancer le jeu souhaité par l'utilisateur.</b><br>
+ * <b>CombineGame allows to launch the game desired by the user.</b><br>
  * <br>
- * Affiche différents menus permettant à l'utilisateur de choisir le jeu et l'option de jeu.<br>
- * Quand le choix du jeu et du mode est effectué par l'utilisateur, le jeu à proprement parler est appelé avec en argument le mode de jeu.<br>
+ * Displays various menus allowing the user to choose the game and the game option.<br>
+ * When the choice of game and mode is made by the user, the game itself is called with the game mode as an argument.<br>
  * 
  * @author BRUCELLA2
  * @version 1.0
@@ -22,15 +22,15 @@ public class CombineGame {
 //***** VARIABLES *****/
 	
 	/**
-	 * affichage sert à l'affichage des différents élements du jeu (par exemple le menu)
+	 * display is used to display the different elements of the game (for example the menu)
 	 * 
-	 * @see #getAffichage()
-	 * @see #setAffichage(Affichage)
+	 * @see #getDisplay()
+	 * @see #setDisplay(Display)
 	 */
-	private Affichage affichage;
+	private Display display;
 	
 	/**
-	 * Scanner qui permet de récupérer les données (chaines de caractères) saisies par l'utilisateur
+	 * scanner which allows to retrieve data (Strings) entered by the user
 	 * 
 	 * @see #getScanner()
 	 * @see #setScanner(Scanner)
@@ -39,30 +39,30 @@ public class CombineGame {
 	private Scanner scanner;
 	
 	/**
-	 * jeuChoisi représente le jeu choisi par l'utilisateur au travers des menus.
+	 * gameChosen represents the game chose by the user through the menus.
 	 * 
-	 * @see NomsDeJeu#PLUS_MOINS
-	 * @see NomsDeJeu#MASTERMIND
+	 * @see GameNames#MORE_LESS
+	 * @see GameNames#MASTERMIND
 	 * 
-	 * @see #getJeuChoisi()
-	 * @see #setJeuChoisi(NomsDeJeu)
+	 * @see #getGameChosen()
+	 * @see #setGameChosen(GameNames)
 	 */
-	private NomsDeJeu jeuChoisi;
+	private GameNames gameChosen;
 	
 	/**
-	 * modeChoisi représente le mode de jeu choisi par l'utilisateur au travers des menus.
+	 * modeChosen represents the game mode chose by the user through the menus.
 	 * 
-	 * @see ModesDeJeu#CHALLENGER
-	 * @see ModesDeJeu#DEFENSEUR
-	 * @see ModesDeJeu#DUEL
+	 * @see GameModes#CHALLENGER
+	 * @see GameModes#DEFENDER
+	 * @see GameModes#DUEL
 	 * 
-	 * @see #getModeChoisi()
-	 * @see #setModeChoisi(ModesDeJeu)
+	 * @see #getmodeChosen()
+	 * @see #setModeChosen(GameModes)
 	 */
-	private ModesDeJeu modeChoisi;
+	private GameModes modeChosen;
 	
 	/**
-	 * executeCombineGame sert à indiquer si CombineGame est en cours d'exécution ou si son exécution doit être arretée en changeant sa valeur à false.
+	 * executeCombineGame is used to indicate whether CombineGame is running or whether it should be stopped by changing its value to false.
 	 * 
 	 * @see #getExecuteCombineGame()
 	 * @see #setExecuteCombineGame(boolean)
@@ -71,22 +71,22 @@ public class CombineGame {
 	
 	
 	
-//***** CONSTRUCTEURS *****/
+//***** CONSTRUCTORS *****/
 	
 	/**
-	 * Constructeur de la classe CombineGame.<br>
+	 * CombineGame class's constructor.<br>
 	 * <br>
-	 * Initialisation des différentes variables et lancement de CombineGame via la méthode {@link #launchCombineGame()}
+	 * Initialization of the different variables and launch of CombineGame using the method {@link #launchCombineGame()}
 	 * 
 	 * @see #launchCombineGame()
 	 * 
 	 */
 	public CombineGame() {
 		
-		this.setAffichage(new Affichage());
+		this.setDisplay(new Display());
 		this.setScanner(new Scanner(System.in));
-		this.setJeuChoisi(null);
-		this.setModeChoisi(null);
+		this.setGameChosen(null);
+		this.setModeChosen(null);
 		this.setExecuteCombineGame(true);
 		
 		this.launchCombineGame();
@@ -94,39 +94,39 @@ public class CombineGame {
 	}
 	
 	/**
-	 * Cette méthode est au coeur du controle des jeux CombineGame. <br>
+	 * This method asks for menus to be displayed to select the game and mode and then start the game.<br>
 	 * <br>
-	 * Demande l'affichage du menu de choix du jeu.<br>
-	 * Demande l'affichage du menu de choix du mode.<br>
-	 * Demande le démarrage du jeu choisi.<br>
-	 * Demande l'affichage du menu de fin de partie<br>
+	 * Requests the display of the game selection menu.<br>
+	 * Requests the display of the mode selection menu.<br>
+	 * Request the start of the selected game.<br>
+	 * Requests the display of the end of game menu<br>
 	 * 
 	 * 
-	 * @see #menuChoixJeu()
-	 * @see #menuChoixMode()
+	 * @see #menuGameSelection()
+	 * @see #menuModeSelection()
 	 */
 	private void launchCombineGame() {
 		
 		while(this.getExecuteCombineGame()) {
 
-			while ((this.getJeuChoisi() == null || this.getModeChoisi() == null) && this.getExecuteCombineGame() != false) {
+			while ((this.getGameChosen() == null || this.getmodeChosen() == null) && this.getExecuteCombineGame() != false) {
 				
-				char choixJeu = this.menuChoixJeu();
-				if(choixJeu == 'Q') {
+				char gameChoice = this.menuGameSelection();
+				if(gameChoice == 'Q') {
 					break;
 				}
 				
-				this.menuChoixMode();
+				this.menuModeSelection();
 				
-				while(this.getJeuChoisi() != null && this.getModeChoisi() != null){
-					if(this.getJeuChoisi() == NomsDeJeu.PLUS_MOINS) {
+				while(this.getGameChosen() != null && this.getmodeChosen() != null){
+					if(this.getGameChosen() == GameNames.MORE_LESS) {
 						
-						Game game = new PlusMoins(this.getModeChoisi(), this.getAffichage());
+						Game game = new MoreLess(this.getmodeChosen(), this.getDisplay());
 						
-						if(game.isFinPartie() == true) {
+						if(game.isEndGame() == true) {
 
-							char choixFinJeu = this.menuChoixFinJeu();
-							if(choixFinJeu == 'Q') {
+							char endGameChoice = this.menuEndGameSelection();
+							if(endGameChoice == 'Q') {
 								break;
 							}
 						}
@@ -143,20 +143,20 @@ public class CombineGame {
 //***** GETTER *****/
 	
 	/**
-	 * Retourne l'affichage qui permet de faire les différents affichages du jeu
+	 * Returns the display that allows to make the different displays of the game.
 	 * 
-	 * @return L'affichage permettant l'affichage du jeu
+	 * @return The display allowing the display in the game
 	 * 
-	 * @see #setAffichage(Affichage)
+	 * @see #setDisplay(Display)
 	 */
-	public Affichage getAffichage() {
-		return this.affichage;
+	public Display getDisplay() {
+		return this.display;
 	}
 	
 	/**
-	 * Retourne le scanner qui permet de récupérer les saisies de l'utilisateur
+	 * Returns the scanner that allow to get the user's input.
 	 * 
-	 * @return le scanner qui permet de récupérer les saisies de l'utilisateur
+	 * @return the scanner that allow to get the user's input.
 	 * 
 	 * @see #setScanner(Scanner)
 	 * 
@@ -166,10 +166,10 @@ public class CombineGame {
 	}
 		
 	/**
-	 * Retourne le status de CombineGame.<br>
-	 * True si CombineGame doit s'exécuter, False, si CombineGame doit s'arrêter.
+	 * Returns combineGame's status<br>
+	 * True if combineGame has to run, false if combineGame has to stop.
 	 * 
-	 * @return le status de CombineGame. 
+	 * @return the combineGame's status
 	 * 
 	 * @see #setExecuteCombineGame(boolean)
 	 */
@@ -178,35 +178,37 @@ public class CombineGame {
 	}
 	
 	/**
-	 * Retourne le jeu choisi par l'utilisateur sous la forme d'un {@link NomsDeJeu}<br>
-	 * Retourne null si aucun jeu n'a été choisi
+	 * Returns the game chosen by the user in the form of a {@link GameNames}<br>
+	 * <br>
+	 * Returns null if no game has been chosen
 	 * 
-	 * @return Le jeu choisi par l'utilisateur.
+	 * @return game chosen by the user
 	 * 
-	 * @see #setJeuChoisi(NomsDeJeu)
+	 * @see #setGameChosen(GameNames)
 	 */
-	public NomsDeJeu getJeuChoisi() {
-		return this.jeuChoisi;
+	public GameNames getGameChosen() {
+		return this.gameChosen;
 	}
 	
 	/**
-	 * Retourne le mode du jeu choisi par l'utilisateur sous la forme d'un {@link ModesDeJeu}<br>
-	 * Retourne null si aucun mode n'est choisi
+	 * Returns the game mode chosen by the user in the form of a {@link GameModes}<br>
+	 * <br>
+	 * Returns null if no mode has been chosen
 	 * 
-	 * @return Le mode de jeu choisi par l'utilisateur
+	 * @return game mode chosen by the user
 	 * 
-	 * @see #setModeChoisi(ModesDeJeu)
+	 * @see #setModeChosen(GameModes)
 	 */
-	public ModesDeJeu getModeChoisi() {
-		return this.modeChoisi;
+	public GameModes getmodeChosen() {
+		return this.modeChosen;
 	}
 	
 //***** SETTER *****/
 	
 	/**
-	 * Permet de définir le scanner utilisé pour récupérer les saisies de l'utilisateur
+	 * Allow to define the scanner used to get user input
 	 * 
-	 * @param pScanner un scanner qui sera utilisé pour récupérer les saisies de l'utilisateur
+	 * @param pScanner a scanner that will be used to get user input
 	 * 
 	 * @see #getScanner()
 	 */
@@ -215,42 +217,42 @@ public class CombineGame {
 	}
 	
 	/**
-	 * Permet de définir l'affichage qui sera utilisé pour effectuer les affichages
+	 * Allow to define the display used to make the displays
 	 * 
-	 * @param pAffichage Affichage utilisé pour effectuer les affichages
+	 * @param pDisplay display used to make the displays
 	 * 
-	 * @see #getAffichage()
+	 * @see #getDisplay()
 	 */
-	private void setAffichage(Affichage pAffichage) {
-		this.affichage = pAffichage;
+	private void setDisplay(Display pDisplay) {
+		this.display = pDisplay;
 	}
 	
 	/**
-	 * Permet de définir le jeu choisi par l'utilisateur
+	 * Allow to define the game chosen by the user
 	 *  
-	 * @param pJeuChoisi Jeu choisi par l'utilisateur
+	 * @param pGameChosen game chosen by the user
 	 * 
-	 * @see #getJeuChoisi()
+	 * @see #getGameChosen()
 	 */
-	private void setJeuChoisi(NomsDeJeu pJeuChoisi) {
-		this.jeuChoisi = pJeuChoisi;
+	private void setGameChosen(GameNames pGameChosen) {
+		this.gameChosen = pGameChosen;
 	}
 	
 	/**
-	 * Permet de définir le mode de jeu choisi par l'utilisateur
+	 * Allow to define the game mode chosen by the user
 	 * 
-	 * @param pModeChoisi Mode de jeu choisi par l'utilisateur
+	 * @param pModeChosen game mode chosen by the user
 	 * 
-	 * @see #getModeChoisi()
+	 * @see #getmodeChosen()
 	 */
-	private void setModeChoisi(ModesDeJeu pModeChoisi) {
-		this.modeChoisi = pModeChoisi;
+	private void setModeChosen(GameModes pModeChosen) {
+		this.modeChosen = pModeChosen;
 	}
 	
 	/**
-	 * Permet de définir si CombineGame doit continuer à s'exécuter.
+	 * Set whether CombineGame should continue to run.
 	 * 
-	 * @param pExecuteCombineGame true si CombineGame continue ou false si CombineGame doit s'arrêter
+	 * @param pExecuteCombineGame true if CombineGame has to continue or false if CombineGame has to stop
 	 * 
 	 * @see #getExecuteCombineGame()
 	 */
@@ -262,161 +264,162 @@ public class CombineGame {
 //***** METHODES *****/
 	
 	/**
-	 * Cette méthode permet à l'utilisateur de choisir son jeu.<br>
+	 * This method allows the user to choose his game.<br>
 	 * 
-	 * Le choix du jeu se fait au travers d'un menu. <br>
-	 * Le menu actualise la variable {@link #jeuChoisi}. Le choix de l'utilisateur est également renvoyé à l'issu de la méthode sous forme d'un char en majuscule.<br>
-	 * Les différents retour possible sont :<br>
+	 * The choice of the game is made through a menu.<br>
+	 * The menu updates the {@link #gameChosen} variable. The user's choice is also returned at the end of the method in the form of a uppercase char.<br>
+	 * The different possible returns are :<br>
 	 * <ul>
-	 * <li>'1' pour le jeu Plus_Moins</li>
-	 * <li>'2' pour le jeu MasterMind</li>
-	 * <li>'Q' pour arrêter CombineGame</li>
+	 * <li>'1' for MoreLess game</li>
+	 * <li>'2' for Mastermind game</li>
+	 * <li>'Q' to stop CombineGame</li>
 	 * </ul>
 	 * 
 	 * 
-	 * @return Le choix de l'utilisateur sous forme d'un char en majuscule.
+	 * @return the user's choice in the form of a uppercas char
 	 */
-	public char menuChoixJeu() {
+	public char menuGameSelection() {
 		
-		boolean choixJeu = false;
-		char choix;
+		boolean gameChoice = false;
+		char choice;
 		
 		do {
-			this.getAffichage().afficheMenuChoixJeu();
-			choix = this.getScanner().nextLine().charAt(0);
-			choix = Character.toUpperCase(choix);
+			this.getDisplay().showGamesMenu();
+			choice = this.getScanner().nextLine().charAt(0);
+			choice = Character.toUpperCase(choice);
 			
-			switch(choix)
+			switch(choice)
 			{
 			case '1':
-				choixJeu = true;
-				this.setJeuChoisi(NomsDeJeu.PLUS_MOINS);
+				gameChoice = true;
+				this.setGameChosen(GameNames.MORE_LESS);
 				break;
 				
 			case '2':
-				choixJeu = true;
-				this.setJeuChoisi(NomsDeJeu.MASTERMIND);
+				gameChoice = true;
+				this.setGameChosen(GameNames.MASTERMIND);
 				break;
 			
 			case 'Q':
-				choixJeu = true;
-				this.setJeuChoisi(null);
+				gameChoice = true;
+				this.setGameChosen(null);
 				this.setExecuteCombineGame(false);
 				break;
 				
 			default:
 				break;	
 			}
-		}while(!choixJeu);
+		}while(!gameChoice);
 		
-		return choix;
+		return choice;
 	}
 	
 	/**
-	 * Cette méthode permet à l'utilisateur de choisir son mode jeu.<br>
+	 * This method allows the user to choose his game mode.<br>
 	 * 
-	 * Le choix du mode de jeu se fait au travers d'un menu. <br>
-	 * Le menu actualise la variable {@link #modeChoisi}. Le choix de l'utilisateur est également renvoyé à l'issu de la méthode sous forme d'un char en majuscule.<br>
-	 * Les différents retour possible sont :<br>
+	 * The choice of the game mode is made through a menu.<br>
+	 * 
+	 * The menu updates the {@link #modeChosen} variable. The user's choice is also returned at the end of the method in the form of a uppercase char.<br>
+	 * The different possible returns are :<br>
 	 * <ul>
-	 * <li>'1' pour le mode Challenger</li>
-	 * <li>'2' pour le mode Defenseur</li>
-	 * <li>'3' pour le mode Duel</li>
-	 * <li>'R' pour revenir en arrière</li>
+	 * <li>'1' for Challenger mode</li>
+	 * <li>'2' for Defender mode</li>
+	 * <li>'3' for Duel mode</li>
+	 * <li>'R' to go back to the game selection</li>
 	 * </ul>
 	 * 
 	 * 
-	 * @return Le choix de l'utilisateur sous forme d'un char en majuscule.
+	 * @return The user's choice in the form of an uppercase char.
 	 */
-	public char menuChoixMode() {
+	public char menuModeSelection() {
 		
-		boolean choixMode = false;
-		char choix;
+		boolean modeChoice = false;
+		char choice;
 		
 		do {
-			this.getAffichage().afficheMenuModeJeu();
-			choix = this.getScanner().nextLine().charAt(0);
-			choix = Character.toUpperCase(choix);
+			this.getDisplay().showGameModesMenu();
+			choice = this.getScanner().nextLine().charAt(0);
+			choice = Character.toUpperCase(choice);
 			
-			switch(choix)
+			switch(choice)
 			{
 			case '1':
-				choixMode = true;
-				this.setModeChoisi(ModesDeJeu.CHALLENGER);
+				modeChoice = true;
+				this.setModeChosen(GameModes.CHALLENGER);
 				break;
 				
 			case '2':
-				choixMode = true;
-				this.setModeChoisi(ModesDeJeu.DEFENSEUR);
+				modeChoice = true;
+				this.setModeChosen(GameModes.DEFENDER);
 				break;
 				
 			case '3':
-				choixMode = true;
-				this.setModeChoisi(ModesDeJeu.DUEL);
+				modeChoice = true;
+				this.setModeChosen(GameModes.DUEL);
 				break;
 				
 			case 'R':
-				choixMode = true;
-				this.setModeChoisi(null);
-				this.setJeuChoisi(null);
+				modeChoice = true;
+				this.setModeChosen(null);
+				this.setGameChosen(null);
 				break;
 				
 			default :
 				break;
 			}
 			
-		}while(!choixMode);
+		}while(!modeChoice);
 		
-		return choix;
+		return choice;
 	}
 	
 	/**
-	 * Cette méthode permet à l'utilisateur d'indiquer ce qu'il souhaite faire à la fin de sa partie.<br>
+	 * This method allows the user to indicate what he wants to do after the end of his game.<br>
 	 * 
-	 * Le choix de fin de partie se fait au travers d'un menu. <br>
-	 * Le menu réinitialise à null la variable {@link #modeChoisi} et la variable {@link #jeuChoisi}. <br>
-	 * Le choix de l'utilisateur est également renvoyé à l'issu de la méthode sous forme d'un char en majuscule.<br>
-	 * Les différents retour possible sont :<br>
+	 * The choice of what to do at the end of game is made through a menu.<br>
+	 * The menu updates at null the variable {@link #modeChosen} and the variable {@link #gameChosen}.<br>
+	 * The user's choice is also returned at the end of the method in the form of an uppercase char.<br>
+	 * The different possible returns are :<br>
 	 * <ul>
-	 * <li>'1' pour rejouer au même jeu avec le même mode</li>
-	 * <li>'R' pour revenir au menu de choix du jeu</li>
-	 * <li>'Q' Pour quitter CombineGame</li>
+	 * <li>'1' to replay the same game with the same mode</li>
+	 * <li>'R' to go back to the game selection</li>
+	 * <li>'Q' to stop CombineGame</li>
 	 * </ul>
 	 * 
 	 * 
-	 * @return Le choix de l'utilisateur sous forme d'un char en majuscule.
+	 * @return The user's choice in the form of an uppercase char.
 	 */
-	public char menuChoixFinJeu() {
-		boolean choixFinJeu = false;
-		char choix;
+	public char menuEndGameSelection() {
+		boolean endGameChoice = false;
+		char choice;
 		
 		do {
-			this.getAffichage().afficheMenuFinJeu();
-			choix = this.getScanner().nextLine().charAt(0);
-			choix = Character.toUpperCase(choix);
+			this.getDisplay().showEndGameMenu();
+			choice = this.getScanner().nextLine().charAt(0);
+			choice = Character.toUpperCase(choice);
 			
-			switch(choix) 
+			switch(choice) 
 			{
 			case '1':
-				choixFinJeu = true;
+				endGameChoice = true;
 				break;
 			
 			case 'R':
-				choixFinJeu = true;
-				this.setJeuChoisi(null);
-				this.setModeChoisi(null);
+				endGameChoice = true;
+				this.setGameChosen(null);
+				this.setModeChosen(null);
 				break;
 			
 			case 'Q':
-				choixFinJeu = true;
+				endGameChoice = true;
 				this.setExecuteCombineGame(false);
 				break;
 			
 			default :
 				break;
 			}		
-		}while(!choixFinJeu);
+		}while(!endGameChoice);
 		
-		return choix;
+		return choice;
 	}
 }

@@ -2,25 +2,24 @@ package games;
 
 import java.util.ArrayList;
 
-import affichage.Affichage;
-import games.constantes.ModesDeJeu;
-import games.constantes.NomsDeJeu;
+import display.Display;
+import games.constants.GameModes;
+import games.constants.GameNames;
 
 
 /**
- * /**
- * <b>Game est la classe représentant un jeu.</b><br>
+ * <b>Game is the class representing a game.</b><br>
  * <br>
- * Les jeux représentés par la classe Game sont des jeux où il faut découvrir soit un nombre (Jeu du plus moins) soit une combinaison de nombre ou de couleur (mastermind)<br>
+ * The games represented by the Game class are games where it is necessary to discover either a number (MoreLess game) or a combination of number or color (mastermind)<br>
  * <br> 
- * Un Jeu est initilisé en débutant avec le mode de jeu fourni en paramètre du constructeur (appel des méthodes play {@link #playChallenger()} {@link #playDefenser()} {@link #playDuel()})<br>
- * Un jeu peut générer un nombre mystère {@link #genereNombreMystere()}<br>
- * Un jeu peut comparer une proposition fournie avec le nombre mystère {@link #compareNombre(ArrayList)}<br>
- * Un jeu peut initier un message de victoire ou de défaite {@link #victoire()} {@link #defaite()}<br>
+ * A game is initiated by starting with the game mode provided as a constructor's parameter (call of the play methods {@link #playChallenger()} {@link #playDefenser()} {@link #playDuel()})<br>
+ * A game can generate a mystery number {@link #mysteryNumberGeneration()}<br>
+ * A game can compare a proposal provided with the mystery number {@link #compareNumber(ArrayList)}<br>
+ * A game can initiate a message of victory or defeat {@link #victory()} {@link #defeat()}<br>
  * 
  * 
  * @author BRUCELLA2
- * @version 1.0
+ * @version 1.0.1
  * 
  */
 public abstract class Game {
@@ -28,123 +27,122 @@ public abstract class Game {
 //***** VARIABLES *****/
 	
 	/**
-	 * Nom du jeu<br>
+	 * Game's name<br>
 	 * <br>
-	 * Cette variable est initialisée par le constructeur de la classe.
+	 * This variable is initialized by the constructor of the class.
 	 * 
-	 * @see #getNomDeJeu()
-	 * @see #setNomDeJeu(NomsDeJeu)
+	 * @see #getGameName()
+	 * @see #setGameName(GameNames)
 	 * 
 	 */
 	//TODO a rendre final si possible
-	NomsDeJeu nomDeJeu;
+	GameNames gameName;
 	
 	/**
-	 * Mode du jeu<br>
+	 * game's mode<br>
 	 * <br>
-	 * Cette variable est initialisée par un paramètre fourni au constructeur de la classe.<br>
-	 * Cette variable permet de définir comment le jeu se déroulera. 
+	 * This variable is initialized by a parameter provided to the constructor of the class.<br>
+	 * This variable is used to define how the game will run.
 	 * 
-	 * @see #getModeDeJeu()
-	 * @see #setModeDeJeu(ModesDeJeu)
+	 * @see #getGameMode()
+	 * @see #setGameMode(GameModes)
 	 * 
 	 */
 	//TODO a rendre final si possible
-	ModesDeJeu modeDeJeu;
+	GameModes gameMode;
 	
 	/**
-	 * Nombre Mystere à découvrir<br>
+	 * Mystery Number to Discover<br>
 	 * <br>
-	 * Chaque chiffre constituant le nombre est contenu dans un ArrayList d'entier.<br>
-	 * Le nombre mystère est généré aléatoirement {@link #genereNombreMystere()} ou à partir d'une donnée saisie par l'utilisateur
+	 * Each digit constituting the number is contained in an ArrayList of  integer.<br>
+	 * The mystery number is generated randomly {@link #mysteryNumberGeneration ()} or from a data entered by the user.
 	 * 
-	 * @see #getNombreMystere()
-	 * @see #setNombreMystere(ArrayList)
-	 * @see #genereNombreMystere()
+	 * @see #getMysteryNumber()
+	 * @see #setMysteryNumber(ArrayList)
+	 * @see #mysteryNumberGeneration()
 	 * 
 	 */
 	//TODO A supprimer ? à transformer en liste d'ArrayList pour gérer le mode duel ? A dupliquer pour gérer 2 nombres mystères ?
-	ArrayList<Integer> nombreMystere = new ArrayList<>();
+	ArrayList<Integer> mysteryNumber = new ArrayList<>();
 	
 	/**
-	 * Nombre de chiffres constituant le nombre mystère<br>
+	 * Number of digits constituting the mystery number<br>
 	 *
-	 * @see #getNbChiffresMysteres()
-	 * @see #setNbChiffresMysteres(int)
+	 * @see #getNbDigitsMysteryNumber()
+	 * @see #setNbDigitsMysteryNumber(int)
 	 */
-	//TODO a rendre final si possible
-	int nbChiffresMysteres = 4;
+	//TODO a rendre final si possible et à récupérer du fichier de paramétrage
+	int nbDigitsMysteryNumber = 4;
 	
 	/**
-	 * Nombre de tentatives restant pour finir la partie<br>
+	 * Number of remaining attempts to complete the game<br>
 	 * <br>
-	 * Cette variable est initialisée au niveau du constructeur.<br>
-	 * Quand nbCoups arrive à 0, la partie doit prendre fin. //TODO à intégrer dans le SETTER
+	 * This variable is initialized in the constructor.<br>
+	 * When nbRemainingTries arrives at 0, the game must end. //TODO à intégrer dans le SETTER
 	 * 
-	 * @see #getNbCoups()
-	 * @see #setNbCoups(int)
+	 * @see #getNbRemainingTries()
+	 * @see #setNbRemainingTries(int)
 	 */
-	int nbCoups;
+	int nbRemainingTries;
 	
 	/**
-	 * Liste des joueurs<br>
+	 * Players list<br>
 	 * <br>
-	 * Les joueurs sont stockés dans un ArrayList de joueur.<br>
-	 * Cette liste est vide à la création du jeu. Les joueurs sont ajoutés lorsque le jeu débute (méthodes play)<br>
+	 * Players are stored in ArrayList of player.<br>
+	 * This list is empty when the game is created. Players are added when the game starts (play methods)<br>
 	 * <br>
-	 * (actuellement pas utilisé, les joueurs sont créés et utilisés localement)
+	 * (currently not used, players are created and used locally except for duel mode)
 	 *
-	 * @see #getJoueurs()
-	 * @see #setJoueurs(ArrayList)
+	 * @see #getPlayers()
+	 * @see #setPlayers(ArrayList)
 	 * 
 	 */
-	// TODO a voir si utile
-	ArrayList<Joueur> joueurs = new ArrayList<>();
+	ArrayList<Player> players = new ArrayList<>();
 	
 	/**
-	 * affichage sert à l'affichage des différents élements du jeu
+	 * display is used to display the different elements of the game.
 	 * 
-	 * @see #getAffichage()
-	 * @see #setAffichage(Affichage)
+	 * @see #getDisplay()
+	 * @see #setDisplay(Display)
 	 * 
 	 */
-	Affichage affichage;
+	Display display;
 	
 	/**
-	 * finPartie indique si la partie doit prendre fin.
+	 * endGame indicates whether the game should end.
 	 * 
-	 * @see #isFinPartie()
-	 * @see #setFinPartie(boolean)
+	 * @see #isEndGame()
+	 * @see #setEndGame(boolean)
 	 * 
 	 */
-	boolean finPartie;
+	boolean endGame;
 	
 	
 //***** CONSTRUCTEURS *****/	
 	
 	/**
-	 * Constructeur de Game<br>
+	 * Game's constructor<br>
 	 * <br>
-	 * Le constructeur initialise les différentes variables et débute le jeu avec le mode souhaité.
+	 * The constructor initiates the various variables and starts the game with the desired mode
 	 * 
 	 * 
-	 * @param pModeDeJeu mode de jeu qui doit être utilisé
-	 * @param pAffichage affichage qui sera utilisé pour procéder aux affichages du jeu
+	 * @param pGameMode game mode to be used
+	 * @param pDisplay display that will be used to make game displays
 	 * 
 	 * @see #playChallenger()
 	 * @see #playDefenser()
 	 * @see #playDuel()
 	 */
-	protected Game(ModesDeJeu pModeDeJeu, Affichage pAffichage) {
-		this.setAffichage(pAffichage);
-		this.setFinPartie(false);
-		this.setModeDeJeu(pModeDeJeu);
-		this.setNbCoups(4);
+	protected Game(GameModes pGameMode, Display pDisplay) {
+		this.setDisplay(pDisplay);
+		this.setEndGame(false);
+		this.setGameMode(pGameMode);
+		this.setNbRemainingTries(4);
 		
-		if(this.getModeDeJeu() == ModesDeJeu.CHALLENGER) {
+		if(this.getGameMode() == GameModes.CHALLENGER) {
 			this.playChallenger();
 		}
-		else if(this.getModeDeJeu() == ModesDeJeu.DEFENSEUR) {
+		else if(this.getGameMode() == GameModes.DEFENDER) {
 			this.playDefenser();
 		}
 		else{
@@ -156,274 +154,274 @@ public abstract class Game {
 //***** GETTERS *****/
 	
 	/**
-	 * Retourne le nom du jeu
+	 * Returns the game's name
 	 * 
-	 * @return Nom du jeu
+	 * @return game's name
 	 * 
-	 * @see #setNomDeJeu(NomsDeJeu)
+	 * @see #setGameName(GameNames)
 	 */
-	public NomsDeJeu getNomDeJeu() {
-		return this.nomDeJeu;
+	public GameNames getGameName() {
+		return this.gameName;
 	}
 	
 	/**
-	 * Retourne le mode du jeu
+	 * Returns the game's mode
 	 * 
 	 * @return Mode de jeu
 	 * 
-	 * @see #setModeDeJeu(ModesDeJeu)
+	 * @see #setGameMode(GameModes)
 	 */
-	public ModesDeJeu getModeDeJeu() {
-		return this.modeDeJeu;
+	public GameModes getGameMode() {
+		return this.gameMode;
 	}
 	
 	
 	/**
-	 * Retourne le nombre mystère sous forme d'ArrayList d'entiers
+	 * Returns the mystery number as an ArrayList of integer
 	 * 
-	 * @return nombre mystere
+	 * @return mystery number
 	 * 
-	 * @see #setNombreMystere(ArrayList)
-	 * @see #genereNombreMystere()
+	 * @see #setMysteryNumber(ArrayList)
+	 * @see #mysteryNumberGeneration()
 	 */
-	public ArrayList<Integer> getNombreMystere(){
-		return this.nombreMystere;
+	public ArrayList<Integer> getMysteryNumber(){
+		return this.mysteryNumber;
 	}
 	
 	/**
-	 * Retourne le nombre de chiffres mystères à découvrir.<br>
+	 * Return the number of digits constituting the mystery number<br>
 	 * <br>
-	 * Ce nombre de chiffres est paramétré au lancement du jeu.
+	 * This number of digits is set when the game is launched.
 	 * 
-	 * @return Le nombre de chiffres mystères à découvrir.
+	 * @return the number of digits constituting the mystery number
 	 * 
-	 * @see #setNbChiffresMysteres(int)
+	 * @see #setNbDigitsMysteryNumber(int)
 	 */
-	public int getNbChiffresMysteres() {
-		return this.nbChiffresMysteres;
+	public int getNbDigitsMysteryNumber() {
+		return this.nbDigitsMysteryNumber;
 	}
 	
 	/**
-	 * Retourne le nombre de coups possible avant la fin de partie<br>
+	 * Returns the number of remaining tries before the end of the game.<br>
 	 * <br>
-	 * Ce nombre de coups est paramétré au lancement du jeu.
+	 * This number of tries is set when the game is launched.
 	 * 
-	 * @return Le nombre de coups avant la fin de partie
+	 * @return the number of remaining tries before the end of the game.
 	 * 
-	 * @see #setNbCoups(int)
+	 * @see #setNbRemainingTries(int)
 	 */
-	public int getNbCoups() {
-		return this.nbCoups;
+	public int getNbRemainingTries() {
+		return this.nbRemainingTries;
 	}
 	
 	/**
-	 * Retourne l'affichage qui permet de faire les différents affichages du jeu
+	 * Returns the display that allows to make the different displays of the game.
 	 * 
-	 * @return L'affichage permettant l'affichage du jeu
+	 * @return The display allowing the display in the game
 	 * 
-	 * @see #setAffichage(Affichage)
+	 * @see #setDisplay(Display)
 	 */
-	public Affichage getAffichage() {
-		return this.affichage;
+	public Display getDisplay() {
+		return this.display;
 	}
 	
 	/**
-	 * Retourne la liste des joueurs sous forme d'ArrayList
+	 * Returns the list of players as an ArrayList
 	 * 
-	 * @return La liste des joueurs
+	 * @return list of players
 	 * 
-	 * @see #setJoueurs(ArrayList)
+	 * @see #setPlayers(ArrayList)
 	 */
-	public ArrayList<Joueur> getJoueurs(){
-		return this.joueurs;
+	public ArrayList<Player> getPlayers(){
+		return this.players;
 	}
 	
 	/**
-	 * Retourne si la partie doit se terminer.
+	 * Return true if the game has to end.
 	 * 
-	 * @return Si la partie doit se terminer
+	 * @return true if the game has to end and false if not
 	 * 
-	 * @see #setFinPartie(boolean)
+	 * @see #setEndGame(boolean)
 	 */
-	public boolean isFinPartie() {
-		return this.finPartie;
+	public boolean isEndGame() {
+		return this.endGame;
 	}
 	
 //***** SETTERS *****/
 	
 	/**
-	 * Permet de définir le nom du jeu.<br>
+	 * Allows to define the game's name.<br>
 	 * 
-	 * @param pNomDeJeu Le nom du jeu
+	 * @param pGameName game's name
 	 * 
-	 * @see #getNomDeJeu()
+	 * @see #getGameName()
 	 */
-	public void setNomDeJeu(NomsDeJeu pNomDeJeu) {
-		this.nomDeJeu = pNomDeJeu;
+	public void setGameName(GameNames pGameName) {
+		this.gameName = pGameName;
 	}
 	
 	/**
-	 * Permet de définir le mode du jeu.
+	 * Allows to define the game's mode.
 	 * 
-	 * @param pModeDeJeu Le mode du jeu
+	 * @param pGameMode The game's mode
 	 * 
-	 * @see #getModeDeJeu()
+	 * @see #getGameMode()
 	 */
-	public void setModeDeJeu(ModesDeJeu pModeDeJeu) {
-		this.modeDeJeu = pModeDeJeu;
+	public void setGameMode(GameModes pGameMode) {
+		this.gameMode = pGameMode;
 	}
 	
 	/**
-	 * Permet de définir le nombre mystère au moyen d'un ArrayList d'entiers.
+	 * Allows to define the mystery number by using an ArrayList of integer.
 	 * 
-	 * @param pNombreMystere Nombre mystère
+	 * @param pMysteryNumber Mystery number
 	 * 
-	 * @see #getNombreMystere()
+	 * @see #getMysteryNumber()
 	 */
-	public void setNombreMystere(ArrayList<Integer> pNombreMystere) {
-		this.nombreMystere = pNombreMystere;
+	public void setMysteryNumber(ArrayList<Integer> pMysteryNumber) {
+		this.mysteryNumber = pMysteryNumber;
 	}
 	
 	/**
-	 * Permet de définir le nombre de chiffres constituant le nombre mystère.
+	 * Allows to define the number of digits constituting the mystery number.
 	 * 
-	 * @param pNbChiffresMysteres Nombre de chiffres constituant le nombre mystère.
+	 * @param pNbDigitsMysteryNumber number of digits constituting the mystery number.
 	 * 
-	 * @see #getNbChiffresMysteres()
+	 * @see #getNbDigitsMysteryNumber()
 	 */
-	public void setNbChiffresMysteres(int pNbChiffresMysteres) {
-		this.nbChiffresMysteres = pNbChiffresMysteres;
+	public void setNbDigitsMysteryNumber(int pNbDigitsMysteryNumber) {
+		this.nbDigitsMysteryNumber = pNbDigitsMysteryNumber;
 	}
 	
 	/**
-	 * Permet de définir le nombre de coups possible (ou restant) avant la fin de la partie
+	 * Allows to define the number of remaining tries before the end of the game.
 	 * 
-	 * @param pNbCoups Nombre de coups avant la fin de partie
+	 * @param pNbRemainingTries number of remaining tries before the end of the game.
 	 * 
-	 * @see #getNbCoups()
+	 * @see #getNbRemainingTries()
 	 */
-	public void setNbCoups(int pNbCoups) {
-		this.nbCoups = pNbCoups;
+	public void setNbRemainingTries(int pNbRemainingTries) {
+		this.nbRemainingTries = pNbRemainingTries;
 	}
 	
 	/**
-	 * Permet de définir l'affichage qui sera utilisé pour effectuer les affichages
+	 * Allow to define the display used to make the displays
 	 * 
-	 * @param pAffichage Affichage utilisé pour effectuer les affichages
+	 * @param pDisplay display used to make the displays
 	 * 
-	 * @see #getAffichage()
+	 * @see #getDisplay()
 	 */
-	public void setAffichage(Affichage pAffichage) {
-		this.affichage = pAffichage;
+	public void setDisplay(Display pDisplay) {
+		this.display = pDisplay;
 	}
 	
 	/**
-	 * Permet de définir la liste des joueurs à partir d'un ArrayList de joueurs
+	 * Allows to define the players list from an ArrayList of players.
 	 * 
-	 * @param pJoueurs liste des joueurs
+	 * @param pPlayers list of players
 	 * 
-	 * @see #getJoueurs()
+	 * @see #getPlayers()
 	 */
-	public void setJoueurs(ArrayList<Joueur> pJoueurs) {
-		this.joueurs = pJoueurs;
+	public void setPlayers(ArrayList<Player> pPlayers) {
+		this.players = pPlayers;
 	}
 	
 	/**
-	 * Permet de définir si la partie doit se terminer.
+	 * Allows to define if the game should end.
 	 * 
-	 * @param pFinPartie Indique si la partie doit se terminer.
+	 * @param pEndGame Specifies whether the game should end
 	 * 
-	 * @see #isFinPartie()
+	 * @see #isEndGame()
 	 */
-	public void setFinPartie(boolean pFinPartie) {
-		this.finPartie = pFinPartie;
+	public void setEndGame(boolean pEndGame) {
+		this.endGame = pEndGame;
 	}
 	
-//***** METHODES *****/
+//***** METHODS *****/
 	
 	/**
-	 * Cette méthode permet de générer un nombre mystère.<br>
+	 * This method generates a mystery number.<br>
 	 * <br>
-	 * Cette méthode prend en compte le nombre de chiffres mystère constituant le nombre mystère.<br>
-	 * Les chiffres générés sont des entiers compris entre 0 et 9.<br>
+	 * This method is based on the number of mystery digits that constitue the mystery number.<br>
+	 * The generated digits are integers between 0 and 9.<br>
 	 * 
 	 */
-	public void genereNombreMystere(){
+	public void mysteryNumberGeneration(){
 		
-		for(int i=0; i < this.getNbChiffresMysteres(); i++) {
-			this.getNombreMystere().add(new Integer((int) ((9-0)*Math.random())));
+		for(int i=0; i < this.getNbDigitsMysteryNumber(); i++) {
+			this.getMysteryNumber().add(new Integer((int) ((9-0)*Math.random())));
 		}
 	}
 	
 	/**
-	 * Cette méthode permet de mettre un terme à la partie en indiquant que le joueur a perdu.<br>
-	 * Le message est "Dommage ! Vous avez perdu" suivi de la bonne réponse sauf si le mode de jeu est le duel.
+	 * This method is used to end the game by indicating that the player has lost.<br>
+	 * The message is "Dommage ! Vous avez perdu" followed by the correct answer unless the game mode is the defender.
 	 * 
 	 */
-	protected void defaite() {
+	protected void defeat() {
 		
-		this.getAffichage().afficheln("\n Dommage ! Vous avez perdu"); //$NON-NLS-1$
+		this.getDisplay().println("\n Dommage ! Vous avez perdu"); //$NON-NLS-1$
 
-		if(this.getModeDeJeu() != ModesDeJeu.DEFENSEUR) {
-			this.getAffichage().affiche("La bonne réponse était : "); //$NON-NLS-1$
+		if(this.getGameMode() != GameModes.DEFENDER) {
+			this.getDisplay().print("La bonne réponse était : "); //$NON-NLS-1$
 			// TODO ajouter la fonction afficheln(ArrayList<Integer>)
-			this.getAffichage().affiche(this.getNombreMystere());
-			this.getAffichage().afficheln(""); //$NON-NLS-1$
+			this.getDisplay().print(this.getMysteryNumber());
+			this.getDisplay().println(""); //$NON-NLS-1$
 		}
 
-		this.setFinPartie(true);
+		this.setEndGame(true);
 	}
 	
 	/**
-	 * Cette méthode permet de mettre un terme à la partie en indiquant que le joueur a gagné.<br>
-	 * Le message est "Bravo ! Vous avez gagné"
+	 * This method is used to end the game by indicating that the player has won.<br>
+	 * The message is "Bravo ! Vous avez gagné"
 	 * 
 	 */
-	protected void victoire() {
+	protected void victory() {
 
-		this.getAffichage().afficheln("\n Bravo ! Vous avez gagné"); //$NON-NLS-1$
-		this.setFinPartie(true);
+		this.getDisplay().println("\n Bravo ! Vous avez gagné"); //$NON-NLS-1$
+		this.setEndGame(true);
 	}
 	
 	/**
-	 * Cette méthode permet de mettre un terme à la partie en indiquant une égalité entre le joueur et l'ordinateur.<br>
-	 * Le message est "Personne n'a gagné"
+	 * This method is used to end the game by indicating an equality between the player and the computer.<br>
+	 * This message is "Personne n'a gagné"
 	 * 
 	 */
-	protected void egalite() {
+	protected void equality() {
 		
-		this.getAffichage().afficheln("\n Personne n'a gagné"); //$NON-NLS-1$
-		this.setFinPartie(true);
+		this.getDisplay().println("\n Personne n'a gagné"); //$NON-NLS-1$
+		this.setEndGame(true);
 	}
 	
 	/**
-	 * Cette méthode permet de comparer le nombre proposer en paramètre au nombre mystère.<br>
+	 * This method allows to compare the number proposed in the parameter with the mystery number<br>
 	 * <br>
-	 * Cette méthode est redéfinie dans les différentes classes filles.
+	 * This method is redefined in the different girls' classes.
 	 * 
-	 * @param pNombreAComparer Le nombre à comparer au nombre mystère. 
-	 * @return Le résultat de la comparaison sous la forme d'une String.
+	 * @param pNumberToCompare The number to be compared to the mystery number. 
+	 * @return The result of the comparison in the form of a String
 	 */
-	public abstract String compareNombre(ArrayList<Integer> pNombreAComparer);
+	public abstract String compareNumber(ArrayList<Integer> pNumberToCompare);
 	
 	/**
-	 * Cette méthode démarre le jeu en mode Challenger.<br>
+	 * This method starts the game in Challenger mode.<br>
 	 * <br>
-	 * Cette méthode est redéfinie dans les classes filles
+	 * This method is redefined in the different daughter's classes.
 	 */
 	public abstract void playChallenger();
 	
 	/**
-	 * Cette méthode démarre le jeu en mode Défenseur<br>
+	 * This method starts the game in Defender mode<br>
 	 * <br>
-	 * Cette méthode est redéfinie dans les classes filles
+	 * This method is redefined in the different daughter's classes.
 	 */
 	public abstract void playDefenser();
 	
 	/**
-	 * Cette méthode démarre le jeu en mode Duel<br>
+	 * This method starts the game in Duel mode<br>
 	 * <br>
-	 * Cette méthode est redéfinie dans les classes filles
+	 * This method is redefined in the different daughter's classes.
 	 */
 	public abstract void playDuel();
 	
