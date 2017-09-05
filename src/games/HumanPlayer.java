@@ -8,7 +8,7 @@ import display.Display;
  * <b>This class represents a human player</b>
  * 
  * @author BRUCELLA2
- * @version 1.0.1
+ * @version 1.0.2
  */
 public class HumanPlayer extends Player {
 	
@@ -31,16 +31,22 @@ public class HumanPlayer extends Player {
 	 * <br>
 	 * This number is retrieved as String and transformed into an ArrayList of integer.  
 	 * 
+	 * @param pMaxValueDigit The max value digit
+	 * 
 	 * @return A number in the form of an ArrayList of integer
 	 */
 	@Override
-	public ArrayList<Integer> giveNumber() {
+	public ArrayList<Integer> giveNumber(int pMaxValueDigit) {
 		
 		ArrayList<Integer> number = new ArrayList<>();
 		
+		//TODO to be factorised ?
 		do {
 			this.getDisplay().println("Donnez le nombre mystère : "); //$NON-NLS-1$
-			number = this.getNumberInput();
+			number = this.getNumberInput(pMaxValueDigit);
+			if(number.isEmpty()) {
+				this.getDisplay().println("Saisie incorrecte");
+			}
 		}
 		while(number.isEmpty());
 		
@@ -52,15 +58,21 @@ public class HumanPlayer extends Player {
 	 * <br>
 	 * This number obtained as String is transformed into an integer ArrayList.  
 	 * 
+	 * @param pMaxValueDigit The max value digit
+	 * 
 	 * @return A number in the form of an ArrayList of integer
 	 */
-	public ArrayList<Integer> createMysteryNumber(){
+	public ArrayList<Integer> createMysteryNumber(int pMaxValueDigit){
 		
 		ArrayList<Integer> number = new ArrayList<>();
 		
+		//TODO to be factorised ?
 		do {
-			this.getDisplay().println("Donnez le nombre mystère : "); //$NON-NLS-1$
-			number = this.getNumberInput();
+			this.getDisplay().println("Donnez la combinaison secrète : "); //$NON-NLS-1$
+			number = this.getNumberInput(pMaxValueDigit);
+			if(number.isEmpty()) {
+				this.getDisplay().println("Saisie incorrecte"); //$NON-NLS-1$
+			}
 		}while(number.isEmpty());
 		
 		return number;	

@@ -11,7 +11,7 @@ import display.Display;
  * <br>
  * 
  * @author BRUCELLA2
- * @version 1.0.1
+ * @version 1.0.2
  *
  */
 public abstract class Player {
@@ -104,20 +104,23 @@ public abstract class Player {
 	 * This number has a limited number of digits.<br>
 	 * This method is redefined in the different daughter's classes.
 	 * 
+	 * @param pMaxValueDigit The max value digit
 	 * @return A number in the form of an ArrayList of integer
 	 * 
 	 * @see #getNumberInput(int)
 	 */
-	public abstract ArrayList<Integer> giveNumber();
+	public abstract ArrayList<Integer> giveNumber(int pMaxValueDigit);
 	
 	/**
 	 * This method allows to get the number entered by the user and return is as an ArrayList of integer.<br>
 	 * <br>
+	 * Return an empty ArrayList if the input is not valide (too long, no digit character, digit not in the game rules)
 	 * 
+	 * @param pMaxValueDigit The max value digit
 	 * @return A number in the form of an ArrayList of integer
 	 */
 	//TODO Move this method in HumanPlayer
-	protected ArrayList<Integer> getNumberInput(){
+	protected ArrayList<Integer> getNumberInput(int pMaxValueDigit){
 		
 		String str;
 		ArrayList<Integer> number = new ArrayList<>();
@@ -130,7 +133,14 @@ public abstract class Player {
 		if (str.length() == CombineGame.NB_DIGITS_MYSTERY) {
 			for(int i = 0; i < CombineGame.NB_DIGITS_MYSTERY; i++) {
 				if(Character.isDigit(str.charAt(i))) {
-					number.add(new Integer(Character.getNumericValue(str.charAt(i))));
+					int digit = Character.getNumericValue(str.charAt(i));
+					if(digit <= pMaxValueDigit) {
+						number.add(new Integer(digit));
+					}
+					else {
+						number.clear();
+						return number;
+					}
 				}
 				else {
 					number.clear();

@@ -18,7 +18,7 @@ import games.constants.GameModes;
  * 
  * 
  * @author BRUCELLA2
- * @version 1.0.2
+ * @version 1.0.3
  *
  */
 public class MoreLess extends Game{
@@ -85,7 +85,7 @@ public class MoreLess extends Game{
 	 * If the player finds the right combination, the game stops and displays the victory message.<br>
 	 * If the player does not find the right combination, the game stops and displays the defeat message. 
 	 * 
-	 * @see #mysteryNumberGeneration()
+	 * @see #mysteryNumberGeneration(int)
 	 * @see #victory()
 	 * @see #defeat()
 	 */
@@ -93,7 +93,7 @@ public class MoreLess extends Game{
 	public void playChallenger() {
 
 		HumanPlayer humanPlayer = new HumanPlayer("Player", this.getDisplay()); //$NON-NLS-1$
-		this.mysteryNumberGeneration();
+		this.mysteryNumberGeneration(CombineGame.MAX_VALUE_DIGIT);
 		if(CombineGame.DEVELOPER_MODE) {
 			this.getDisplay().print("Le nombre mystère généré est : "); //$NON-NLS-1$
 			this.getDisplay().println(this.getMysteryNumber());
@@ -101,7 +101,7 @@ public class MoreLess extends Game{
 		
 		while(!this.isEndGame()) {
 			
-			ArrayList<Integer> number = humanPlayer.giveNumber();
+			ArrayList<Integer> number = humanPlayer.giveNumber(CombineGame.MAX_VALUE_DIGIT);
 			String comparison = this.compareNumber(number);
 			String result = " -> Réponse : " + comparison; //$NON-NLS-1$
 			
@@ -138,16 +138,16 @@ public class MoreLess extends Game{
 
 		HumanPlayer humanPlayer = new HumanPlayer("Player", this.getDisplay()); //$NON-NLS-1$
 		ComputerPlayer computerPlayer = new ComputerPlayer("Ordinateur", this.getDisplay()); //$NON-NLS-1$
-		this.setMysteryNumber(humanPlayer.createMysteryNumber());
+		this.setMysteryNumber(humanPlayer.createMysteryNumber(CombineGame.MAX_VALUE_DIGIT));
 		//TODO warning a prendre en compte
 		@SuppressWarnings("resource")
 		Scanner scan = new Scanner(System.in);
 		
 		while(!this.isEndGame()) {
 			
-			ArrayList<Integer> number = computerPlayer.giveNumber();
+			ArrayList<Integer> number = computerPlayer.giveNumber(CombineGame.MAX_VALUE_DIGIT);
 			String comparison = this.compareNumber(number);
-			computerPlayer.addResultat(comparison);
+			computerPlayer.addResultatMoreLess(comparison);
 			String resultat = " -> Réponse : " + comparison; //$NON-NLS-1$
 			
 			this.getDisplay().print(computerPlayer.getPlayerName() + " propose : "); //$NON-NLS-1$
@@ -187,7 +187,7 @@ public class MoreLess extends Game{
 		String compHumanNb = new String();
 		String compComputerNb= new String();
 		
-		this.mysteryNumberGeneration();
+		this.mysteryNumberGeneration(CombineGame.MAX_VALUE_DIGIT);
 		this.getDisplay().println("Un nombre a été généré. A vous de le deviner. Que le meilleur gagne"); //$NON-NLS-1$
 		
 		if(CombineGame.DEVELOPER_MODE) {
@@ -200,7 +200,7 @@ public class MoreLess extends Game{
 			for(Player player : this.getPlayers()) {
 				
 				ArrayList<Integer> number = new ArrayList<>();			
-				number = player.giveNumber();
+				number = player.giveNumber(CombineGame.MAX_VALUE_DIGIT);
 				
 				
 				if(player instanceof HumanPlayer) {
@@ -222,7 +222,7 @@ public class MoreLess extends Game{
 				}
 				else if (!this.isEndGame()) {
 					compComputerNb = this.compareNumber(number);
-					computerPlayer.addResultat(compComputerNb);
+					computerPlayer.addResultatMoreLess(compComputerNb);
 					String resultat = " -> Réponse : " + compComputerNb; //$NON-NLS-1$
 					
 					this.getDisplay().print(("L'ordinateur a proposé un nombre. "));//$NON-NLS-1$

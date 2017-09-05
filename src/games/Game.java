@@ -13,13 +13,13 @@ import games.constants.GameNames;
  * The games represented by the Game class are games where it is necessary to discover either a number (MoreLess game) or a combination of number or color (mastermind)<br>
  * <br> 
  * A game is initiated by starting with the game mode provided as a constructor's parameter (call of the play methods {@link #playChallenger()} {@link #playDefenser()} {@link #playDuel()})<br>
- * A game can generate a mystery number {@link #mysteryNumberGeneration()}<br>
+ * A game can generate a mystery number {@link #mysteryNumberGeneration(int)}<br>
  * A game can compare a proposal provided with the mystery number {@link #compareNumber(ArrayList)}<br>
  * A game can initiate a message of victory or defeat {@link #victory()} {@link #defeat()}<br>
  * 
  * 
  * @author BRUCELLA2
- * @version 1.0.2
+ * @version 1.0.3
  * 
  */
 public abstract class Game {
@@ -55,11 +55,11 @@ public abstract class Game {
 	 * Mystery Number to Discover<br>
 	 * <br>
 	 * Each digit constituting the number is contained in an ArrayList of  integer.<br>
-	 * The mystery number is generated randomly {@link #mysteryNumberGeneration ()} or from a data entered by the user.
+	 * The mystery number is generated randomly {@link #mysteryNumberGeneration(int)} or from a data entered by the user.
 	 * 
 	 * @see #getMysteryNumber()
 	 * @see #setMysteryNumber(ArrayList)
-	 * @see #mysteryNumberGeneration()
+	 * @see #mysteryNumberGeneration(int)
 	 * 
 	 */
 	//TODO A supprimer ? à transformer en liste d'ArrayList pour gérer le mode duel ? A dupliquer pour gérer 2 nombres mystères ?
@@ -173,7 +173,7 @@ public abstract class Game {
 	 * @return mystery number
 	 * 
 	 * @see #setMysteryNumber(ArrayList)
-	 * @see #mysteryNumberGeneration()
+	 * @see #mysteryNumberGeneration(int)
 	 */
 	public ArrayList<Integer> getMysteryNumber(){
 		return this.mysteryNumber;
@@ -313,11 +313,12 @@ public abstract class Game {
 	 * This method is based on the number of mystery digits that constitue the mystery number.<br>
 	 * The generated digits are integers between 0 and 9.<br>
 	 * 
+	 * @param pMaxValueDigit The max value of each digit
 	 */
-	public void mysteryNumberGeneration(){
+	public void mysteryNumberGeneration(int pMaxValueDigit){
 		
 		for(int i=0; i < CombineGame.NB_DIGITS_MYSTERY; i++) {
-			this.getMysteryNumber().add(new Integer((int) ((CombineGame.NB_DIGITS_MYSTERY-0)*Math.random())));
+			this.getMysteryNumber().add(new Integer((int) (((pMaxValueDigit+1)-0)*Math.random())));
 		}
 	}
 	
