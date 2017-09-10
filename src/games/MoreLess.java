@@ -4,6 +4,9 @@ import java.util.ArrayList;
 import java.util.ListIterator;
 import java.util.Scanner;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import display.Display;
 import games.constants.GameModes;
 /**
@@ -18,10 +21,15 @@ import games.constants.GameModes;
  * 
  * 
  * @author BRUCELLA2
- * @version 1.0.3
+ * @version 1.0.4
  *
  */
 public class MoreLess extends Game{
+	
+	/**
+	 * Log4j2 Logger
+	 */
+	private static final Logger logger = LogManager.getLogger(MoreLess.class);
 	
 	/**
 	 * Constructor of the MoreLess class.<br>
@@ -32,11 +40,13 @@ public class MoreLess extends Game{
 	 * @param pDisplay display that will be used to make game displays
 	 * 
 	 * @see #playChallenger()
-	 * @see #playDefenser()
+	 * @see #playDefender()
 	 * @see #playDuel()
 	 */
 	public MoreLess(GameModes pGameMode, Display pDisplay) {
+		
 		super(pGameMode, pDisplay);
+		logger.trace("MoreLess Construction"); //$NON-NLS-1$
 	}
 	
 	/**
@@ -55,6 +65,9 @@ public class MoreLess extends Game{
 	 */
 	@Override
 	public String compareNumber(ArrayList<Integer> pNumberToCompare) {
+		
+		logger.debug("Compare " + pNumberToCompare + " to mysteryNumber : " + this.getMysteryNumber()); //$NON-NLS-1$ //$NON-NLS-2$
+		
 		ListIterator<Integer> itProposedNumber = pNumberToCompare.listIterator();
 		ListIterator<Integer> itMysteryNumber = this.getMysteryNumber().listIterator();
 		String result = ""; //$NON-NLS-1$
@@ -64,6 +77,12 @@ public class MoreLess extends Game{
 				
 				int proposedDigit = itProposedNumber.next().intValue();
 				int mysteryDigit = itMysteryNumber.next().intValue();
+				
+				if(logger.isTraceEnabled()) {
+					logger.trace("proposedDigit = " + proposedDigit); //$NON-NLS-1$
+					logger.trace("mysteryDigit = " + mysteryDigit); //$NON-NLS-1$
+				}
+				
 				if( proposedDigit - mysteryDigit < 0) {
 					result = result + "+"; //$NON-NLS-1$
 				}
@@ -73,8 +92,10 @@ public class MoreLess extends Game{
 				else {
 					result = result + "="; //$NON-NLS-1$
 				}
+				logger.trace("result = " + result); //$NON-NLS-1$
 			}	
-		}		
+		}
+		logger.debug("Result comparison = " + result); //$NON-NLS-1$
 		return result;
 	}
 	
@@ -91,7 +112,9 @@ public class MoreLess extends Game{
 	 */
 	@Override
 	public void playChallenger() {
-
+		
+		logger.trace("Start Challenger mode"); //$NON-NLS-1$
+		
 		HumanPlayer humanPlayer = new HumanPlayer("Player", this.getDisplay()); //$NON-NLS-1$
 		this.mysteryNumberGeneration(CombineGame.MAX_VALUE_DIGIT);
 		if(CombineGame.DEVELOPER_MODE) {
@@ -99,7 +122,11 @@ public class MoreLess extends Game{
 			this.getDisplay().println(this.getMysteryNumber());
 		}
 		
+		logger.debug("Mystery Number = " + this.getMysteryNumber()); //$NON-NLS-1$
+		
 		while(!this.isEndGame()) {
+			
+			logger.trace("Start round - Remaining Tries : " + this.getNbRemainingTries()); //$NON-NLS-1$
 			
 			ArrayList<Integer> number = humanPlayer.giveNumber(CombineGame.MAX_VALUE_DIGIT);
 			String comparison = this.compareNumber(number);
@@ -119,6 +146,8 @@ public class MoreLess extends Game{
 			}
 			
 			this.setNbRemainingTries(this.getNbRemainingTries()-1);
+			
+			logger.debug("End round - Remaining Tries : " + this.getNbRemainingTries()); //$NON-NLS-1$
 		}
 	}
 	
@@ -134,16 +163,23 @@ public class MoreLess extends Game{
 	 * 
 	 */
 	@Override
-	public void playDefenser() {
-
+	public void playDefender() {
+		
+		logger.trace("Start Defender mode"); //$NON-NLS-1$
+		
 		HumanPlayer humanPlayer = new HumanPlayer("Player", this.getDisplay()); //$NON-NLS-1$
 		ComputerPlayer computerPlayer = new ComputerPlayer("Ordinateur", this.getDisplay()); //$NON-NLS-1$
 		this.setMysteryNumber(humanPlayer.createMysteryNumber(CombineGame.MAX_VALUE_DIGIT));
+		
+		logger.debug("Mystery Number = " + this.getMysteryNumber()); //$NON-NLS-1$
+		
 		//TODO warning a prendre en compte
 		@SuppressWarnings("resource")
 		Scanner scan = new Scanner(System.in);
 		
 		while(!this.isEndGame()) {
+			
+			logger.trace("Start round - Remaining Tries : " + this.getNbRemainingTries()); //$NON-NLS-1$
 			
 			ArrayList<Integer> number = computerPlayer.giveNumber(CombineGame.MAX_VALUE_DIGIT);
 			String comparison = this.compareNumber(number);
@@ -165,6 +201,8 @@ public class MoreLess extends Game{
 			}
 			
 			this.setNbRemainingTries(this.getNbRemainingTries()-1);	
+			
+			logger.debug("End round - Remaining Tries : " + this.getNbRemainingTries()); //$NON-NLS-1$
 		}		
 	}
 	
@@ -180,6 +218,8 @@ public class MoreLess extends Game{
 	//TODO A refaire, ne correspond pas à l'énoncé.
 	public void playDuel() {
 		
+		logger.trace("Start Duel mode"); //$NON-NLS-1$
+		
 		HumanPlayer humanPlayer= new HumanPlayer("Player", this.getDisplay()); //$NON-NLS-1$
 		this.players.add(humanPlayer);
 		ComputerPlayer computerPlayer = new ComputerPlayer("Ordinateur", this.getDisplay()); //$NON-NLS-1$
@@ -188,6 +228,9 @@ public class MoreLess extends Game{
 		String compComputerNb= new String();
 		
 		this.mysteryNumberGeneration(CombineGame.MAX_VALUE_DIGIT);
+		
+		logger.debug("Mystery Number = " + this.getMysteryNumber()); //$NON-NLS-1$
+		
 		this.getDisplay().println("Un nombre a été généré. A vous de le deviner. Que le meilleur gagne"); //$NON-NLS-1$
 		
 		if(CombineGame.DEVELOPER_MODE) {
@@ -197,11 +240,16 @@ public class MoreLess extends Game{
 		
 		while(!this.isEndGame()) {
 			
+			logger.trace("Start round - Remaining Tries : " + this.getNbRemainingTries()); //$NON-NLS-1$
+			
 			for(Player player : this.getPlayers()) {
+				
+				logger.trace("Joueur : " + player.getPlayerName()); //$NON-NLS-1$
 				
 				ArrayList<Integer> number = new ArrayList<>();			
 				number = player.giveNumber(CombineGame.MAX_VALUE_DIGIT);
 				
+				logger.debug("Number proposed : " + number); //$NON-NLS-1$
 				
 				if(player instanceof HumanPlayer) {
 					compHumanNb = this.compareNumber(number);
@@ -243,6 +291,8 @@ public class MoreLess extends Game{
 				this.equality();
 			}
 			this.setNbRemainingTries(this.getNbRemainingTries()-1);
+			
+			logger.debug("End round - Remaining Tries : " + this.getNbRemainingTries()); //$NON-NLS-1$
 		}
 	}
 	

@@ -5,6 +5,9 @@ import java.io.InputStream;
 import java.util.Properties;
 import java.util.Scanner;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import display.Display;
 import games.constants.GameModes;
 import games.constants.GameNames;
@@ -16,7 +19,7 @@ import games.constants.GameNames;
  * When the choice of game and mode is made by the user, the game itself is called with the game mode as an argument.<br>
  * 
  * @author BRUCELLA2
- * @version 1.0.2
+ * @version 1.0.3
  * 
  */
 public class CombineGame {
@@ -116,6 +119,10 @@ public class CombineGame {
 	 */
 	private boolean executeCombineGame = true;
 	
+	/**
+	 * Log4j2 logger
+	 */
+	private static final Logger logger = LogManager.getLogger(CombineGame.class);
 	
 	
 //***** CONSTRUCTORS *****/
@@ -130,6 +137,8 @@ public class CombineGame {
 	 * 
 	 */
 	public CombineGame() {
+		
+		logger.trace("CombineGame Construction"); //$NON-NLS-1$
 		
 		this.setDisplay(new Display());
 		this.setScanner(new Scanner(System.in));
@@ -156,8 +165,12 @@ public class CombineGame {
 	 */
 	private void launchCombineGame() {
 		
+		logger.trace("Start CombineGame"); //$NON-NLS-1$
+		
 		while(this.getExecuteCombineGame()) {
-
+			
+			logger.trace("CombineGame is running"); //$NON-NLS-1$
+			
 			while ((this.getGameChosen() == null || this.getmodeChosen() == null) && this.getExecuteCombineGame() != false) {
 				
 				char gameChoice = this.menuGameSelection();
@@ -195,7 +208,7 @@ public class CombineGame {
 
 			}
 
-
+			logger.trace("CombineGame stop"); //$NON-NLS-1$
 		}
 		
 	}
@@ -340,13 +353,19 @@ public class CombineGame {
 	 */
 	public char menuGameSelection() {
 		
+		logger.trace("Display Game selection menu"); //$NON-NLS-1$
+		
 		boolean gameChoice = false;
 		char choice;
-		
+		//TODO if input is > 1 char ask user to answer again
 		do {
 			this.getDisplay().showGamesMenu();
-			choice = this.getScanner().nextLine().charAt(0);
+			String line = this.getScanner().nextLine();
+			choice = line.charAt(0);
 			choice = Character.toUpperCase(choice);
+			
+			logger.debug("User input : " + line); //$NON-NLS-1$
+			logger.debug("User choice : " + choice); //$NON-NLS-1$
 			
 			switch(choice)
 			{
@@ -370,6 +389,8 @@ public class CombineGame {
 				break;	
 			}
 		}while(!gameChoice);
+			
+			logger.debug("Game Chosen : " + this.getGameChosen()); //$NON-NLS-1$
 		
 		return choice;
 	}
@@ -393,13 +414,20 @@ public class CombineGame {
 	 */
 	public char menuModeSelection() {
 		
+		logger.trace("Display Mode selection menu"); //$NON-NLS-1$
+		
 		boolean modeChoice = false;
 		char choice;
 		
+		//TODO if input is > 1 char ask user to answer again
 		do {
 			this.getDisplay().showGameModesMenu();
-			choice = this.getScanner().nextLine().charAt(0);
+			String line = this.getScanner().nextLine();
+			choice = line.charAt(0);
 			choice = Character.toUpperCase(choice);
+			
+			logger.debug("User input : " + line); //$NON-NLS-1$
+			logger.debug("User choice : " + choice); //$NON-NLS-1$
 			
 			switch(choice)
 			{
@@ -430,6 +458,8 @@ public class CombineGame {
 			
 		}while(!modeChoice);
 		
+		logger.debug("Mode Chosen : " + this.getmodeChosen()); //$NON-NLS-1$
+		
 		return choice;
 	}
 	
@@ -450,13 +480,21 @@ public class CombineGame {
 	 * @return The user's choice in the form of an uppercase char.
 	 */
 	public char menuEndGameSelection() {
+		
 		boolean endGameChoice = false;
 		char choice;
 		
+		logger.trace("Display End Game selection menu"); //$NON-NLS-1$
+		
+		//TODO if input is > 1 char ask user to answer again
 		do {
 			this.getDisplay().showEndGameMenu();
-			choice = this.getScanner().nextLine().charAt(0);
+			String line = this.getScanner().nextLine();
+			choice = line.charAt(0);
 			choice = Character.toUpperCase(choice);
+			
+			logger.debug("User input : " + line); //$NON-NLS-1$
+			logger.debug("User choice : " + choice); //$NON-NLS-1$
 			
 			switch(choice) 
 			{
@@ -480,6 +518,8 @@ public class CombineGame {
 			}		
 		}while(!endGameChoice);
 		
+		logger.debug("Quitter : " + this.getExecuteCombineGame()); //$NON-NLS-1$
+		
 		return choice;
 	}
 	
@@ -494,7 +534,8 @@ public class CombineGame {
 		try(InputStream input = getClass().getClassLoader().getResourceAsStream("resources/config.properties")){ //$NON-NLS-1$
 			prop.load(input);
 		} catch (IOException e) {
-			e.printStackTrace();
+			logger.error("Loading config properties Error"); //$NON-NLS-1$
+			logger.error(e.getStackTrace());
 		}
 		
 		DEVELOPER_MODE = Boolean.valueOf(prop.getProperty("DEVELOPER_MODE")).booleanValue(); //$NON-NLS-1$
@@ -503,5 +544,12 @@ public class CombineGame {
 		MAX_VALUE_DIGIT = Integer.valueOf(prop.getProperty("MAX_VALUE_DIGIT")).intValue(); //$NON-NLS-1$
 		NB_COLORS = Integer.valueOf(prop.getProperty("NB_COLORS")).intValue(); //$NON-NLS-1$
 		
+		if(logger.isDebugEnabled()) {
+			logger.debug("DEVELOPPER_MODE = " + DEVELOPER_MODE); //$NON-NLS-1$
+			logger.debug("NB_DIGITS_MYSTERY = " + NB_DIGITS_MYSTERY); //$NON-NLS-1$
+			logger.debug("NB_MAX_TRIES = " + NB_MAX_TRIES); //$NON-NLS-1$
+			logger.debug("MAX_VALUE_DIGIT = " + MAX_VALUE_DIGIT); //$NON-NLS-1$
+			logger.debug("NB_COLORS = " + NB_COLORS); //$NON-NLS-1$
+		}
 	}
 }

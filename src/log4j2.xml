@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<Configuration status="ERROR" monitorInterval="30">
+	<Appenders>
+		<Console name="Console">
+			<PatternLayout pattern="%d{HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n"></PatternLayout>
+		</Console>
+		<file name="File" filename="logs/CombineGame.log">
+			<PatternLayout pattern="%d{HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n"></PatternLayout>
+		</file>
+	</Appenders>
+	<Loggers>
+		<Root level="TRACE">
+			<AppenderRef ref="Console"></AppenderRef>
+			<AppenderRef ref="File"></AppenderRef>
+		</Root>
+			<logger name="games" additivity="false">
+				<AppenderRef ref="Console"></AppenderRef>
+				<AppenderRef ref="File"></AppenderRef>
+			</logger>
+				<logger name="games.Launcher" additivity="false">
+					<AppenderRef ref="Console"></AppenderRef>
+					<AppenderRef ref="File"></AppenderRef>
+				</logger>
+				<logger name="games.CombineGame" additivity="false">
+					<AppenderRef ref="Console"></AppenderRef>
+					<AppenderRef ref="File"></AppenderRef>
+				</logger>
+				<logger name="games.Game" additivity="false">
+					<AppenderRef ref="Console"></AppenderRef>
+					<AppenderRef ref="File"></AppenderRef>
+				</logger>
+				<logger name="games.MoreLess" additivity="false">
+					<AppenderRef ref="Console"></AppenderRef>
+					<AppenderRef ref="File"></AppenderRef>
+				</logger>
+				<logger name="games.Mastermind" additivity="false">
+					<AppenderRef ref="Console"></AppenderRef>
+					<AppenderRef ref="File"></AppenderRef>
+				</logger>
+				<logger name="games.Player" additivity="false">
+					<AppenderRef ref="Console"></AppenderRef>
+					<AppenderRef ref="File"></AppenderRef>
+				</logger>
+				<logger name="games.HumanPlayer" additivity="false">
+					<AppenderRef ref="Console"></AppenderRef>
+					<AppenderRef ref="File"></AppenderRef>
+				</logger>
+				<logger name="games.ComputerPlayer" additivity="false">
+					<AppenderRef ref="Console"></AppenderRef>
+					<AppenderRef ref="File"></AppenderRef>
+				</logger>
+				
+	</Loggers>
+</Configuration>

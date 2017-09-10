@@ -2,6 +2,9 @@ package games;
 
 import java.util.ArrayList;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import display.Display;
 import games.constants.GameModes;
 import games.constants.GameNames;
@@ -12,14 +15,14 @@ import games.constants.GameNames;
  * <br>
  * The games represented by the Game class are games where it is necessary to discover either a number (MoreLess game) or a combination of number or color (mastermind)<br>
  * <br> 
- * A game is initiated by starting with the game mode provided as a constructor's parameter (call of the play methods {@link #playChallenger()} {@link #playDefenser()} {@link #playDuel()})<br>
+ * A game is initiated by starting with the game mode provided as a constructor's parameter (call of the play methods {@link #playChallenger()} {@link #playDefender()} {@link #playDuel()})<br>
  * A game can generate a mystery number {@link #mysteryNumberGeneration(int)}<br>
  * A game can compare a proposal provided with the mystery number {@link #compareNumber(ArrayList)}<br>
  * A game can initiate a message of victory or defeat {@link #victory()} {@link #defeat()}<br>
  * 
  * 
  * @author BRUCELLA2
- * @version 1.0.3
+ * @version 1.0.4
  * 
  */
 public abstract class Game {
@@ -108,6 +111,10 @@ public abstract class Game {
 	 */
 	boolean endGame;
 	
+	/**
+	 * Log4j logger
+	 */
+	private static final Logger logger = LogManager.getLogger(Game.class); 
 	
 //***** CONSTRUCTEURS *****/	
 	
@@ -121,20 +128,29 @@ public abstract class Game {
 	 * @param pDisplay display that will be used to make game displays
 	 * 
 	 * @see #playChallenger()
-	 * @see #playDefenser()
+	 * @see #playDefender()
 	 * @see #playDuel()
 	 */
+	
+	//TODO Remove play methods, this methods need to be call in a new method startGame() and not directly in the constructor.
 	protected Game(GameModes pGameMode, Display pDisplay) {
+		
+		logger.trace("Game Construction"); //$NON-NLS-1$
+		
 		this.setDisplay(pDisplay);
 		this.setEndGame(false);
 		this.setGameMode(pGameMode);
 		this.setNbRemainingTries(CombineGame.NB_MAX_TRIES);
 		
+		logger.debug("EnGame = " + this.isEndGame()); //$NON-NLS-1$
+		logger.debug("GameMode = " + this.getGameMode()); //$NON-NLS-1$
+		logger.debug("RemainingTries = " + this.getNbRemainingTries()); //$NON-NLS-1$
+		
 		if(this.getGameMode() == GameModes.CHALLENGER) {
 			this.playChallenger();
 		}
 		else if(this.getGameMode() == GameModes.DEFENDER) {
-			this.playDefenser();
+			this.playDefender();
 		}
 		else{
 			this.playDuel();
@@ -317,8 +333,14 @@ public abstract class Game {
 	 */
 	public void mysteryNumberGeneration(int pMaxValueDigit){
 		
+		logger.trace("Number Generation"); //$NON-NLS-1$
+		
 		for(int i=0; i < CombineGame.NB_DIGITS_MYSTERY; i++) {
 			this.getMysteryNumber().add(new Integer((int) (((pMaxValueDigit+1)-0)*Math.random())));
+			
+			if(logger.isTraceEnabled()) {
+				logger.trace(this.getMysteryNumber());
+			}
 		}
 	}
 	
@@ -328,6 +350,8 @@ public abstract class Game {
 	 * 
 	 */
 	protected void defeat() {
+		
+		logger.trace("Defeat"); //$NON-NLS-1$
 		
 		this.getDisplay().println("\n Dommage ! Vous avez perdu"); //$NON-NLS-1$
 
@@ -339,6 +363,7 @@ public abstract class Game {
 		}
 
 		this.setEndGame(true);
+		logger.trace("End game : " + this.isEndGame()); //$NON-NLS-1$
 	}
 	
 	/**
@@ -347,9 +372,13 @@ public abstract class Game {
 	 * 
 	 */
 	protected void victory() {
-
+		
+		logger.trace("Victory"); //$NON-NLS-1$
+		
 		this.getDisplay().println("\n Bravo ! Vous avez gagné"); //$NON-NLS-1$
 		this.setEndGame(true);
+		
+		logger.trace("End game : " + this.isEndGame()); //$NON-NLS-1$
 	}
 	
 	/**
@@ -359,8 +388,12 @@ public abstract class Game {
 	 */
 	protected void equality() {
 		
+		logger.trace("Equality"); //$NON-NLS-1$
+		
 		this.getDisplay().println("\n Personne n'a gagné"); //$NON-NLS-1$
 		this.setEndGame(true);
+		
+		logger.trace("End game : " + this.isEndGame()); //$NON-NLS-1$
 	}
 	
 	/**
@@ -385,7 +418,7 @@ public abstract class Game {
 	 * <br>
 	 * This method is redefined in the different daughter's classes.
 	 */
-	public abstract void playDefenser();
+	public abstract void playDefender();
 	
 	/**
 	 * This method starts the game in Duel mode<br>

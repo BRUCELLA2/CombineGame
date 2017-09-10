@@ -18,7 +18,7 @@ import games.constants.GameModes;
  * The elements that must be displayed are sent to the Display object, wich will then adjust the graphical aspects.<br>
  * 
  * @author BRUCELLA2
- * @version 1.0.0
+ * @version 1.0.1
  */
 public class Mastermind extends Game{
 	
@@ -49,7 +49,7 @@ public class Mastermind extends Game{
 	 * @param pDisplay display that will be used to make game displays
 	 * 
 	 * @see #playChallenger()
-	 * @see #playDefenser()
+	 * @see #playDefender()
 	 * @see #playDuel()
 	 * 
 	 */
@@ -254,7 +254,7 @@ public class Mastermind extends Game{
 	 *  
 	 */
 	@Override
-	public void playDefenser() {
+	public void playDefender() {
 		
 		HumanPlayer human = new HumanPlayer("Joueur", this.getDisplay()); //$NON-NLS-1$
 		ComputerPlayer computer = new ComputerPlayer("ordinateur", this.getDisplay()); //$NON-NLS-1$

@@ -4,6 +4,9 @@ import java.util.ArrayList;
 
 import java.util.Scanner;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import display.Display;
 
 /**
@@ -11,7 +14,7 @@ import display.Display;
  * <br>
  * 
  * @author BRUCELLA2
- * @version 1.0.2
+ * @version 1.0.3
  *
  */
 public abstract class Player {
@@ -34,6 +37,10 @@ public abstract class Player {
 	 */
 	private Display display;
 	
+	/**
+	 * Log4j2 Logger
+	 */
+	private static final Logger logger = LogManager.getLogger(Player.class);
 	
 //***** CONSTRUCTORS *****//
 	
@@ -46,8 +53,13 @@ public abstract class Player {
 	 * @param pDisplay The display to used
 	 */
 	public Player(String pPlayerGame, Display pDisplay) {
+		
+		logger.trace("Player construction"); //$NON-NLS-1$
+		
 		this.setPlayerName(pPlayerGame);
 		this.setDisplay(pDisplay);
+		
+		logger.trace("Player name : " + this.getPlayerName()); //$NON-NLS-1$
 	}
 	
 //***** GETTERS *****//
@@ -122,6 +134,8 @@ public abstract class Player {
 	//TODO Move this method in HumanPlayer
 	protected ArrayList<Integer> getNumberInput(int pMaxValueDigit){
 		
+		logger.trace("Get Number input"); //$NON-NLS-1$
+		
 		String str;
 		ArrayList<Integer> number = new ArrayList<>();
 		
@@ -129,30 +143,38 @@ public abstract class Player {
 		@SuppressWarnings("resource")
 		Scanner scan = new Scanner(System.in);
 		str = scan.nextLine();
-			
+		
+		logger.trace("User input : " + str); //$NON-NLS-1$
+		logger.trace("User input length : " + str.length()); //$NON-NLS-1$
 		if (str.length() == CombineGame.NB_DIGITS_MYSTERY) {
 			for(int i = 0; i < CombineGame.NB_DIGITS_MYSTERY; i++) {
+				logger.trace("char : " + str.charAt(i)); //$NON-NLS-1$
 				if(Character.isDigit(str.charAt(i))) {
 					int digit = Character.getNumericValue(str.charAt(i));
+					logger.trace("digit : " + digit); //$NON-NLS-1$
 					if(digit <= pMaxValueDigit) {
 						number.add(new Integer(digit));
+						logger.trace("number : " + number); //$NON-NLS-1$
 					}
 					else {
 						number.clear();
+						logger.trace("number returned : " + number); //$NON-NLS-1$
 						return number;
 					}
 				}
 				else {
 					number.clear();
+					logger.trace("number returned : " + number); //$NON-NLS-1$
 					return number;
 				}
 			}
 		}
 		else {
 			number.clear();
+			logger.trace("number returned : " + number); //$NON-NLS-1$
 			return number;
 		}
-		
+		logger.trace("number returned : " + number); //$NON-NLS-1$
 		return number;
 	}
 }
