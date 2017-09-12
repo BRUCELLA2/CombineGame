@@ -19,7 +19,7 @@ import games.constants.GameNames;
  * When the choice of game and mode is made by the user, the game itself is called with the game mode as an argument.<br>
  * 
  * @author BRUCELLA2
- * @version 1.0.3
+ * @version 1.0.4
  * 
  */
 public class CombineGame {
@@ -184,6 +184,7 @@ public class CombineGame {
 					if(this.getGameChosen() == GameNames.MORE_LESS) {
 						
 						Game game = new MoreLess(this.getmodeChosen(), this.getDisplay());
+						game.startGame();
 						
 						if(game.isEndGame() == true) {
 
@@ -194,7 +195,9 @@ public class CombineGame {
 						}
 					}
 					else if(this.getGameChosen() == GameNames.MASTERMIND) {
+						
 						Game game = new Mastermind(this.getmodeChosen(), this.getDisplay());
+						game.startGame();
 						
 						if(game.isEndGame() == true) {
 
@@ -518,7 +521,7 @@ public class CombineGame {
 			}		
 		}while(!endGameChoice);
 		
-		logger.debug("Quitter : " + this.getExecuteCombineGame()); //$NON-NLS-1$
+		logger.debug("Combine game continue : " + this.getExecuteCombineGame()); //$NON-NLS-1$
 		
 		return choice;
 	}

@@ -4,6 +4,9 @@ import java.util.ArrayList;
 import java.util.ListIterator;
 import java.util.Scanner;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import display.Display;
 import games.constants.GameModes;
 
@@ -18,7 +21,7 @@ import games.constants.GameModes;
  * The elements that must be displayed are sent to the Display object, wich will then adjust the graphical aspects.<br>
  * 
  * @author BRUCELLA2
- * @version 1.0.1
+ * @version 1.0.2
  */
 public class Mastermind extends Game{
 	
@@ -39,6 +42,12 @@ public class Mastermind extends Game{
 	 */
 	private int badPos;
 	
+	
+	/**
+	 * Log4j2 Logger
+	 */
+	private static final Logger logger = LogManager.getLogger(Mastermind.class);
+	
 //***** CONSTRUCTORS *****//
 	/**
 	 * Constructor of the Mastermind class.<br>
@@ -56,6 +65,8 @@ public class Mastermind extends Game{
 	protected Mastermind(GameModes pGameMode, Display pDisplay) {
 		
 		super(pGameMode, pDisplay);
+		
+		logger.trace("Mastermind Construction"); //$NON-NLS-1$
 
 	}
 
@@ -118,15 +129,25 @@ public class Mastermind extends Game{
 	 * @see Mastermind#findNbDigitsGoodPos(ArrayList, ArrayList) 
 	 */
 	@Override
-	public String compareNumber(ArrayList<Integer> pNumberToCompare) {
+	public String compareNumber(ArrayList<Integer> pNumberToCompare, ArrayList<Integer> pMysteryNumber) {
+		
+		logger.trace("Start compare number"); //$NON-NLS-1$
+		logger.trace("Number to compare : " + pNumberToCompare); //$NON-NLS-1$
+		logger.trace("Mystery number : " + pMysteryNumber); //$NON-NLS-1$
 		
 		String result = ""; //$NON-NLS-1$
 		
-		int nbDigitInMystery = Mastermind.findNbDigitInMystery(pNumberToCompare, this.getMysteryNumber());
-		this.setGoodPos(Mastermind.findNbDigitsGoodPos(pNumberToCompare, this.getMysteryNumber()));
+		int nbDigitInMystery = Mastermind.findNbDigitInMystery(pNumberToCompare, pMysteryNumber);
+		this.setGoodPos(Mastermind.findNbDigitsGoodPos(pNumberToCompare, pMysteryNumber));
 		this.setBadPos(nbDigitInMystery - this.getGoodPos());
 		
+		logger.debug("Nb same digit in mystery : " + nbDigitInMystery); //$NON-NLS-1$
+		logger.debug("Nb digit in good position : " + this.getGoodPos()); //$NON-NLS-1$
+		logger.debug("Nb digit in bad position : " + this.getBadPos()); //$NON-NLS-1$
+		
 		result = this.getBadPos() + " présent(s), " + this.getGoodPos() + " bien placé(s)"; //$NON-NLS-1$ //$NON-NLS-2$
+		
+		logger.debug("result comparison : " + result); //$NON-NLS-1$
 		return result;
 	}
 	
@@ -140,6 +161,10 @@ public class Mastermind extends Game{
 	 */
 	public static int findNbDigitInMystery(ArrayList<Integer> pNumberToCompare, ArrayList<Integer> pMysteryNumber) {
 		
+		logger.trace("Start search nb same digit in mystery"); //$NON-NLS-1$
+		logger.trace("Number to compare : " + pNumberToCompare); //$NON-NLS-1$
+		logger.trace("Mystery number : " + pMysteryNumber); //$NON-NLS-1$
+		
 		int NbDigitsInMystery = 0;
 		
 		ArrayList<Integer> mysteryNumberCopy = new ArrayList<>(pMysteryNumber);
@@ -149,20 +174,30 @@ public class Mastermind extends Game{
 			
 			int proposedDigit = itNumberToCompare.next().intValue();
 			
+			logger.trace("Proposed digit : " + proposedDigit); //$NON-NLS-1$
+			
 			ListIterator<Integer> itMysteryNumberCopy = mysteryNumberCopy.listIterator();
 			
 			while(itMysteryNumberCopy.hasNext()) {
 				
 				int mysteryDigit = itMysteryNumberCopy.next().intValue();
-
+				
+				logger.trace("Mystery digit : " + mysteryDigit); //$NON-NLS-1$
+				
 				if(proposedDigit == mysteryDigit) {
-
+					
 					NbDigitsInMystery++;						
 					itMysteryNumberCopy.remove();
+					if(logger.isTraceEnabled()) {
+						logger.trace("Nb same digits in mystery : " + NbDigitsInMystery); //$NON-NLS-1$
+						logger.trace("Digit remaining in mystery : " + mysteryNumberCopy); //$NON-NLS-1$
+					}					
 					break;
 				}
 			}
 		}
+		
+		logger.debug("Number same digit in mystery after searching : " + NbDigitsInMystery); //$NON-NLS-1$
 		
 		return NbDigitsInMystery;
 	}
@@ -177,6 +212,10 @@ public class Mastermind extends Game{
 	 */
 	public static int findNbDigitsGoodPos(ArrayList<Integer> pNumberToCompare, ArrayList<Integer> pMysteryNumber) {
 		
+		logger.trace("Start search for nb digits in good pos"); //$NON-NLS-1$
+		logger.trace("Number to compare : " + pNumberToCompare); //$NON-NLS-1$
+		logger.trace("Mystery number : " + pMysteryNumber); //$NON-NLS-1$
+		
 		int goodPosFind = 0;
 		
 		ArrayList<Integer >mysteryNumberCopy = new ArrayList<>(pMysteryNumber);
@@ -188,15 +227,23 @@ public class Mastermind extends Game{
 			
 			int proposedDigit = itNumberProposed.next().intValue();
 			
+			logger.trace("Proposed digit : " + proposedDigit); //$NON-NLS-1$
+			
 			if(itMysteryNumberCopy.hasNext()) {
 				
 				int mysteryDigit = itMysteryNumberCopy.next().intValue();
 				
+				logger.trace("mystery digit : " + mysteryDigit); //$NON-NLS-1$
+				
 				if(proposedDigit == mysteryDigit ) {
 					goodPosFind++;
+					logger.trace("Nb digits in good pos mystery : " + goodPosFind); //$NON-NLS-1$
 				}
 			}
 		}
+		
+		logger.debug("Nb digits in good pos : " + goodPosFind); //$NON-NLS-1$
+		
 		return goodPosFind;
 	}
 	
@@ -209,31 +256,43 @@ public class Mastermind extends Game{
 	 * 
 	 * @see #mysteryNumberGeneration(int)
 	 * @see #victory()
-	 * @see #defeat()
+	 * @see #defeat(ArrayList)
 	 */
 	@Override
 	public void playChallenger() {
-
+		
+		logger.trace("Start Challenger mode"); //$NON-NLS-1$
+		logger.trace("Remaining tries at start of turn: " + this.nbRemainingTries); //$NON-NLS-1$
+		
 		HumanPlayer humanPlayer = new HumanPlayer("Joueur", this.getDisplay()); //$NON-NLS-1$
-		this.mysteryNumberGeneration(CombineGame.NB_COLORS);
+		ArrayList<Integer> mysteryNumber = this.mysteryNumberGeneration(CombineGame.NB_COLORS);
+		
+		logger.debug("Mystery number : " + mysteryNumber); //$NON-NLS-1$
 		
 		if(CombineGame.DEVELOPER_MODE) {
 			this.getDisplay().print("Le nombre mystère généré est : "); //$NON-NLS-1$
-			this.getDisplay().println(this.getMysteryNumber());
+			this.getDisplay().println(mysteryNumber);
 		}
 		
 		while(!this.isEndGame()) {
 			
 			ArrayList<Integer> proposedNumber = humanPlayer.giveNumber(CombineGame.NB_COLORS);
-			String resultat = this.compareNumber(proposedNumber);
+			String result = this.compareNumber(proposedNumber, mysteryNumber);
 			
-			this.getDisplay().println(resultat);
+			if(logger.isTraceEnabled()) {
+				logger.trace("Proposed number by player : " + proposedNumber); //$NON-NLS-1$
+				logger.trace("Result of comparison : " + result); //$NON-NLS-1$
+			}
+			
+			this.getDisplay().println(result);
 
 			if(this.getGoodPos() == CombineGame.NB_DIGITS_MYSTERY) {
+				logger.debug("Victory : good position = nb digits mystery"); //$NON-NLS-1$
 				this.victory();
 			}
 			else if(this.getNbRemainingTries() == 1) {
-				this.defeat();
+				logger.debug("Defeat : no remaining tries "); //$NON-NLS-1$
+				this.defeat(mysteryNumber);
 			}
 			else {
 				this.setNbRemainingTries(this.getNbRemainingTries() - 1);
@@ -256,10 +315,23 @@ public class Mastermind extends Game{
 	@Override
 	public void playDefender() {
 		
+		logger.trace("Start Challenger mode"); //$NON-NLS-1$
+		logger.trace("Remaining tries at start of turn: " + this.nbRemainingTries); //$NON-NLS-1$
+		
 		HumanPlayer human = new HumanPlayer("Joueur", this.getDisplay()); //$NON-NLS-1$
 		ComputerPlayer computer = new ComputerPlayer("ordinateur", this.getDisplay()); //$NON-NLS-1$
 		
-		this.setMysteryNumber(human.createMysteryNumber(CombineGame.NB_COLORS));
+		ArrayList<Integer> mysteryNumber = human.createMysteryNumber(CombineGame.NB_COLORS);
+		
+		logger.debug("Mystery number : " + mysteryNumber); //$NON-NLS-1$
+		
+		if(CombineGame.DEVELOPER_MODE) {
+			this.getDisplay().print("Le nombre mystère est : "); //$NON-NLS-1$
+			this.getDisplay().println(mysteryNumber);
+		}
+		
+		//TODO don't create a new scan each time if possible
+		@SuppressWarnings("resource")
 		Scanner scan = new Scanner(System.in);
 		
 		while(!this.isEndGame()) {
@@ -268,7 +340,7 @@ public class Mastermind extends Game{
 			ArrayList<Integer> proposition = computer.giveNumberPattern();
 			
 			// Compare computer's proposition to mystery pattern
-			String result = compareNumber(proposition);
+			String result = compareNumber(proposition, mysteryNumber);
 		
 			// Store the comparison results
 			computer.addGoodResultMastermind(proposition, this.getGoodPos());
@@ -282,9 +354,11 @@ public class Mastermind extends Game{
 			
 			//Check if it's the end of game
 			if(this.getGoodPos() == CombineGame.NB_DIGITS_MYSTERY) {
-				this.defeat();
+				logger.debug("Defeat : good position = nb digits mystery"); //$NON-NLS-1$
+				this.defeat(mysteryNumber);
 			}
 			else if(!(this.getGoodPos() == CombineGame.NB_DIGITS_MYSTERY) && this.getNbRemainingTries() == 1){
+				logger.debug("Victory : no remaining tries for computer"); //$NON-NLS-1$
 				this.victory();
 			}
 			
@@ -296,7 +370,7 @@ public class Mastermind extends Game{
 
 	@Override
 	public void playDuel() {
-		// TODO Auto-generated method stub
+		// TODO Auto-generated method stub	
 		
 	}
 

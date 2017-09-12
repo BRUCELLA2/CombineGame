@@ -17,12 +17,12 @@ import games.constants.GameNames;
  * <br> 
  * A game is initiated by starting with the game mode provided as a constructor's parameter (call of the play methods {@link #playChallenger()} {@link #playDefender()} {@link #playDuel()})<br>
  * A game can generate a mystery number {@link #mysteryNumberGeneration(int)}<br>
- * A game can compare a proposal provided with the mystery number {@link #compareNumber(ArrayList)}<br>
- * A game can initiate a message of victory or defeat {@link #victory()} {@link #defeat()}<br>
+ * A game can compare a proposal provided with the mystery number {@link #compareNumber(ArrayList, ArrayList)}<br>
+ * A game can initiate a message of victory or defeat {@link #victory()} {@link #defeat(ArrayList)}<br>
  * 
  * 
  * @author BRUCELLA2
- * @version 1.0.4
+ * @version 1.0.5
  * 
  */
 public abstract class Game {
@@ -53,20 +53,6 @@ public abstract class Game {
 	 */
 	//TODO a rendre final si possible
 	GameModes gameMode;
-	
-	/**
-	 * Mystery Number to Discover<br>
-	 * <br>
-	 * Each digit constituting the number is contained in an ArrayList of  integer.<br>
-	 * The mystery number is generated randomly {@link #mysteryNumberGeneration(int)} or from a data entered by the user.
-	 * 
-	 * @see #getMysteryNumber()
-	 * @see #setMysteryNumber(ArrayList)
-	 * @see #mysteryNumberGeneration(int)
-	 * 
-	 */
-	//TODO A supprimer ? à transformer en liste d'ArrayList pour gérer le mode duel ? A dupliquer pour gérer 2 nombres mystères ?
-	ArrayList<Integer> mysteryNumber = new ArrayList<>();
 	
 	/**
 	 * Number of remaining attempts to complete the game<br>
@@ -121,7 +107,7 @@ public abstract class Game {
 	/**
 	 * Game's constructor<br>
 	 * <br>
-	 * The constructor initiates the various variables and starts the game with the desired mode
+	 * The constructor initiates the various variables.
 	 * 
 	 * 
 	 * @param pGameMode game mode to be used
@@ -132,7 +118,6 @@ public abstract class Game {
 	 * @see #playDuel()
 	 */
 	
-	//TODO Remove play methods, this methods need to be call in a new method startGame() and not directly in the constructor.
 	protected Game(GameModes pGameMode, Display pDisplay) {
 		
 		logger.trace("Game Construction"); //$NON-NLS-1$
@@ -145,16 +130,6 @@ public abstract class Game {
 		logger.debug("EnGame = " + this.isEndGame()); //$NON-NLS-1$
 		logger.debug("GameMode = " + this.getGameMode()); //$NON-NLS-1$
 		logger.debug("RemainingTries = " + this.getNbRemainingTries()); //$NON-NLS-1$
-		
-		if(this.getGameMode() == GameModes.CHALLENGER) {
-			this.playChallenger();
-		}
-		else if(this.getGameMode() == GameModes.DEFENDER) {
-			this.playDefender();
-		}
-		else{
-			this.playDuel();
-		}
 	}
 	
 	
@@ -191,9 +166,10 @@ public abstract class Game {
 	 * @see #setMysteryNumber(ArrayList)
 	 * @see #mysteryNumberGeneration(int)
 	 */
+	/*
 	public ArrayList<Integer> getMysteryNumber(){
 		return this.mysteryNumber;
-	}
+	}*/
 	
 	
 	/**
@@ -273,9 +249,10 @@ public abstract class Game {
 	 * 
 	 * @see #getMysteryNumber()
 	 */
+	/*
 	public void setMysteryNumber(ArrayList<Integer> pMysteryNumber) {
 		this.mysteryNumber = pMysteryNumber;
-	}
+	}*/
 	
 	/**
 	 * Allows to define the number of remaining tries before the end of the game.
@@ -324,32 +301,56 @@ public abstract class Game {
 //***** METHODS *****/
 	
 	/**
+	 * This method starts the game with the desired mode
+	 */
+	public void startGame() {
+		
+		logger.trace("Start game"); //$NON-NLS-1$
+		
+		if(this.getGameMode() == GameModes.CHALLENGER) {
+			this.playChallenger();
+		}
+		else if(this.getGameMode() == GameModes.DEFENDER) {
+			this.playDefender();
+		}
+		else{
+			this.playDuel();
+		}
+	}
+	
+	/**
 	 * This method generates a mystery number.<br>
 	 * <br>
 	 * This method is based on the number of mystery digits that constitue the mystery number.<br>
 	 * The generated digits are integers between 0 and 9.<br>
 	 * 
 	 * @param pMaxValueDigit The max value of each digit
+	 * @return The mystery Number generated
 	 */
-	public void mysteryNumberGeneration(int pMaxValueDigit){
+	public ArrayList<Integer> mysteryNumberGeneration(int pMaxValueDigit){
 		
 		logger.trace("Number Generation"); //$NON-NLS-1$
+		ArrayList<Integer> mysteryNumber = new ArrayList<>();
 		
 		for(int i=0; i < CombineGame.NB_DIGITS_MYSTERY; i++) {
-			this.getMysteryNumber().add(new Integer((int) (((pMaxValueDigit+1)-0)*Math.random())));
+			mysteryNumber.add(new Integer((int) (((pMaxValueDigit+1)-0)*Math.random())));
 			
 			if(logger.isTraceEnabled()) {
-				logger.trace(this.getMysteryNumber());
+				logger.trace(mysteryNumber);
 			}
 		}
+		
+		return mysteryNumber;
 	}
 	
 	/**
 	 * This method is used to end the game by indicating that the player has lost.<br>
 	 * The message is "Dommage ! Vous avez perdu" followed by the correct answer unless the game mode is the defender.
 	 * 
+	 * @param pMysteryNumber The mystery Number not discovered during the game
+	 * 
 	 */
-	protected void defeat() {
+	protected void defeat(ArrayList<Integer> pMysteryNumber) {
 		
 		logger.trace("Defeat"); //$NON-NLS-1$
 		
@@ -358,7 +359,7 @@ public abstract class Game {
 		if(this.getGameMode() != GameModes.DEFENDER) {
 			this.getDisplay().print("La bonne réponse était : "); //$NON-NLS-1$
 			// TODO ajouter la fonction afficheln(ArrayList<Integer>)
-			this.getDisplay().print(this.getMysteryNumber());
+			this.getDisplay().print(pMysteryNumber);
 			this.getDisplay().println(""); //$NON-NLS-1$
 		}
 
@@ -402,9 +403,11 @@ public abstract class Game {
 	 * This method is redefined in the different girls' classes.
 	 * 
 	 * @param pNumberToCompare The number to be compared to the mystery number. 
+	 * @param pMysteryNumber The mystery Number.
+	 * 
 	 * @return The result of the comparison in the form of a String
 	 */
-	public abstract String compareNumber(ArrayList<Integer> pNumberToCompare);
+	public abstract String compareNumber(ArrayList<Integer> pNumberToCompare, ArrayList<Integer> pMysteryNumber);
 	
 	/**
 	 * This method starts the game in Challenger mode.<br>

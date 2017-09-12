@@ -18,7 +18,7 @@ import display.Display;
  * <b>This class represents a player simulated by the computer.</b><br>
  * 
  * @author BRUCELLA2
- * @version 1.0.4
+ * @version 1.0.5
  *
  */
 public class ComputerPlayer extends Player{
@@ -108,14 +108,6 @@ public class ComputerPlayer extends Player{
 		
 		logger.trace("Computer construction"); //$NON-NLS-1$
 		
-		for(int i=0; i < CombineGame.NB_DIGITS_MYSTERY; i++) {
-			this.getMaxValues().add(CombineGame.MAX_VALUE_DIGIT);
-			this.getMinValues().add(0);
-			if(logger.isTraceEnabled()) {
-				logger.trace("Construction of MaxValue for each digit : " + this.getMaxValues()); //$NON-NLS-1$
-				logger.trace("Construction of MinValue for each digit : " + this.getMinValues()); //$NON-NLS-1$
-			}
-		}
 	}
 
 //***** GETTERS *****/
@@ -354,9 +346,15 @@ public class ComputerPlayer extends Player{
 			
 			if(lastProposition.isEmpty()) {
 				number.add(new Integer((int) ((pMaxValueDigit-0)*Math.random())));
+				this.getMaxValues().add(new Integer(CombineGame.MAX_VALUE_DIGIT));
+				this.getMinValues().add(new Integer(0));
+				
 				if(logger.isTraceEnabled()) {
+					logger.trace("Construction of MaxValue for each digit : " + this.getMaxValues()); //$NON-NLS-1$
+					logger.trace("Construction of MinValue for each digit : " + this.getMinValues()); //$NON-NLS-1$
 					logger.trace("Last proposition empty - Number construction : " + number); //$NON-NLS-1$
 				}
+
 			}
 			else {
 				
