@@ -1,5 +1,6 @@
 .classpath
 .project
+/.settings
 /bin
 /logs
 /src/log4j2.out.xml
