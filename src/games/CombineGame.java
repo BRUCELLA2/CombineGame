@@ -21,7 +21,7 @@ import games.constants.GameNames;
  * called with the game mode as an argument.<br>
  *
  * @author BRUCELLA2
- * @version 1.0.5
+ * @version 1.0.6
  *
  */
 public class CombineGame {
@@ -80,7 +80,7 @@ public class CombineGame {
      * @see #getDisplay()
      * @see #setDisplay(Display)
      */
-    private Display display;
+    public static final Display DISPLAY = new Display();
 
     /**
      * scanner which allows to retrieve data (Strings) entered by the user
@@ -143,8 +143,8 @@ public class CombineGame {
     public CombineGame() {
 
         logger.trace("CombineGame Construction"); //$NON-NLS-1$
-
-        this.setDisplay(new Display());
+        
+        //this.setDisplay(new Display());
         this.setScanner(new Scanner(System.in));
         this.setGameChosen(null);
         this.setModeChosen(null);
@@ -189,7 +189,7 @@ public class CombineGame {
                 while (this.getGameChosen() != null && this.getmodeChosen() != null) {
                     if (this.getGameChosen() == GameNames.MORE_LESS) {
 
-                        Game game = new MoreLess(this.getmodeChosen(), this.getDisplay());
+                        Game game = new MoreLess(this.getmodeChosen());
                         game.startGame();
 
                         if (game.isEndGame() == true) {
@@ -201,7 +201,7 @@ public class CombineGame {
                         }
                     } else if (this.getGameChosen() == GameNames.MASTERMIND) {
 
-                        Game game = new Mastermind(this.getmodeChosen(), this.getDisplay());
+                        Game game = new Mastermind(this.getmodeChosen());
                         game.startGame();
 
                         if (game.isEndGame() == true) {
@@ -228,10 +228,9 @@ public class CombineGame {
      *
      * @return The display allowing the display in the game
      *
-     * @see #setDisplay(Display)
      */
-    public Display getDisplay() {
-        return this.display;
+    public static Display getDisplay() {
+        return DISPLAY;
     }
 
     /**
@@ -306,10 +305,10 @@ public class CombineGame {
      *            display used to make the displays
      *
      * @see #getDisplay()
-     */
+     *//*
     private void setDisplay(Display pDisplay) {
         this.display = pDisplay;
-    }
+    }*/
 
     /**
      * Allow to define the game chosen by the user
@@ -374,7 +373,7 @@ public class CombineGame {
         char choice;
         // TODO if input is > 1 char ask user to answer again
         do {
-            this.getDisplay().showGamesMenu();
+            CombineGame.getDisplay().showGamesMenu();
             String line = this.getScanner().nextLine();
             choice = line.charAt(0);
             choice = Character.toUpperCase(choice);
@@ -436,7 +435,7 @@ public class CombineGame {
 
         // TODO if input is > 1 char ask user to answer again
         do {
-            this.getDisplay().showGameModesMenu();
+            CombineGame.getDisplay().showGameModesMenu();
             String line = this.getScanner().nextLine();
             choice = line.charAt(0);
             choice = Character.toUpperCase(choice);
@@ -505,7 +504,7 @@ public class CombineGame {
 
         // TODO if input is > 1 char ask user to answer again
         do {
-            this.getDisplay().showEndGameMenu();
+            CombineGame.getDisplay().showEndGameMenu();
             String line = this.getScanner().nextLine();
             choice = line.charAt(0);
             choice = Character.toUpperCase(choice);

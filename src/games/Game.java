@@ -28,7 +28,7 @@ import games.constants.GameNames;
  *
  *
  * @author BRUCELLA2
- * @version 1.0.6
+ * @version 1.0.7
  *
  */
 public abstract class Game {
@@ -74,31 +74,6 @@ public abstract class Game {
     int nbRemainingTries;
 
     /**
-     * Players list<br>
-     * <br>
-     * Players are stored in ArrayList of player.<br>
-     * This list is empty when the game is created. Players are added when the game
-     * starts (play methods)<br>
-     * <br>
-     * (currently not used, players are created and used locally except for duel
-     * mode)
-     *
-     * @see #getPlayers()
-     * @see #setPlayers(ArrayList)
-     *
-     */
-    ArrayList<Player> players = new ArrayList<>();
-
-    /**
-     * display is used to display the different elements of the game.
-     *
-     * @see #getDisplay()
-     * @see #setDisplay(Display)
-     *
-     */
-    Display display;
-
-    /**
      * endGame indicates whether the game should end.
      *
      * @see #isEndGame()
@@ -122,19 +97,17 @@ public abstract class Game {
      *
      * @param pGameMode
      *            game mode to be used
-     * @param pDisplay
-     *            display that will be used to make game displays
      *
      * @see #playChallenger()
      * @see #playDefender()
      * @see #playDuel()
      */
 
-    protected Game(GameModes pGameMode, Display pDisplay) {
+    protected Game(GameModes pGameMode) {
 
         logger.trace("Game Construction"); //$NON-NLS-1$
 
-        this.setDisplay(pDisplay);
+        //this.setDisplay(pDisplay);
         this.setEndGame(false);
         this.setGameMode(pGameMode);
         this.setNbRemainingTries(CombineGame.NB_MAX_TRIES);
@@ -169,18 +142,6 @@ public abstract class Game {
     }
 
     /**
-     * Returns the mystery number as an ArrayList of integer
-     *
-     * @return mystery number
-     *
-     * @see #setMysteryNumber(ArrayList)
-     * @see #mysteryNumberGeneration(int)
-     */
-    /*
-     * public ArrayList<Integer> getMysteryNumber(){ return this.mysteryNumber; }
-     */
-
-    /**
      * Returns the number of remaining tries before the end of the game.<br>
      * <br>
      * This number of tries is set when the game is launched.
@@ -191,28 +152,6 @@ public abstract class Game {
      */
     public int getNbRemainingTries() {
         return this.nbRemainingTries;
-    }
-
-    /**
-     * Returns the display that allows to make the different displays of the game.
-     *
-     * @return The display allowing the display in the game
-     *
-     * @see #setDisplay(Display)
-     */
-    public Display getDisplay() {
-        return this.display;
-    }
-
-    /**
-     * Returns the list of players as an ArrayList
-     *
-     * @return list of players
-     *
-     * @see #setPlayers(ArrayList)
-     */
-    public ArrayList<Player> getPlayers() {
-        return this.players;
     }
 
     /**
@@ -253,19 +192,6 @@ public abstract class Game {
     }
 
     /**
-     * Allows to define the mystery number by using an ArrayList of integer.
-     *
-     * @param pMysteryNumber
-     *            Mystery number
-     *
-     * @see #getMysteryNumber()
-     */
-    /*
-     * public void setMysteryNumber(ArrayList<Integer> pMysteryNumber) {
-     * this.mysteryNumber = pMysteryNumber; }
-     */
-
-    /**
      * Allows to define the number of remaining tries before the end of the game.
      *
      * @param pNbRemainingTries
@@ -278,34 +204,9 @@ public abstract class Game {
     }
 
     /**
-     * Allow to define the display used to make the displays
-     *
-     * @param pDisplay
-     *            display used to make the displays
-     *
-     * @see #getDisplay()
-     */
-    public void setDisplay(Display pDisplay) {
-        this.display = pDisplay;
-    }
-
-    /**
-     * Allows to define the players list from an ArrayList of players.
-     *
-     * @param pPlayers
-     *            list of players
-     *
-     * @see #getPlayers()
-     */
-    public void setPlayers(ArrayList<Player> pPlayers) {
-        this.players = pPlayers;
-    }
-
-    /**
      * Allows to define if the game should end.
      *
-     * @param pEndGame
-     *            Specifies whether the game should end
+     * @param pEndGame Specifies whether the game should end
      *
      * @see #isEndGame()
      */
@@ -372,13 +273,13 @@ public abstract class Game {
 
         logger.trace("Defeat"); //$NON-NLS-1$
 
-        this.getDisplay().println("\n Dommage ! Vous avez perdu"); //$NON-NLS-1$
+        CombineGame.getDisplay().println("\n Dommage ! Vous avez perdu"); //$NON-NLS-1$
 
         if (this.getGameMode() != GameModes.DEFENDER) {
-            this.getDisplay().print("La bonne réponse était : "); //$NON-NLS-1$
+            CombineGame.getDisplay().print("La bonne réponse était : "); //$NON-NLS-1$
             // TODO ajouter la fonction afficheln(ArrayList<Integer>)
-            this.getDisplay().print(pMysteryNumber);
-            this.getDisplay().println(""); //$NON-NLS-1$
+            CombineGame.getDisplay().print(pMysteryNumber);
+            CombineGame.getDisplay().println(""); //$NON-NLS-1$
         }
 
         this.setEndGame(true);
@@ -395,7 +296,7 @@ public abstract class Game {
 
         logger.trace("Victory"); //$NON-NLS-1$
 
-        this.getDisplay().println("\n Bravo ! Vous avez gagné"); //$NON-NLS-1$
+        CombineGame.getDisplay().println("\n Bravo ! Vous avez gagné"); //$NON-NLS-1$
         this.setEndGame(true);
 
         logger.trace("End game : " + this.isEndGame()); //$NON-NLS-1$
@@ -411,7 +312,7 @@ public abstract class Game {
 
         logger.trace("Equality"); //$NON-NLS-1$
 
-        this.getDisplay().println("\n Personne n'a gagné"); //$NON-NLS-1$
+        CombineGame.getDisplay().println("\n Personne n'a gagné"); //$NON-NLS-1$
         this.setEndGame(true);
 
         logger.trace("End game : " + this.isEndGame()); //$NON-NLS-1$

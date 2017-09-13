@@ -11,7 +11,7 @@ import display.Display;
  * <b>This class represents a human player</b>
  *
  * @author BRUCELLA2
- * @version 1.0.4
+ * @version 1.0.5
  */
 public class HumanPlayer extends Player {
 
@@ -31,8 +31,8 @@ public class HumanPlayer extends Player {
      * @param pDisplay
      *            The display to used
      */
-    public HumanPlayer(String pPlayerName, Display pDisplay) {
-        super(pPlayerName, pDisplay);
+    public HumanPlayer(String pPlayerName) {
+        super(pPlayerName);
 
         logger.trace("HumanPlayer construction"); //$NON-NLS-1$
     }
@@ -60,13 +60,13 @@ public class HumanPlayer extends Player {
 
         // TODO to be factorised ?
         do {
-            this.getDisplay().println("Donnez le nombre mystère : "); //$NON-NLS-1$
+            CombineGame.getDisplay().println("Donnez le nombre mystère : "); //$NON-NLS-1$
             number = this.getNumberInput(pMaxValueDigit);
 
             logger.debug("Number Input : " + number); //$NON-NLS-1$
 
             if (number.isEmpty()) {
-                this.getDisplay().println("Saisie incorrecte"); //$NON-NLS-1$
+                CombineGame.getDisplay().println("Saisie incorrecte"); //$NON-NLS-1$
             }
         } while (number.isEmpty());
 
@@ -93,13 +93,13 @@ public class HumanPlayer extends Player {
 
         // TODO to be factorised ?
         do {
-            this.getDisplay().println("Donnez la combinaison secrète : "); //$NON-NLS-1$
+            CombineGame.getDisplay().println("Donnez la combinaison secrète : "); //$NON-NLS-1$
             number = this.getNumberInput(pMaxValueDigit);
 
             logger.debug("Number input : " + number); //$NON-NLS-1$
 
             if (number.isEmpty()) {
-                this.getDisplay().println("Saisie incorrecte"); //$NON-NLS-1$
+                CombineGame.getDisplay().println("Saisie incorrecte"); //$NON-NLS-1$
             }
         } while (number.isEmpty());
 

@@ -27,7 +27,7 @@ import games.constants.GameModes;
  * then adjust the graphical aspects.<br>
  *
  * @author BRUCELLA2
- * @version 1.0.3
+ * @version 1.0.4
  */
 public class Mastermind extends Game {
 
@@ -70,9 +70,9 @@ public class Mastermind extends Game {
      * @see #playDuel()
      *
      */
-    protected Mastermind(GameModes pGameMode, Display pDisplay) {
+    protected Mastermind(GameModes pGameMode) {
 
-        super(pGameMode, pDisplay);
+        super(pGameMode);
 
         logger.trace("Mastermind Construction"); //$NON-NLS-1$
 
@@ -289,14 +289,14 @@ public class Mastermind extends Game {
         logger.trace("Start Challenger mode"); //$NON-NLS-1$
         logger.trace("Remaining tries at start of turn: " + this.nbRemainingTries); //$NON-NLS-1$
 
-        HumanPlayer humanPlayer = new HumanPlayer("Joueur", this.getDisplay()); //$NON-NLS-1$
+        HumanPlayer humanPlayer = new HumanPlayer("Joueur"); //$NON-NLS-1$
         ArrayList<Integer> mysteryNumber = this.mysteryNumberGeneration(CombineGame.NB_COLORS);
 
         logger.debug("Mystery number : " + mysteryNumber); //$NON-NLS-1$
 
         if (CombineGame.DEVELOPER_MODE) {
-            this.getDisplay().print("Le nombre mystère généré est : "); //$NON-NLS-1$
-            this.getDisplay().println(mysteryNumber);
+            CombineGame.getDisplay().print("Le nombre mystère généré est : "); //$NON-NLS-1$
+            CombineGame.getDisplay().println(mysteryNumber);
         }
 
         while (!this.isEndGame()) {
@@ -309,7 +309,7 @@ public class Mastermind extends Game {
                 logger.trace("Result of comparison : " + result); //$NON-NLS-1$
             }
 
-            this.getDisplay().println(result);
+            CombineGame.getDisplay().println(result);
 
             if (this.getGoodPos() == CombineGame.NB_DIGITS_MYSTERY) {
                 logger.debug("Victory : good position = nb digits mystery"); //$NON-NLS-1$
@@ -345,16 +345,16 @@ public class Mastermind extends Game {
         logger.trace("Start Challenger mode"); //$NON-NLS-1$
         logger.trace("Remaining tries at start of turn: " + this.nbRemainingTries); //$NON-NLS-1$
 
-        HumanPlayer human = new HumanPlayer("Joueur", this.getDisplay()); //$NON-NLS-1$
-        ComputerPlayer computer = new ComputerPlayer("ordinateur", this.getDisplay()); //$NON-NLS-1$
+        HumanPlayer human = new HumanPlayer("Joueur"); //$NON-NLS-1$
+        ComputerPlayer computer = new ComputerPlayer("ordinateur"); //$NON-NLS-1$
 
         ArrayList<Integer> mysteryNumber = human.createMysteryNumber(CombineGame.NB_COLORS);
 
         logger.debug("Mystery number : " + mysteryNumber); //$NON-NLS-1$
 
         if (CombineGame.DEVELOPER_MODE) {
-            this.getDisplay().print("Le nombre mystère est : "); //$NON-NLS-1$
-            this.getDisplay().println(mysteryNumber);
+            CombineGame.getDisplay().print("Le nombre mystère est : "); //$NON-NLS-1$
+            CombineGame.getDisplay().println(mysteryNumber);
         }
 
         // TODO don't create a new scan each time if possible
@@ -374,9 +374,9 @@ public class Mastermind extends Game {
             computer.addBadResultMastermind(proposition, this.getBadPos());
 
             // Show the computer proposition and the result
-            this.getDisplay().print("Proposition : "); //$NON-NLS-1$
-            this.getDisplay().print(proposition);
-            this.getDisplay().print(" -> Réponse : " + result + "   (Appuyez sur entrée pour continuer)"); //$NON-NLS-1$ //$NON-NLS-2$
+            CombineGame.getDisplay().print("Proposition : "); //$NON-NLS-1$
+            CombineGame.getDisplay().print(proposition);
+            CombineGame.getDisplay().print(" -> Réponse : " + result + "   (Appuyez sur entrée pour continuer)"); //$NON-NLS-1$ //$NON-NLS-2$
             scan.nextLine();
 
             // Check if it's the end of game
@@ -407,8 +407,8 @@ public class Mastermind extends Game {
     public void playDuel() {
         logger.trace("Start Duel mode"); //$NON-NLS-1$
 
-        HumanPlayer human = new HumanPlayer("Joueur", this.getDisplay()); //$NON-NLS-1$
-        ComputerPlayer computer = new ComputerPlayer("Ordinateur", this.getDisplay()); //$NON-NLS-1$
+        HumanPlayer human = new HumanPlayer("Joueur"); //$NON-NLS-1$
+        ComputerPlayer computer = new ComputerPlayer("Ordinateur"); //$NON-NLS-1$
 
         ArrayList<Integer> humanMysteryNumber = human.createMysteryNumber(CombineGame.NB_COLORS);
         ArrayList<Integer> computerMysteryNumber = this.mysteryNumberGeneration(CombineGame.NB_COLORS);
@@ -417,10 +417,10 @@ public class Mastermind extends Game {
         logger.debug("Mystery Number human = " + humanMysteryNumber); //$NON-NLS-1$
 
         if (CombineGame.DEVELOPER_MODE) {
-            this.getDisplay().print("Le nombre mystère généré par l'ordinateur est : "); //$NON-NLS-1$
-            this.getDisplay().println(humanMysteryNumber);
-            this.getDisplay().print("Le nombre mystère généré par le jouer est : "); //$NON-NLS-1$
-            this.getDisplay().println(computerMysteryNumber);
+            CombineGame.getDisplay().print("Le nombre mystère généré par l'ordinateur est : "); //$NON-NLS-1$
+            CombineGame.getDisplay().println(humanMysteryNumber);
+            CombineGame.getDisplay().print("Le nombre mystère généré par le jouer est : "); //$NON-NLS-1$
+            CombineGame.getDisplay().println(computerMysteryNumber);
         }
 
         while (!this.isEndGame()) {
@@ -436,7 +436,7 @@ public class Mastermind extends Game {
                 logger.trace("Result of comparison : " + humanResult); //$NON-NLS-1$
             }
 
-            this.getDisplay().println(humanResult);
+            CombineGame.getDisplay().println(humanResult);
 
             if (humanProposition.equals(computerMysteryNumber)) {
                 this.victory();
@@ -457,8 +457,8 @@ public class Mastermind extends Game {
                 computer.addBadResultMastermind(computerProposition, this.getBadPos());
 
                 // Show the computer proposition and the result
-                this.getDisplay().print("Proposition de l'ordinateur" + computerProposition); //$NON-NLS-1$
-                this.getDisplay().println(" -> Réponse : " + computerResult); //$NON-NLS-1$
+                CombineGame.getDisplay().print("Proposition de l'ordinateur" + computerProposition); //$NON-NLS-1$
+                CombineGame.getDisplay().println(" -> Réponse : " + computerResult); //$NON-NLS-1$
 
                 if (computerProposition.equals(humanMysteryNumber)) {
                     this.defeat(humanMysteryNumber);

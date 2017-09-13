@@ -13,7 +13,7 @@ import display.Display;
  * <br>
  *
  * @author BRUCELLA2
- * @version 1.0.4
+ * @version 1.0.5
  *
  */
 public abstract class Player {
@@ -27,14 +27,6 @@ public abstract class Player {
      * @see #setPlayerName(String)
      */
     private String playerName;
-
-    /**
-     * display is used to display the different elements of the game.
-     *
-     * @see #getDisplay()
-     * @see #setDisplay(Display)
-     */
-    private Display display;
 
     /**
      * Log4j2 Logger
@@ -51,15 +43,12 @@ public abstract class Player {
      *
      * @param pPlayerGame
      *            The player's name
-     * @param pDisplay
-     *            The display to used
      */
-    public Player(String pPlayerGame, Display pDisplay) {
+    public Player(String pPlayerGame) {
 
         logger.trace("Player construction"); //$NON-NLS-1$
 
         this.setPlayerName(pPlayerGame);
-        this.setDisplay(pDisplay);
 
         logger.trace("Player name : " + this.getPlayerName()); //$NON-NLS-1$
     }
@@ -77,15 +66,6 @@ public abstract class Player {
         return this.playerName;
     }
 
-    /**
-     * Returns the display
-     *
-     * @return the display
-     */
-    public Display getDisplay() {
-        return this.display;
-    }
-
     // ***** SETTERS *****//
 
     /**
@@ -98,18 +78,6 @@ public abstract class Player {
      */
     public void setPlayerName(String pPlayerName) {
         this.playerName = pPlayerName;
-    }
-
-    /**
-     * Allows to define the display
-     *
-     * @param pDisplay
-     *            Display
-     *
-     * @see #getDisplay()
-     */
-    public void setDisplay(Display pDisplay) {
-        this.display = pDisplay;
     }
 
     // ***** METHODS *****//

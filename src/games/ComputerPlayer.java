@@ -17,7 +17,7 @@ import display.Display;
  * <b>This class represents a player simulated by the computer.</b><br>
  *
  * @author BRUCELLA2
- * @version 1.0.6
+ * @version 1.0.7
  *
  */
 public class ComputerPlayer extends Player {
@@ -106,9 +106,9 @@ public class ComputerPlayer extends Player {
      *            The display to used
      */
     // TODO mettre en constante globale le nb de chiffres mystères
-    public ComputerPlayer(String pPlayerName, Display pDisplay) {
+    public ComputerPlayer(String pPlayerName) {
 
-        super(pPlayerName, pDisplay);
+        super(pPlayerName);
 
         logger.trace("Computer construction"); //$NON-NLS-1$
 
