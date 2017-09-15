@@ -1,19 +1,18 @@
 package games;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-
-import display.Display;
 
 /**
  * <b>This class represents a player</b><br>
  * <br>
  *
  * @author BRUCELLA2
- * @version 1.0.5
+ * @version 1.0.6
  *
  */
 public abstract class Player {
@@ -31,7 +30,7 @@ public abstract class Player {
     /**
      * Log4j2 Logger
      */
-    private static final Logger logger = LogManager.getLogger(Player.class);
+    private static final Logger LOGGER = LogManager.getLogger(Player.class);
 
     // ***** CONSTRUCTORS *****//
 
@@ -44,13 +43,13 @@ public abstract class Player {
      * @param pPlayerGame
      *            The player's name
      */
-    public Player(String pPlayerGame) {
+    public Player(final String pPlayerGame) {
 
-        logger.trace("Player construction"); //$NON-NLS-1$
+        LOGGER.trace("Player construction"); //$NON-NLS-1$
 
         this.setPlayerName(pPlayerGame);
 
-        logger.trace("Player name : " + this.getPlayerName()); //$NON-NLS-1$
+        LOGGER.trace("Player name : " + this.getPlayerName()); //$NON-NLS-1$
     }
 
     // ***** GETTERS *****//
@@ -63,6 +62,7 @@ public abstract class Player {
      * @see #setPlayerName(String)
      */
     public String getPlayerName() {
+
         return this.playerName;
     }
 
@@ -76,7 +76,8 @@ public abstract class Player {
      *
      * @see #getPlayerName()
      */
-    public void setPlayerName(String pPlayerName) {
+    public void setPlayerName(final String pPlayerName) {
+
         this.playerName = pPlayerName;
     }
 
@@ -95,7 +96,7 @@ public abstract class Player {
      *
      * @see #getNumberInput(int)
      */
-    public abstract ArrayList<Integer> giveNumber(int pMaxValueDigit);
+    public abstract List<Integer> giveNumber(int pMaxValueDigit);
 
     /**
      * This method allows to get the number entered by the user and return is as an
@@ -109,9 +110,9 @@ public abstract class Player {
      * @return A number in the form of an ArrayList of integer
      */
     // TODO Move this method in HumanPlayer
-    protected ArrayList<Integer> getNumberInput(int pMaxValueDigit) {
+    protected ArrayList<Integer> getNumberInput(final int pMaxValueDigit) {
 
-        logger.trace("Get Number input"); //$NON-NLS-1$
+        LOGGER.trace("Get Number input"); //$NON-NLS-1$
 
         String str;
         ArrayList<Integer> number = new ArrayList<>();
@@ -121,34 +122,37 @@ public abstract class Player {
         Scanner scan = new Scanner(System.in);
         str = scan.nextLine();
 
-        logger.trace("User input : " + str); //$NON-NLS-1$
-        logger.trace("User input length : " + str.length()); //$NON-NLS-1$
-        if (str.length() == CombineGame.NB_DIGITS_MYSTERY) {
-            for (int i = 0; i < CombineGame.NB_DIGITS_MYSTERY; i++) {
-                logger.trace("char : " + str.charAt(i)); //$NON-NLS-1$
+        LOGGER.trace("User input : " + str); //$NON-NLS-1$
+        LOGGER.trace("User input length : " + str.length()); //$NON-NLS-1$
+        if (str.length() == CombineGame.getNbDigitsMystery()) {
+            for (int i = 0; i < CombineGame.getNbDigitsMystery(); i++) {
+                LOGGER.trace("char : " + str.charAt(i)); //$NON-NLS-1$
                 if (Character.isDigit(str.charAt(i))) {
                     int digit = Character.getNumericValue(str.charAt(i));
-                    logger.trace("digit : " + digit); //$NON-NLS-1$
+                    LOGGER.trace("digit : " + digit); //$NON-NLS-1$
                     if (digit <= pMaxValueDigit) {
-                        number.add(new Integer(digit));
-                        logger.trace("number : " + number); //$NON-NLS-1$
-                    } else {
+                        number.add(Integer.valueOf(digit));
+                        LOGGER.trace("number : " + number); //$NON-NLS-1$
+                    }
+                    else {
                         number.clear();
-                        logger.trace("number returned : " + number); //$NON-NLS-1$
+                        LOGGER.trace("number returned : " + number); //$NON-NLS-1$
                         return number;
                     }
-                } else {
+                }
+                else {
                     number.clear();
-                    logger.trace("number returned : " + number); //$NON-NLS-1$
+                    LOGGER.trace("number returned : " + number); //$NON-NLS-1$
                     return number;
                 }
             }
-        } else {
+        }
+        else {
             number.clear();
-            logger.trace("number returned : " + number); //$NON-NLS-1$
+            LOGGER.trace("number returned : " + number); //$NON-NLS-1$
             return number;
         }
-        logger.trace("number returned : " + number); //$NON-NLS-1$
+        LOGGER.trace("number returned : " + number); //$NON-NLS-1$
         return number;
     }
 }

@@ -1,17 +1,16 @@
 package games;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-
-import display.Display;
 
 /**
  * <b>This class represents a human player</b>
  *
  * @author BRUCELLA2
- * @version 1.0.5
+ * @version 1.0.6
  */
 public class HumanPlayer extends Player {
 
@@ -19,7 +18,7 @@ public class HumanPlayer extends Player {
     /**
      * Log4j2 Logger
      */
-    private static final Logger logger = LogManager.getLogger(HumanPlayer.class);
+    private static final Logger LOGGER = LogManager.getLogger(HumanPlayer.class);
 
     // ***** CONSTRUCTORS *****//
 
@@ -28,13 +27,12 @@ public class HumanPlayer extends Player {
      *
      * @param pPlayerName
      *            Player's name
-     * @param pDisplay
-     *            The display to used
      */
-    public HumanPlayer(String pPlayerName) {
+    public HumanPlayer(final String pPlayerName) {
+
         super(pPlayerName);
 
-        logger.trace("HumanPlayer construction"); //$NON-NLS-1$
+        LOGGER.trace("HumanPlayer construction"); //$NON-NLS-1$
     }
 
     // ***** METHODS *****//
@@ -51,19 +49,19 @@ public class HumanPlayer extends Player {
      * @return A number in the form of an ArrayList of integer
      */
     @Override
-    public ArrayList<Integer> giveNumber(int pMaxValueDigit) {
+    public List<Integer> giveNumber(final int pMaxValueDigit) {
 
-        logger.trace("Human Give number"); //$NON-NLS-1$
-        logger.trace("Max value digit = " + pMaxValueDigit); //$NON-NLS-1$
+        LOGGER.trace("Human Give number"); //$NON-NLS-1$
+        LOGGER.trace("Max value digit = " + pMaxValueDigit); //$NON-NLS-1$
 
-        ArrayList<Integer> number = new ArrayList<>();
+        ArrayList<Integer> number;
 
         // TODO to be factorised ?
         do {
             CombineGame.getDisplay().println("Donnez le nombre mystère : "); //$NON-NLS-1$
             number = this.getNumberInput(pMaxValueDigit);
 
-            logger.debug("Number Input : " + number); //$NON-NLS-1$
+            LOGGER.debug("Number Input : " + number); //$NON-NLS-1$
 
             if (number.isEmpty()) {
                 CombineGame.getDisplay().println("Saisie incorrecte"); //$NON-NLS-1$
@@ -84,19 +82,19 @@ public class HumanPlayer extends Player {
      *
      * @return A number in the form of an ArrayList of integer
      */
-    public ArrayList<Integer> createMysteryNumber(int pMaxValueDigit) {
+    public List<Integer> createMysteryNumber(final int pMaxValueDigit) {
 
-        logger.trace("Create Mystery Number"); //$NON-NLS-1$
-        logger.trace("Max value digit = " + pMaxValueDigit); //$NON-NLS-1$
+        LOGGER.trace("Create Mystery Number"); //$NON-NLS-1$
+        LOGGER.trace("Max value digit = " + pMaxValueDigit); //$NON-NLS-1$
 
-        ArrayList<Integer> number = new ArrayList<>();
+        ArrayList<Integer> number;
 
         // TODO to be factorised ?
         do {
             CombineGame.getDisplay().println("Donnez la combinaison secrète : "); //$NON-NLS-1$
             number = this.getNumberInput(pMaxValueDigit);
 
-            logger.debug("Number input : " + number); //$NON-NLS-1$
+            LOGGER.debug("Number input : " + number); //$NON-NLS-1$
 
             if (number.isEmpty()) {
                 CombineGame.getDisplay().println("Saisie incorrecte"); //$NON-NLS-1$

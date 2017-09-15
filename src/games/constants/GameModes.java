@@ -4,7 +4,7 @@ package games.constants;
  * <b>Enumeration of the different game modes available for CombineGame</b>
  *
  * @author BRUCELLA2
- * @version 1.0.1
+ * @version 1.0.2
  */
 public enum GameModes {
     /**
@@ -43,7 +43,8 @@ public enum GameModes {
      * @param pModeName
      *            Name of the game mode
      */
-    GameModes(String pModeName) {
+    GameModes(final String pModeName) {
+
         this.setModeName(pModeName);
     }
 
@@ -55,6 +56,7 @@ public enum GameModes {
      * @return the name of the game mode
      */
     public String getModeName() {
+
         return this.modeName;
     }
 
@@ -66,7 +68,8 @@ public enum GameModes {
      * @param pModeName
      *            the name of the game mode
      */
-    private void setModeName(String pModeName) {
+    private void setModeName(final String pModeName) {
+
         this.modeName = pModeName;
     }
 

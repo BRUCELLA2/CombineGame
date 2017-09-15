@@ -1,6 +1,6 @@
 package display;
 
-import java.util.ArrayList;
+import java.util.List;
 import java.util.ListIterator;
 
 import games.constants.GameModes;
@@ -55,6 +55,7 @@ public class Display {
      */
     @SuppressWarnings("static-method")
     public void showGameModesMenu() {
+
         System.out.println("Choisir un mode de jeu : \n"); //$NON-NLS-1$
         System.out.println("1 - " + GameModes.CHALLENGER.getModeName()); //$NON-NLS-1$
         System.out.println("2 - " + GameModes.DEFENDER.getModeName()); //$NON-NLS-1$
@@ -70,6 +71,7 @@ public class Display {
      */
     @SuppressWarnings("static-method")
     public void showEndGameMenu() {
+
         System.out.println("Jeu terminé. Que souhaitez-vous faire : \n"); //$NON-NLS-1$
         System.out.println("1 - " + NavigationMenu.REPLAY.getNavigationName()); //$NON-NLS-1$
         System.out.println("R - " + NavigationMenu.RETURN.getNavigationName()); //$NON-NLS-1$
@@ -83,7 +85,8 @@ public class Display {
      *            String to display
      */
     @SuppressWarnings("static-method")
-    public void println(String pString) {
+    public void println(final String pString) {
+
         System.out.println(pString);
     }
 
@@ -94,8 +97,9 @@ public class Display {
      *            String to display
      */
     @SuppressWarnings("static-method")
-    public void print(String pString) {
-        System.out.print(pString);
+    public void print(final String pString) {
+
+    	System.out.print(pString);
     }
 
     /**
@@ -105,16 +109,16 @@ public class Display {
      *            ArrayList of Integer to show
      */
     @SuppressWarnings("static-method")
-    public void print(ArrayList<Integer> pArrayList) {
+    public void print(final List<Integer> pArrayList) {
 
-        String str = ""; //$NON-NLS-1$
+        StringBuilder bld = new StringBuilder();
         ListIterator<Integer> li = pArrayList.listIterator();
 
         while (li.hasNext()) {
-            str = str + li.next().toString();
+            bld.append(li.next().toString());
         }
 
-        System.out.print(str);
+        System.out.print(bld.toString());
     }
 
     /**
@@ -124,15 +128,15 @@ public class Display {
      *            ArrayList of Integer to show
      */
     @SuppressWarnings("static-method")
-    public void println(ArrayList<Integer> pArrayList) {
+    public void println(final List<Integer> pArrayList) {
 
-        String str = ""; //$NON-NLS-1$
+        StringBuilder bld = new StringBuilder();
         ListIterator<Integer> li = pArrayList.listIterator();
 
         while (li.hasNext()) {
-            str = str + li.next().toString();
+            bld.append(li.next().toString());
         }
 
-        System.out.println(str);
+        System.out.println(bld.toString());
     }
 }

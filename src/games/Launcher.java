@@ -8,16 +8,16 @@ import org.apache.logging.log4j.Logger;
  *
  *
  * @author BRUCELLA2
- * @version 1.0.2
+ * @version 1.0.3
  *
  * @see CombineGame
  */
 public class Launcher {
 
     /**
-     * Log4j2 logger
+     * Log4j2 LOGGER
      */
-    private static final Logger logger = LogManager.getLogger(Launcher.class);
+    private static final Logger LOGGER = LogManager.getLogger(Launcher.class);
 
     /**
      * Main methode of the project.
@@ -29,13 +29,13 @@ public class Launcher {
      *            A string array containing command line arguments
      *
      */
-    public static void main(String[] args) {
+    public static void main(final String[] args) {
 
-        logger.trace("********************  Launch  *******************************"); //$NON-NLS-1$
+        LOGGER.trace("********************  Launch  *******************************"); //$NON-NLS-1$
 
         new CombineGame();
 
-        logger.trace("*****************  End  ************************************"); //$NON-NLS-1$
+        LOGGER.trace("*****************  End  ************************************"); //$NON-NLS-1$
     }
 
 }

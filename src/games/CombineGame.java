@@ -21,7 +21,7 @@ import games.constants.GameNames;
  * called with the game mode as an argument.<br>
  *
  * @author BRUCELLA2
- * @version 1.0.6
+ * @version 1.0.7
  *
  */
 public class CombineGame {
@@ -34,9 +34,9 @@ public class CombineGame {
      * <br>
      * This variable is customizable in config.properties file
      *
-     * @see #initProperties()
+     * @see #isDeveloperMode()
      */
-    public static boolean DEVELOPER_MODE;
+    private static final boolean DEVELOPER_MODE;
 
     /**
      * Number of digits constituting the mystery number.<br>
@@ -45,7 +45,7 @@ public class CombineGame {
      *
      * @see #initProperties()
      */
-    public static int NB_DIGITS_MYSTERY;
+    private static final int NB_DIGITS_MYSTERY;
 
     /**
      * Number of tries at the start of a game.<br>
@@ -54,7 +54,7 @@ public class CombineGame {
      *
      * @see #initProperties()
      */
-    public static int NB_MAX_TRIES;
+    private static final int NB_MAX_TRIES;
 
     /**
      * Maximum value for a digit.<br>
@@ -63,7 +63,7 @@ public class CombineGame {
      *
      * @see #initProperties()
      */
-    public static int MAX_VALUE_DIGIT;
+    private static final int MAX_VALUE_DIGIT;
     /**
      * Number of colors for mastermind game<br>
      * <br>
@@ -71,16 +71,15 @@ public class CombineGame {
      *
      * @see #initProperties()
      */
-    public static int NB_COLORS;
+    private static final int NB_COLORS;
 
     /**
      * display is used to display the different elements of the game (for example
      * the menu)
      *
      * @see #getDisplay()
-     * @see #setDisplay(Display)
      */
-    public static final Display DISPLAY = new Display();
+    private static final Display DISPLAY;
 
     /**
      * scanner which allows to retrieve data (Strings) entered by the user
@@ -124,9 +123,9 @@ public class CombineGame {
     private boolean executeCombineGame = true;
 
     /**
-     * Log4j2 logger
+     * Log4j2 LOGGER
      */
-    private static final Logger logger = LogManager.getLogger(CombineGame.class);
+    private static final Logger LOGGER = LogManager.getLogger(CombineGame.class);
 
     // ***** CONSTRUCTORS *****/
 
@@ -142,15 +141,12 @@ public class CombineGame {
      */
     public CombineGame() {
 
-        logger.trace("CombineGame Construction"); //$NON-NLS-1$
-        
-        //this.setDisplay(new Display());
+        LOGGER.trace("CombineGame Construction"); //$NON-NLS-1$
+
         this.setScanner(new Scanner(System.in));
         this.setGameChosen(null);
         this.setModeChosen(null);
         this.setExecuteCombineGame(true);
-
-        this.initProperties();
 
         this.launchCombineGame();
     }
@@ -170,59 +166,59 @@ public class CombineGame {
      */
     private void launchCombineGame() {
 
-        logger.trace("Start CombineGame"); //$NON-NLS-1$
+        LOGGER.trace("Start CombineGame"); //$NON-NLS-1$
 
-        while (this.getExecuteCombineGame()) {
+        while (this.getExecuteCombineGame() && (this.getGameChosen() == null || this.getmodeChosen() == null)) {
 
-            logger.trace("CombineGame is running"); //$NON-NLS-1$
+            LOGGER.trace("CombineGame is running"); //$NON-NLS-1$
 
-            while ((this.getGameChosen() == null || this.getmodeChosen() == null)
-                    && this.getExecuteCombineGame() != false) {
-
-                char gameChoice = this.menuGameSelection();
-                if (gameChoice == 'Q') {
-                    break;
-                }
-
+            this.menuGameSelection();
+            
+            if(this.getExecuteCombineGame()) {
                 this.menuModeSelection();
+            }
+            
 
-                while (this.getGameChosen() != null && this.getmodeChosen() != null) {
-                    if (this.getGameChosen() == GameNames.MORE_LESS) {
+            while (this.getGameChosen() != null && this.getmodeChosen() != null && this.executeCombineGame) {
 
-                        Game game = new MoreLess(this.getmodeChosen());
-                        game.startGame();
+                if (this.getGameChosen() == GameNames.MORE_LESS) {
 
-                        if (game.isEndGame() == true) {
+                    Game game = new MoreLess(this.getmodeChosen());
+                    game.startGame();
 
-                            char endGameChoice = this.menuEndGameSelection();
-                            if (endGameChoice == 'Q') {
-                                break;
-                            }
-                        }
-                    } else if (this.getGameChosen() == GameNames.MASTERMIND) {
+                    if (game.isEndGame()) {
 
-                        Game game = new Mastermind(this.getmodeChosen());
-                        game.startGame();
-
-                        if (game.isEndGame() == true) {
-
-                            char endGameChoice = this.menuEndGameSelection();
-                            if (endGameChoice == 'Q') {
-                                break;
-                            }
-                        }
+                        this.menuEndGameSelection();
                     }
                 }
+                else if (this.getGameChosen() == GameNames.MASTERMIND){
 
+                    Game game = new Mastermind(this.getmodeChosen());
+                    game.startGame();
+
+                    if (game.isEndGame()) {
+
+                        this.menuEndGameSelection();
+                    }
+                }
             }
 
-            logger.trace("CombineGame stop"); //$NON-NLS-1$
         }
 
+        LOGGER.trace("CombineGame stop"); //$NON-NLS-1$
     }
 
     // ***** GETTER *****/
-
+    /**
+     * Returns if combine game is launch with Developper mode.
+     * 
+     * @return true if Combine game is in developper mode and false if not.
+     */
+    public static final boolean isDeveloperMode(){
+    	
+    	return CombineGame.DEVELOPER_MODE;
+    }
+    
     /**
      * Returns the display that allows to make the different displays of the game.
      *
@@ -230,9 +226,49 @@ public class CombineGame {
      *
      */
     public static Display getDisplay() {
-        return DISPLAY;
-    }
 
+        return CombineGame.DISPLAY;
+    }
+    /**
+     * Returns the numbers of digits in mystery number.
+     *
+     * @return the number of digits in mystery number.
+     */
+    public static final int getNbDigitsMystery() {
+    	
+    	return CombineGame.NB_DIGITS_MYSTERY;
+    }
+    
+    /**
+     * Returns the max numbers of tries at the start of a game.
+     * 
+     * @return the max numbers of tries
+     */
+    public static final int getNbMaxTries() {
+    	
+    	return CombineGame.NB_MAX_TRIES;
+    }
+    
+    /**
+     * Returns the max value for one digit.
+     * 
+     * @return the max value for one digit
+     */
+    public static final int getMaxValueDigit() {
+    	
+    	return CombineGame.MAX_VALUE_DIGIT;
+    }
+    
+    /**
+     * Returns the number of color for Mastermind game
+     * 
+     * @return the number of color for Mastermind game
+     */
+    public static final int getNbColors() {
+        
+        return CombineGame.NB_COLORS;
+    }
+    
     /**
      * Returns the scanner that allow to get the user's input.
      *
@@ -242,6 +278,7 @@ public class CombineGame {
      *
      */
     public Scanner getScanner() {
+
         return this.scanner;
     }
 
@@ -254,6 +291,7 @@ public class CombineGame {
      * @see #setExecuteCombineGame(boolean)
      */
     public boolean getExecuteCombineGame() {
+
         return this.executeCombineGame;
     }
 
@@ -267,6 +305,7 @@ public class CombineGame {
      * @see #setGameChosen(GameNames)
      */
     public GameNames getGameChosen() {
+
         return this.gameChosen;
     }
 
@@ -281,11 +320,12 @@ public class CombineGame {
      * @see #setModeChosen(GameModes)
      */
     public GameModes getmodeChosen() {
+
         return this.modeChosen;
     }
 
     // ***** SETTER *****/
-
+    
     /**
      * Allow to define the scanner used to get user input
      *
@@ -294,21 +334,10 @@ public class CombineGame {
      *
      * @see #getScanner()
      */
-    private void setScanner(Scanner pScanner) {
+    private void setScanner(final Scanner pScanner) {
+
         this.scanner = pScanner;
     }
-
-    /**
-     * Allow to define the display used to make the displays
-     *
-     * @param pDisplay
-     *            display used to make the displays
-     *
-     * @see #getDisplay()
-     *//*
-    private void setDisplay(Display pDisplay) {
-        this.display = pDisplay;
-    }*/
 
     /**
      * Allow to define the game chosen by the user
@@ -318,7 +347,8 @@ public class CombineGame {
      *
      * @see #getGameChosen()
      */
-    private void setGameChosen(GameNames pGameChosen) {
+    private void setGameChosen(final GameNames pGameChosen) {
+
         this.gameChosen = pGameChosen;
     }
 
@@ -330,7 +360,8 @@ public class CombineGame {
      *
      * @see #getmodeChosen()
      */
-    private void setModeChosen(GameModes pModeChosen) {
+    private void setModeChosen(final GameModes pModeChosen) {
+
         this.modeChosen = pModeChosen;
     }
 
@@ -343,7 +374,8 @@ public class CombineGame {
      *
      * @see #getExecuteCombineGame()
      */
-    private void setExecuteCombineGame(boolean pExecuteCombineGame) {
+    private void setExecuteCombineGame(final boolean pExecuteCombineGame) {
+
         this.executeCombineGame = pExecuteCombineGame;
     }
 
@@ -367,43 +399,49 @@ public class CombineGame {
      */
     public char menuGameSelection() {
 
-        logger.trace("Display Game selection menu"); //$NON-NLS-1$
+        LOGGER.trace("Display Game selection menu"); //$NON-NLS-1$
 
         boolean gameChoice = false;
         char choice;
-        // TODO if input is > 1 char ask user to answer again
+
         do {
             CombineGame.getDisplay().showGamesMenu();
             String line = this.getScanner().nextLine();
-            choice = line.charAt(0);
-            choice = Character.toUpperCase(choice);
+            if (line.length() > 1) {
+                choice = 'x';
+            }
+            else {
+                choice = line.charAt(0);
+                choice = Character.toUpperCase(choice);
+            }
 
-            logger.debug("User input : " + line); //$NON-NLS-1$
-            logger.debug("User choice : " + choice); //$NON-NLS-1$
+            LOGGER.debug("User input : " + line); //$NON-NLS-1$
+            LOGGER.debug("User choice : " + choice); //$NON-NLS-1$
 
             switch (choice) {
-            case '1':
-                gameChoice = true;
-                this.setGameChosen(GameNames.MORE_LESS);
-                break;
+                case '1':
+                    gameChoice = true;
+                    this.setGameChosen(GameNames.MORE_LESS);
+                    break;
 
-            case '2':
-                gameChoice = true;
-                this.setGameChosen(GameNames.MASTERMIND);
-                break;
+                case '2':
+                    gameChoice = true;
+                    this.setGameChosen(GameNames.MASTERMIND);
+                    break;
 
-            case 'Q':
-                gameChoice = true;
-                this.setGameChosen(null);
-                this.setExecuteCombineGame(false);
-                break;
+                case 'Q':
+                    gameChoice = true;
+                    this.setGameChosen(null);
+                    this.setExecuteCombineGame(false);
+                    break;
 
-            default:
-                break;
+                default:
+                    CombineGame.getDisplay().println("Saisie incorrecte"); //$NON-NLS-1$
+                    break;
             }
         } while (!gameChoice);
 
-        logger.debug("Game Chosen : " + this.getGameChosen()); //$NON-NLS-1$
+        LOGGER.debug("Game Chosen : " + this.getGameChosen()); //$NON-NLS-1$
 
         return choice;
     }
@@ -428,50 +466,56 @@ public class CombineGame {
      */
     public char menuModeSelection() {
 
-        logger.trace("Display Mode selection menu"); //$NON-NLS-1$
+        LOGGER.trace("Display Mode selection menu"); //$NON-NLS-1$
 
         boolean modeChoice = false;
         char choice;
 
-        // TODO if input is > 1 char ask user to answer again
         do {
             CombineGame.getDisplay().showGameModesMenu();
             String line = this.getScanner().nextLine();
             choice = line.charAt(0);
-            choice = Character.toUpperCase(choice);
+            if (line.length() > 1) {
+                choice = 'x';
+            }
+            else {
+                choice = line.charAt(0);
+                choice = Character.toUpperCase(choice);
+            }
 
-            logger.debug("User input : " + line); //$NON-NLS-1$
-            logger.debug("User choice : " + choice); //$NON-NLS-1$
+            LOGGER.debug("User input : " + line); //$NON-NLS-1$
+            LOGGER.debug("User choice : " + choice); //$NON-NLS-1$
 
             switch (choice) {
-            case '1':
-                modeChoice = true;
-                this.setModeChosen(GameModes.CHALLENGER);
-                break;
+                case '1':
+                    modeChoice = true;
+                    this.setModeChosen(GameModes.CHALLENGER);
+                    break;
 
-            case '2':
-                modeChoice = true;
-                this.setModeChosen(GameModes.DEFENDER);
-                break;
+                case '2':
+                    modeChoice = true;
+                    this.setModeChosen(GameModes.DEFENDER);
+                    break;
 
-            case '3':
-                modeChoice = true;
-                this.setModeChosen(GameModes.DUEL);
-                break;
+                case '3':
+                    modeChoice = true;
+                    this.setModeChosen(GameModes.DUEL);
+                    break;
 
-            case 'R':
-                modeChoice = true;
-                this.setModeChosen(null);
-                this.setGameChosen(null);
-                break;
+                case 'R':
+                    modeChoice = true;
+                    this.setModeChosen(null);
+                    this.setGameChosen(null);
+                    break;
 
-            default:
-                break;
+                default:
+                    CombineGame.getDisplay().println("Saisie incorrecte"); //$NON-NLS-1$
+                    break;
             }
 
         } while (!modeChoice);
 
-        logger.debug("Mode Chosen : " + this.getmodeChosen()); //$NON-NLS-1$
+        LOGGER.debug("Mode Chosen : " + this.getmodeChosen()); //$NON-NLS-1$
 
         return choice;
     }
@@ -500,72 +544,83 @@ public class CombineGame {
         boolean endGameChoice = false;
         char choice;
 
-        logger.trace("Display End Game selection menu"); //$NON-NLS-1$
+        LOGGER.trace("Display End Game selection menu"); //$NON-NLS-1$
 
-        // TODO if input is > 1 char ask user to answer again
         do {
             CombineGame.getDisplay().showEndGameMenu();
             String line = this.getScanner().nextLine();
-            choice = line.charAt(0);
-            choice = Character.toUpperCase(choice);
+            if (line.length() > 1) {
+                choice = 'x';
+            }
+            else {
+                choice = line.charAt(0);
+                choice = Character.toUpperCase(choice);
+            }
+            
 
-            logger.debug("User input : " + line); //$NON-NLS-1$
-            logger.debug("User choice : " + choice); //$NON-NLS-1$
+            LOGGER.debug("User input : " + line); //$NON-NLS-1$
+            LOGGER.debug("User choice : " + choice); //$NON-NLS-1$
 
             switch (choice) {
-            case '1':
-                endGameChoice = true;
-                break;
+                case '1':
+                    endGameChoice = true;
+                    break;
 
-            case 'R':
-                endGameChoice = true;
-                this.setGameChosen(null);
-                this.setModeChosen(null);
-                break;
+                case 'R':
+                    endGameChoice = true;
+                    this.setGameChosen(null);
+                    this.setModeChosen(null);
+                    break;
 
-            case 'Q':
-                endGameChoice = true;
-                this.setExecuteCombineGame(false);
-                break;
+                case 'Q':
+                    endGameChoice = true;
+                    this.setExecuteCombineGame(false);
+                    break;
 
-            default:
-                break;
+                default:
+                    CombineGame.getDisplay().println("Saisie incorrecte"); //$NON-NLS-1$
+                    break;
             }
         } while (!endGameChoice);
 
-        logger.debug("Combine game continue : " + this.getExecuteCombineGame()); //$NON-NLS-1$
+        LOGGER.debug("Combine game continue : " + this.getExecuteCombineGame()); //$NON-NLS-1$
 
         return choice;
     }
 
     /**
-     * This method read the properties file (config.properties) and initialize the
-     * global variables with the properties values.
+     * Read the properties file (config.properties) and initialize the
+     * global variables with the properties values.<br>
+     * <br>
+     * Initialize Display wich will be used for all display.
      *
      */
-    private void initProperties() {
+    static {
 
         Properties prop = new Properties();
 
-        try (InputStream input = this.getClass().getClassLoader().getResourceAsStream("resources/config.properties")) { //$NON-NLS-1$
+        try (InputStream input = CombineGame.class.getClassLoader()
+                .getResourceAsStream("resources/config.properties")) { //$NON-NLS-1$
             prop.load(input);
         } catch (IOException e) {
-            logger.error("Loading config properties Error"); //$NON-NLS-1$
-            logger.error(e.getStackTrace());
+            LOGGER.error("Loading config properties Error"); //$NON-NLS-1$
+            LOGGER.error(e.getStackTrace());
         }
 
-        DEVELOPER_MODE = Boolean.valueOf(prop.getProperty("DEVELOPER_MODE")).booleanValue(); //$NON-NLS-1$
-        NB_DIGITS_MYSTERY = Integer.valueOf(prop.getProperty("NB_DIGITS_MYSTERY")).intValue(); //$NON-NLS-1$
-        NB_MAX_TRIES = Integer.valueOf(prop.getProperty("NB_MAX_TRIES")).intValue(); //$NON-NLS-1$
-        MAX_VALUE_DIGIT = Integer.valueOf(prop.getProperty("MAX_VALUE_DIGIT")).intValue(); //$NON-NLS-1$
-        NB_COLORS = Integer.valueOf(prop.getProperty("NB_COLORS")).intValue(); //$NON-NLS-1$
-
-        if (logger.isDebugEnabled()) {
-            logger.debug("DEVELOPPER_MODE = " + DEVELOPER_MODE); //$NON-NLS-1$
-            logger.debug("NB_DIGITS_MYSTERY = " + NB_DIGITS_MYSTERY); //$NON-NLS-1$
-            logger.debug("NB_MAX_TRIES = " + NB_MAX_TRIES); //$NON-NLS-1$
-            logger.debug("MAX_VALUE_DIGIT = " + MAX_VALUE_DIGIT); //$NON-NLS-1$
-            logger.debug("NB_COLORS = " + NB_COLORS); //$NON-NLS-1$
+        DEVELOPER_MODE = Boolean.parseBoolean(prop.getProperty("DEVELOPER_MODE")); //$NON-NLS-1$
+        NB_DIGITS_MYSTERY = Integer.parseInt(prop.getProperty("NB_DIGITS_MYSTERY")); //$NON-NLS-1$
+        NB_MAX_TRIES = Integer.parseInt(prop.getProperty("NB_MAX_TRIES")); //$NON-NLS-1$
+        MAX_VALUE_DIGIT = Integer.parseInt(prop.getProperty("MAX_VALUE_DIGIT")); //$NON-NLS-1$
+        NB_COLORS = Integer.parseInt(prop.getProperty("NB_COLORS")); //$NON-NLS-1$
+        
+        DISPLAY = new Display();
+        
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("DEVELOPPER_MODE = " + DEVELOPER_MODE); //$NON-NLS-1$
+            LOGGER.debug("NB_DIGITS_MYSTERY = " + NB_DIGITS_MYSTERY); //$NON-NLS-1$
+            LOGGER.debug("NB_MAX_TRIES = " + NB_MAX_TRIES); //$NON-NLS-1$
+            LOGGER.debug("MAX_VALUE_DIGIT = " + MAX_VALUE_DIGIT); //$NON-NLS-1$
+            LOGGER.debug("NB_COLORS = " + NB_COLORS); //$NON-NLS-1$
         }
     }
 }

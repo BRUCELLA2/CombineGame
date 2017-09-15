@@ -1,11 +1,12 @@
 package games;
 
 import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import display.Display;
 import games.constants.GameModes;
 import games.constants.GameNames;
 
@@ -22,13 +23,13 @@ import games.constants.GameNames;
  * A game can generate a mystery number
  * {@link #mysteryNumberGeneration(int)}<br>
  * A game can compare a proposal provided with the mystery number
- * {@link #compareNumber(ArrayList, ArrayList)}<br>
+ * {@link #compareNumber(List, List)}<br>
  * A game can initiate a message of victory or defeat {@link #victory()}
- * {@link #defeat(ArrayList)}<br>
+ * {@link #defeat(List)}<br>
  *
  *
  * @author BRUCELLA2
- * @version 1.0.7
+ * @version 1.0.8
  *
  */
 public abstract class Game {
@@ -45,7 +46,7 @@ public abstract class Game {
      *
      */
     // TODO a rendre final si possible
-    GameNames gameName;
+    private GameNames gameName;
 
     /**
      * game's mode<br>
@@ -59,7 +60,7 @@ public abstract class Game {
      *
      */
     // TODO a rendre final si possible
-    GameModes gameMode;
+    private GameModes gameMode;
 
     /**
      * Number of remaining attempts to complete the game<br>
@@ -71,7 +72,7 @@ public abstract class Game {
      * @see #getNbRemainingTries()
      * @see #setNbRemainingTries(int)
      */
-    int nbRemainingTries;
+    private int nbRemainingTries;
 
     /**
      * endGame indicates whether the game should end.
@@ -80,12 +81,12 @@ public abstract class Game {
      * @see #setEndGame(boolean)
      *
      */
-    boolean endGame;
+    private boolean endGame;
 
     /**
-     * Log4j logger
+     * Log4j LOGGER
      */
-    private static final Logger logger = LogManager.getLogger(Game.class);
+    private static final Logger LOGGER = LogManager.getLogger(Game.class);
 
     // ***** CONSTRUCTEURS *****/
 
@@ -103,18 +104,17 @@ public abstract class Game {
      * @see #playDuel()
      */
 
-    protected Game(GameModes pGameMode) {
+    protected Game(final GameModes pGameMode) {
 
-        logger.trace("Game Construction"); //$NON-NLS-1$
+        LOGGER.trace("Game Construction"); //$NON-NLS-1$
 
-        //this.setDisplay(pDisplay);
         this.setEndGame(false);
         this.setGameMode(pGameMode);
-        this.setNbRemainingTries(CombineGame.NB_MAX_TRIES);
+        this.setNbRemainingTries(CombineGame.getNbMaxTries());
 
-        logger.debug("EnGame = " + this.isEndGame()); //$NON-NLS-1$
-        logger.debug("GameMode = " + this.getGameMode()); //$NON-NLS-1$
-        logger.debug("RemainingTries = " + this.getNbRemainingTries()); //$NON-NLS-1$
+        LOGGER.debug("EnGame = " + this.isEndGame()); //$NON-NLS-1$
+        LOGGER.debug("GameMode = " + this.getGameMode()); //$NON-NLS-1$
+        LOGGER.debug("RemainingTries = " + this.getNbRemainingTries()); //$NON-NLS-1$
     }
 
     // ***** GETTERS *****/
@@ -127,6 +127,7 @@ public abstract class Game {
      * @see #setGameName(GameNames)
      */
     public GameNames getGameName() {
+
         return this.gameName;
     }
 
@@ -138,6 +139,7 @@ public abstract class Game {
      * @see #setGameMode(GameModes)
      */
     public GameModes getGameMode() {
+
         return this.gameMode;
     }
 
@@ -151,6 +153,7 @@ public abstract class Game {
      * @see #setNbRemainingTries(int)
      */
     public int getNbRemainingTries() {
+
         return this.nbRemainingTries;
     }
 
@@ -162,6 +165,7 @@ public abstract class Game {
      * @see #setEndGame(boolean)
      */
     public boolean isEndGame() {
+
         return this.endGame;
     }
 
@@ -175,7 +179,8 @@ public abstract class Game {
      *
      * @see #getGameName()
      */
-    public void setGameName(GameNames pGameName) {
+    public void setGameName(final GameNames pGameName) {
+
         this.gameName = pGameName;
     }
 
@@ -187,7 +192,8 @@ public abstract class Game {
      *
      * @see #getGameMode()
      */
-    public void setGameMode(GameModes pGameMode) {
+    public void setGameMode(final GameModes pGameMode) {
+
         this.gameMode = pGameMode;
     }
 
@@ -199,18 +205,21 @@ public abstract class Game {
      *
      * @see #getNbRemainingTries()
      */
-    public void setNbRemainingTries(int pNbRemainingTries) {
+    public void setNbRemainingTries(final int pNbRemainingTries) {
+
         this.nbRemainingTries = pNbRemainingTries;
     }
 
     /**
      * Allows to define if the game should end.
      *
-     * @param pEndGame Specifies whether the game should end
+     * @param pEndGame
+     *            Specifies whether the game should end
      *
      * @see #isEndGame()
      */
-    public void setEndGame(boolean pEndGame) {
+    public void setEndGame(final boolean pEndGame) {
+
         this.endGame = pEndGame;
     }
 
@@ -221,13 +230,15 @@ public abstract class Game {
      */
     public void startGame() {
 
-        logger.trace("Start game"); //$NON-NLS-1$
+        LOGGER.trace("Start game"); //$NON-NLS-1$
 
         if (this.getGameMode() == GameModes.CHALLENGER) {
             this.playChallenger();
-        } else if (this.getGameMode() == GameModes.DEFENDER) {
+        }
+        else if (this.getGameMode() == GameModes.DEFENDER) {
             this.playDefender();
-        } else {
+        }
+        else {
             this.playDuel();
         }
     }
@@ -243,16 +254,17 @@ public abstract class Game {
      *            The max value of each digit
      * @return The mystery Number generated
      */
-    public ArrayList<Integer> mysteryNumberGeneration(int pMaxValueDigit) {
+    public List<Integer> mysteryNumberGeneration(final int pMaxValueDigit) {
 
-        logger.trace("Number Generation"); //$NON-NLS-1$
+        LOGGER.trace("Number Generation"); //$NON-NLS-1$
         ArrayList<Integer> mysteryNumber = new ArrayList<>();
+        Random r = new Random();
 
-        for (int i = 0; i < CombineGame.NB_DIGITS_MYSTERY; i++) {
-            mysteryNumber.add(new Integer((int) ((pMaxValueDigit + 1 - 0) * Math.random())));
+        for (int i = 0; i < CombineGame.getNbDigitsMystery(); i++) {
+            mysteryNumber.add(Integer.valueOf(r.nextInt(pMaxValueDigit + 1)));
 
-            if (logger.isTraceEnabled()) {
-                logger.trace(mysteryNumber);
+            if (LOGGER.isTraceEnabled()) {
+                LOGGER.trace(mysteryNumber);
             }
         }
 
@@ -269,9 +281,9 @@ public abstract class Game {
      *            The mystery Number not discovered during the game
      *
      */
-    protected void defeat(ArrayList<Integer> pMysteryNumber) {
+    protected void defeat(final List<Integer> pMysteryNumber) {
 
-        logger.trace("Defeat"); //$NON-NLS-1$
+        LOGGER.trace("Defeat"); //$NON-NLS-1$
 
         CombineGame.getDisplay().println("\n Dommage ! Vous avez perdu"); //$NON-NLS-1$
 
@@ -283,7 +295,7 @@ public abstract class Game {
         }
 
         this.setEndGame(true);
-        logger.trace("End game : " + this.isEndGame()); //$NON-NLS-1$
+        LOGGER.trace("End game : " + this.isEndGame()); //$NON-NLS-1$
     }
 
     /**
@@ -294,12 +306,12 @@ public abstract class Game {
      */
     protected void victory() {
 
-        logger.trace("Victory"); //$NON-NLS-1$
+        LOGGER.trace("Victory"); //$NON-NLS-1$
 
         CombineGame.getDisplay().println("\n Bravo ! Vous avez gagné"); //$NON-NLS-1$
         this.setEndGame(true);
 
-        logger.trace("End game : " + this.isEndGame()); //$NON-NLS-1$
+        LOGGER.trace("End game : " + this.isEndGame()); //$NON-NLS-1$
     }
 
     /**
@@ -310,12 +322,12 @@ public abstract class Game {
      */
     protected void equality() {
 
-        logger.trace("Equality"); //$NON-NLS-1$
+        LOGGER.trace("Equality"); //$NON-NLS-1$
 
         CombineGame.getDisplay().println("\n Personne n'a gagné"); //$NON-NLS-1$
         this.setEndGame(true);
 
-        logger.trace("End game : " + this.isEndGame()); //$NON-NLS-1$
+        LOGGER.trace("End game : " + this.isEndGame()); //$NON-NLS-1$
     }
 
     /**
@@ -331,7 +343,7 @@ public abstract class Game {
      *
      * @return The result of the comparison in the form of a String
      */
-    public abstract String compareNumber(ArrayList<Integer> pNumberToCompare, ArrayList<Integer> pMysteryNumber);
+    public abstract String compareNumber(List<Integer> pNumberToCompare, List<Integer> pMysteryNumber);
 
     /**
      * This method starts the game in Challenger mode.<br>
