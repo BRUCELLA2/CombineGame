@@ -29,7 +29,7 @@ import games.constants.GameNames;
  *
  *
  * @author BRUCELLA2
- * @version 1.0.8
+ * @version 1.0.9
  *
  */
 public abstract class Game {
@@ -45,7 +45,6 @@ public abstract class Game {
      * @see #setGameName(GameNames)
      *
      */
-    // TODO a rendre final si possible
     private GameNames gameName;
 
     /**
@@ -59,15 +58,12 @@ public abstract class Game {
      * @see #setGameMode(GameModes)
      *
      */
-    // TODO a rendre final si possible
     private GameModes gameMode;
 
     /**
      * Number of remaining attempts to complete the game<br>
      * <br>
      * This variable is initialized in the constructor.<br>
-     * When nbRemainingTries arrives at 0, the game must end. //TODO à intégrer dans
-     * le SETTER
      *
      * @see #getNbRemainingTries()
      * @see #setNbRemainingTries(int)
@@ -289,7 +285,6 @@ public abstract class Game {
 
         if (this.getGameMode() != GameModes.DEFENDER) {
             CombineGame.getDisplay().print("La bonne réponse était : "); //$NON-NLS-1$
-            // TODO ajouter la fonction afficheln(ArrayList<Integer>)
             CombineGame.getDisplay().print(pMysteryNumber);
             CombineGame.getDisplay().println(""); //$NON-NLS-1$
         }
@@ -308,7 +303,7 @@ public abstract class Game {
 
         LOGGER.trace("Victory"); //$NON-NLS-1$
 
-        CombineGame.getDisplay().println("\n Bravo ! Vous avez gagné"); //$NON-NLS-1$
+        CombineGame.getDisplay().println("\n Bravo ! Vous avez gagné !\n"); //$NON-NLS-1$
         this.setEndGame(true);
 
         LOGGER.trace("End game : " + this.isEndGame()); //$NON-NLS-1$
@@ -366,4 +361,31 @@ public abstract class Game {
      */
     public abstract void playDuel();
 
+    /**
+     * When it's the human turn in a game, this method need to be called to
+     * performed the operation needed. All game in CombineGame need to give a
+     * proposition. This proposition is returned.
+     *
+     * @param pHumanPlayer
+     *            The human player
+     * @param pMysteryNumber
+     *            The mystery number to discover
+     *
+     * @return The proposition of the human player
+     */
+    protected abstract List<Integer> humanTurn(HumanPlayer pHumanPlayer, List<Integer> pMysteryNumber);
+
+    /**
+     * When it's the computer turn in a game, this method need to be called to
+     * performed the operation needed. All game in CombineGame need to give a
+     * proposition. This proposition is returned.
+     *
+     * @param pComputerPlayer
+     *            The computer player
+     * @param pMysteryNumber
+     *            The mystery number to discover
+     *
+     * @return The proposition of the computer player
+     */
+    protected abstract List<Integer> computerTurn(ComputerPlayer pComputerPlayer, List<Integer> pMysteryNumber);
 }

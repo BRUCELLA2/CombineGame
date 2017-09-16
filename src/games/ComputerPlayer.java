@@ -13,12 +13,11 @@ import java.util.Set;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-
 /**
  * <b>This class represents a player simulated by the computer.</b><br>
  *
  * @author BRUCELLA2
- * @version 1.0.7
+ * @version 1.0.8
  *
  */
 public class ComputerPlayer extends Player {
@@ -218,8 +217,7 @@ public class ComputerPlayer extends Player {
     /**
      * Allows to define the list of numbers already proposed.<br>
      * <br>
-     * To add an item to the list you must use
-     * {@link #addLastProposition(List)}
+     * To add an item to the list you must use {@link #addLastProposition(List)}
      *
      * @param pListNumberProposed
      *            the list of numbers already proposed
@@ -354,29 +352,6 @@ public class ComputerPlayer extends Player {
         }
         LOGGER.trace("Last proposition : " + lastProposition); //$NON-NLS-1$
 
-        /*
-         * VERSION IA LOW for(int i=0; i < pNbChiffre; i++) { nombre.add(new
-         * Integer((int) ((9-0)*Math.random()))); }
-         */
-
-        /*
-         * VERSION IA MEDIUM for(int i=0; i < pNbChiffre; i++) {
-         *
-         * if(derniereProposition.isEmpty()) { nombre.add(new Integer((int)
-         * ((9-0)*Math.random()))); } else {
-         *
-         * switch(this.getListResultats().get(this.getListResultats().size()-1).charAt(i
-         * )) {
-         *
-         * case '+': nombre.add(new Integer((int)
-         * ((9-derniereProposition.get(i).intValue())*Math.random()))); break; case '-':
-         * nombre.add(new Integer((int)
-         * ((derniereProposition.get(i).intValue()-0)*Math.random()))); break; case '=':
-         * nombre.add(new Integer(derniereProposition.get(i).intValue())); break;
-         *
-         * default: break; } } }
-         */
-
         for (int i = 0; i < CombineGame.getNbDigitsMystery(); i++) {
 
             Random r = new Random();
@@ -496,7 +471,7 @@ public class ComputerPlayer extends Player {
 
             ArrayList<Integer> patternInit = new ArrayList<>();
             for (int i = 0; i < CombineGame.getNbDigitsMystery(); i++) {
-                patternInit.add(0);
+                patternInit.add(Integer.valueOf(0));
             }
             this.getPoolMastermind().add(patternInit);
             LOGGER.trace("Pool init : " + this.getPoolMastermind()); //$NON-NLS-1$
@@ -511,10 +486,11 @@ public class ComputerPlayer extends Player {
 
         Random r = new Random();
         int randomIndex;
-        
+
         try {
-            randomIndex = r.nextInt(this.getPoolMastermind().size()-1);
-        } catch (IllegalArgumentException e) {
+            randomIndex = r.nextInt(this.getPoolMastermind().size() - 1);
+        }
+        catch (@SuppressWarnings("unused") IllegalArgumentException e) {
             randomIndex = 0;
         }
 
@@ -552,7 +528,7 @@ public class ComputerPlayer extends Player {
 
             for (int i = 0; i <= CombineGame.getNbColors(); i++) {
                 ArrayList<Integer> number = new ArrayList<>(numberPool);
-                number.set(nbDigitCombination - 1, i);
+                number.set(nbDigitCombination - 1, Integer.valueOf(i));
                 pPool.add(number);
 
                 if (LOGGER.isTraceEnabled()) {
@@ -581,7 +557,7 @@ public class ComputerPlayer extends Player {
      * @param pPool
      *            The pool of combinations that will be optimized
      */
-    public void optimizedPool(List<List<Integer>> pPool) {
+    public void optimizedPool(final List<List<Integer>> pPool) {
 
         if (LOGGER.isTraceEnabled()) {
             LOGGER.trace("Optimized pool"); //$NON-NLS-1$
@@ -630,7 +606,7 @@ public class ComputerPlayer extends Player {
                     liPool.remove();
                 } // New proposition need to have same number of digit in good or bad position
                   // with old propositions than old propositions have with mystery pattern.
-                  // If more, it means there is some digit wich are not the good one. If less, it
+                  // If more, it means there is some digit which are not the good one. If less, it
                   // means there is good digits missing
                 else if (badPos + goodPos != mapResultGoodPos.getValue().intValue()
                         + mapResultBadPos.getValue().intValue()) {
@@ -669,8 +645,7 @@ public class ComputerPlayer extends Player {
                 else if (mapResultBadPos.getValue().intValue() == 0 && mapResultGoodPos.getValue().intValue() == 0
                         && goodPos + badPos == CombineGame.getNbDigitsMystery()) {
                     if (LOGGER.isTraceEnabled()) {
-                        LOGGER.trace(
-                                "result bad pos = 0 and result good pos = 0 " //$NON-NLS-1$
+                        LOGGER.trace("result bad pos = 0 and result good pos = 0 " //$NON-NLS-1$
                                 + "and (bad pos + good pos) = nb mystery digit"); //$NON-NLS-1$
                         LOGGER.trace("remove : " + numberPool); //$NON-NLS-1$
                     }

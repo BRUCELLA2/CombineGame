@@ -21,7 +21,7 @@ import games.constants.GameNames;
  * called with the game mode as an argument.<br>
  *
  * @author BRUCELLA2
- * @version 1.0.7
+ * @version 1.0.8
  *
  */
 public class CombineGame {
@@ -43,7 +43,6 @@ public class CombineGame {
      * <br>
      * This variable is customizable in config.properties file
      *
-     * @see #initProperties()
      */
     private static final int NB_DIGITS_MYSTERY;
 
@@ -52,7 +51,6 @@ public class CombineGame {
      * <br>
      * This variable is customizable in config.properties file
      *
-     * @see #initProperties()
      */
     private static final int NB_MAX_TRIES;
 
@@ -61,7 +59,6 @@ public class CombineGame {
      * <br>
      * This variable is customizable in config.properties file
      *
-     * @see #initProperties()
      */
     private static final int MAX_VALUE_DIGIT;
     /**
@@ -69,7 +66,6 @@ public class CombineGame {
      * <br>
      * This variable is customizable in config.properties file
      *
-     * @see #initProperties()
      */
     private static final int NB_COLORS;
 
@@ -132,7 +128,6 @@ public class CombineGame {
     /**
      * CombineGame class's constructor.<br>
      * <br>
-     * Initialization of global variables using the method {@link #initProperties()}
      * Initialization of the different variables and launch of CombineGame using the
      * method {@link #launchCombineGame()}
      *
@@ -173,11 +168,10 @@ public class CombineGame {
             LOGGER.trace("CombineGame is running"); //$NON-NLS-1$
 
             this.menuGameSelection();
-            
-            if(this.getExecuteCombineGame()) {
+
+            if (this.getExecuteCombineGame()) {
                 this.menuModeSelection();
             }
-            
 
             while (this.getGameChosen() != null && this.getmodeChosen() != null && this.executeCombineGame) {
 
@@ -191,7 +185,7 @@ public class CombineGame {
                         this.menuEndGameSelection();
                     }
                 }
-                else if (this.getGameChosen() == GameNames.MASTERMIND){
+                else if (this.getGameChosen() == GameNames.MASTERMIND) {
 
                     Game game = new Mastermind(this.getmodeChosen());
                     game.startGame();
@@ -211,14 +205,14 @@ public class CombineGame {
     // ***** GETTER *****/
     /**
      * Returns if combine game is launch with Developper mode.
-     * 
+     *
      * @return true if Combine game is in developper mode and false if not.
      */
-    public static final boolean isDeveloperMode(){
-    	
-    	return CombineGame.DEVELOPER_MODE;
+    public static final boolean isDeveloperMode() {
+
+        return CombineGame.DEVELOPER_MODE;
     }
-    
+
     /**
      * Returns the display that allows to make the different displays of the game.
      *
@@ -229,46 +223,47 @@ public class CombineGame {
 
         return CombineGame.DISPLAY;
     }
+
     /**
      * Returns the numbers of digits in mystery number.
      *
      * @return the number of digits in mystery number.
      */
     public static final int getNbDigitsMystery() {
-    	
-    	return CombineGame.NB_DIGITS_MYSTERY;
+
+        return CombineGame.NB_DIGITS_MYSTERY;
     }
-    
+
     /**
      * Returns the max numbers of tries at the start of a game.
-     * 
+     *
      * @return the max numbers of tries
      */
     public static final int getNbMaxTries() {
-    	
-    	return CombineGame.NB_MAX_TRIES;
+
+        return CombineGame.NB_MAX_TRIES;
     }
-    
+
     /**
      * Returns the max value for one digit.
-     * 
+     *
      * @return the max value for one digit
      */
     public static final int getMaxValueDigit() {
-    	
-    	return CombineGame.MAX_VALUE_DIGIT;
+
+        return CombineGame.MAX_VALUE_DIGIT;
     }
-    
+
     /**
      * Returns the number of color for Mastermind game
-     * 
+     *
      * @return the number of color for Mastermind game
      */
     public static final int getNbColors() {
-        
+
         return CombineGame.NB_COLORS;
     }
-    
+
     /**
      * Returns the scanner that allow to get the user's input.
      *
@@ -325,7 +320,7 @@ public class CombineGame {
     }
 
     // ***** SETTER *****/
-    
+
     /**
      * Allow to define the scanner used to get user input
      *
@@ -474,7 +469,7 @@ public class CombineGame {
         do {
             CombineGame.getDisplay().showGameModesMenu();
             String line = this.getScanner().nextLine();
-            choice = line.charAt(0);
+
             if (line.length() > 1) {
                 choice = 'x';
             }
@@ -556,7 +551,6 @@ public class CombineGame {
                 choice = line.charAt(0);
                 choice = Character.toUpperCase(choice);
             }
-            
 
             LOGGER.debug("User input : " + line); //$NON-NLS-1$
             LOGGER.debug("User choice : " + choice); //$NON-NLS-1$
@@ -589,8 +583,8 @@ public class CombineGame {
     }
 
     /**
-     * Read the properties file (config.properties) and initialize the
-     * global variables with the properties values.<br>
+     * Read the properties file (config.properties) and initialize the global
+     * variables with the properties values.<br>
      * <br>
      * Initialize Display wich will be used for all display.
      *
@@ -612,9 +606,9 @@ public class CombineGame {
         NB_MAX_TRIES = Integer.parseInt(prop.getProperty("NB_MAX_TRIES")); //$NON-NLS-1$
         MAX_VALUE_DIGIT = Integer.parseInt(prop.getProperty("MAX_VALUE_DIGIT")); //$NON-NLS-1$
         NB_COLORS = Integer.parseInt(prop.getProperty("NB_COLORS")); //$NON-NLS-1$
-        
+
         DISPLAY = new Display();
-        
+
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("DEVELOPPER_MODE = " + DEVELOPER_MODE); //$NON-NLS-1$
             LOGGER.debug("NB_DIGITS_MYSTERY = " + NB_DIGITS_MYSTERY); //$NON-NLS-1$

@@ -11,45 +11,34 @@
 	</Appenders>
 	<Loggers>
 		<Root level="DEBUG">
-			<AppenderRef ref="Console"></AppenderRef>
 			<AppenderRef ref="File"></AppenderRef>
 		</Root>
 			<logger name="games" additivity="false">
-				<AppenderRef ref="Console"></AppenderRef>
 				<AppenderRef ref="File"></AppenderRef>
 			</logger>
 				<logger name="games.Launcher" additivity="false">
-					<AppenderRef ref="Console"></AppenderRef>
 					<AppenderRef ref="File"></AppenderRef>
 				</logger>
 				<logger name="games.CombineGame" additivity="false">
-					<AppenderRef ref="Console"></AppenderRef>
 					<AppenderRef ref="File"></AppenderRef>
 				</logger>
 				<logger name="games.Game" additivity="false">
-					<AppenderRef ref="Console"></AppenderRef>
 					<AppenderRef ref="File"></AppenderRef>
 				</logger>
 				<logger name="games.MoreLess" additivity="false">
-					<AppenderRef ref="Console"></AppenderRef>
 					<AppenderRef ref="File"></AppenderRef>
 				</logger>
 				<logger name="games.Mastermind" additivity="false">
-					<AppenderRef ref="Console"></AppenderRef>
 					<AppenderRef ref="File"></AppenderRef>
 				</logger>
 				<logger name="games.Player" additivity="false">
-					<AppenderRef ref="Console"></AppenderRef>
 					<AppenderRef ref="File"></AppenderRef>
 				</logger>
 				<logger name="games.HumanPlayer" additivity="false">
-					<AppenderRef ref="Console"></AppenderRef>
 					<AppenderRef ref="File"></AppenderRef>
 				</logger>
 				<logger name="games.ComputerPlayer" additivity="false">
-					<AppenderRef ref="Console"></AppenderRef>
 					<AppenderRef ref="File"></AppenderRef>
 				</logger>
-				
 	</Loggers>
 </Configuration>

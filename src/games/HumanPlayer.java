@@ -2,6 +2,7 @@ package games;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Scanner;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -10,7 +11,7 @@ import org.apache.logging.log4j.Logger;
  * <b>This class represents a human player</b>
  *
  * @author BRUCELLA2
- * @version 1.0.6
+ * @version 1.0.7
  */
 public class HumanPlayer extends Player {
 
@@ -56,7 +57,6 @@ public class HumanPlayer extends Player {
 
         ArrayList<Integer> number;
 
-        // TODO to be factorised ?
         do {
             CombineGame.getDisplay().println("Donnez le nombre mystère : "); //$NON-NLS-1$
             number = this.getNumberInput(pMaxValueDigit);
@@ -72,36 +72,58 @@ public class HumanPlayer extends Player {
     }
 
     /**
-     * This method asks the user to provide a mystery number (i. e. a number to
-     * guess).<br>
+     * This method allows to get the number entered by the user and return is as an
+     * ArrayList of integer.<br>
      * <br>
-     * This number obtained as String is transformed into an integer ArrayList.
+     * Return an empty ArrayList if the input is not valide (too long, no digit
+     * character, digit not in the game rules)
      *
      * @param pMaxValueDigit
      *            The max value digit
-     *
      * @return A number in the form of an ArrayList of integer
      */
-    public List<Integer> createMysteryNumber(final int pMaxValueDigit) {
+    protected ArrayList<Integer> getNumberInput(final int pMaxValueDigit) {
 
-        LOGGER.trace("Create Mystery Number"); //$NON-NLS-1$
-        LOGGER.trace("Max value digit = " + pMaxValueDigit); //$NON-NLS-1$
+        LOGGER.trace("Get Number input"); //$NON-NLS-1$
 
-        ArrayList<Integer> number;
+        String str;
+        ArrayList<Integer> number = new ArrayList<>();
 
-        // TODO to be factorised ?
-        do {
-            CombineGame.getDisplay().println("Donnez la combinaison secrète : "); //$NON-NLS-1$
-            number = this.getNumberInput(pMaxValueDigit);
+        @SuppressWarnings("resource")
+        Scanner scan = new Scanner(System.in);
+        str = scan.nextLine();
 
-            LOGGER.debug("Number input : " + number); //$NON-NLS-1$
-
-            if (number.isEmpty()) {
-                CombineGame.getDisplay().println("Saisie incorrecte"); //$NON-NLS-1$
+        LOGGER.trace("User input : " + str); //$NON-NLS-1$
+        LOGGER.trace("User input length : " + str.length()); //$NON-NLS-1$
+        if (str.length() == CombineGame.getNbDigitsMystery()) {
+            for (int i = 0; i < CombineGame.getNbDigitsMystery(); i++) {
+                LOGGER.trace("char : " + str.charAt(i)); //$NON-NLS-1$
+                if (Character.isDigit(str.charAt(i))) {
+                    int digit = Character.getNumericValue(str.charAt(i));
+                    LOGGER.trace("digit : " + digit); //$NON-NLS-1$
+                    if (digit <= pMaxValueDigit) {
+                        number.add(Integer.valueOf(digit));
+                        LOGGER.trace("number : " + number); //$NON-NLS-1$
+                    }
+                    else {
+                        number.clear();
+                        LOGGER.trace("number returned : " + number); //$NON-NLS-1$
+                        return number;
+                    }
+                }
+                else {
+                    number.clear();
+                    LOGGER.trace("number returned : " + number); //$NON-NLS-1$
+                    return number;
+                }
             }
-        } while (number.isEmpty());
-
+        }
+        else {
+            number.clear();
+            LOGGER.trace("number returned : " + number); //$NON-NLS-1$
+            return number;
+        }
+        LOGGER.trace("number returned : " + number); //$NON-NLS-1$
         return number;
     }
-
 }

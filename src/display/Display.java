@@ -13,7 +13,7 @@ import games.constants.NavigationMenu;
  * Currently the display is made by console output.
  *
  * @author BRUCELLA2
- * @version 1.0.2
+ * @version 1.0.3
  *
  */
 public class Display {
@@ -99,7 +99,7 @@ public class Display {
     @SuppressWarnings("static-method")
     public void print(final String pString) {
 
-    	System.out.print(pString);
+        System.out.print(pString);
     }
 
     /**

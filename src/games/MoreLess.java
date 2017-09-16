@@ -2,7 +2,6 @@ package games;
 
 import java.util.List;
 import java.util.ListIterator;
-import java.util.Scanner;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -26,7 +25,7 @@ import games.constants.GameModes;
  *
  *
  * @author BRUCELLA2
- * @version 1.0.8
+ * @version 1.0.9
  *
  */
 public class MoreLess extends Game {
@@ -76,7 +75,7 @@ public class MoreLess extends Game {
     public String compareNumber(final List<Integer> pNumberToCompare, final List<Integer> pMysteryNumber) {
 
         LOGGER.debug("Compare " + pNumberToCompare //$NON-NLS-1$
-                + " to mysteryNumber : " + pMysteryNumber); //$NON-NLS-1$ //$NON-NLS-2$
+                + " to mysteryNumber : " + pMysteryNumber); //$NON-NLS-1$
 
         ListIterator<Integer> itProposedNumber = pNumberToCompare.listIterator();
         ListIterator<Integer> itMysteryNumber = pMysteryNumber.listIterator();
@@ -142,23 +141,17 @@ public class MoreLess extends Game {
 
             LOGGER.trace("Start round - Remaining Tries : " + this.getNbRemainingTries()); //$NON-NLS-1$
 
-            List<Integer> number = humanPlayer.giveNumber(CombineGame.getMaxValueDigit());
-            String comparison = this.compareNumber(number, mysteryNumber);
-            String result = " -> Réponse : " + comparison; //$NON-NLS-1$
+            // Decrease number of remaining tries at the start of each turn
+            this.setNbRemainingTries(this.getNbRemainingTries() - 1);
 
-            CombineGame.getDisplay().print("Proposition : "); //$NON-NLS-1$
-            CombineGame.getDisplay().print(number);
-            CombineGame.getDisplay().println(result);
+            List<Integer> proposition = this.humanTurn(humanPlayer, mysteryNumber);
 
-            if (number.equals(mysteryNumber)) {
+            if (proposition.equals(mysteryNumber)) {
                 this.victory();
             }
-
-            if (!number.equals(mysteryNumber) && this.getNbRemainingTries() == 1) {
+            else if (this.getNbRemainingTries() == 0) {
                 this.defeat(mysteryNumber);
             }
-
-            this.setNbRemainingTries(this.getNbRemainingTries() - 1);
 
             LOGGER.debug("End round - Remaining Tries : " + this.getNbRemainingTries()); //$NON-NLS-1$
         }
@@ -185,38 +178,26 @@ public class MoreLess extends Game {
 
         HumanPlayer humanPlayer = new HumanPlayer("Player"); //$NON-NLS-1$
         ComputerPlayer computerPlayer = new ComputerPlayer("Ordinateur"); //$NON-NLS-1$
-        List<Integer> mysteryNumber = humanPlayer.createMysteryNumber(CombineGame.getMaxValueDigit());
+        List<Integer> mysteryNumber = humanPlayer.giveNumber(CombineGame.getMaxValueDigit());
 
         LOGGER.debug("Mystery Number = " + mysteryNumber); //$NON-NLS-1$
-
-        // TODO warning a prendre en compte
-        @SuppressWarnings("resource")
-        Scanner scan = new Scanner(System.in);
 
         while (!this.isEndGame()) {
 
             LOGGER.trace("Start round - Remaining Tries : " + this.getNbRemainingTries()); //$NON-NLS-1$
 
-            List<Integer> number = computerPlayer.giveNumber(CombineGame.getMaxValueDigit());
-            String comparison = this.compareNumber(number, mysteryNumber);
-            computerPlayer.addResultatMoreLess(comparison);
-            String resultat = " -> Réponse : " + comparison; //$NON-NLS-1$
+            // Decrease number of remaining tries at the start of each turn
+            this.setNbRemainingTries(this.getNbRemainingTries() - 1);
 
-            CombineGame.getDisplay().print(computerPlayer.getPlayerName() + " propose : "); //$NON-NLS-1$
-            CombineGame.getDisplay().print(number);
-            CombineGame.getDisplay().print(resultat);
-            CombineGame.getDisplay().print("   (Appuyez sur entrée pour continuer)"); //$NON-NLS-1$
-            scan.nextLine();
+            List<Integer> number = this.computerTurn(computerPlayer, mysteryNumber);
 
             if (number.equals(mysteryNumber)) {
                 this.defeat(mysteryNumber);
             }
 
-            if (!number.equals(mysteryNumber) && this.getNbRemainingTries() == 1) {
+            if (!number.equals(mysteryNumber) && this.getNbRemainingTries() == 0) {
                 this.victory();
             }
-
-            this.setNbRemainingTries(this.getNbRemainingTries() - 1);
 
             LOGGER.debug("End round - Remaining Tries : " + this.getNbRemainingTries()); //$NON-NLS-1$
         }
@@ -242,7 +223,7 @@ public class MoreLess extends Game {
         ComputerPlayer computerPlayer = new ComputerPlayer("Ordinateur"); //$NON-NLS-1$
 
         List<Integer> mysteryNumberComputer = this.mysteryNumberGeneration(CombineGame.getMaxValueDigit());
-        List<Integer> mysteryNumberHuman = humanPlayer.createMysteryNumber(CombineGame.getMaxValueDigit());
+        List<Integer> mysteryNumberHuman = humanPlayer.giveNumber(CombineGame.getMaxValueDigit());
 
         LOGGER.debug("Mystery Number computer = " + mysteryNumberComputer); //$NON-NLS-1$
         LOGGER.debug("Mystery Number human = " + mysteryNumberHuman); //$NON-NLS-1$
@@ -260,55 +241,99 @@ public class MoreLess extends Game {
 
             LOGGER.trace("Start round - Remaining Tries : " + this.getNbRemainingTries()); //$NON-NLS-1$
 
+            // Decrease number of remaining tries at the start of each turn
+            this.setNbRemainingTries(this.getNbRemainingTries() - 1);
+
             // Human turn
-            List<Integer> numberHuman = humanPlayer.giveNumber(CombineGame.getMaxValueDigit());
+            List<Integer> humanProposition = this.humanTurn(humanPlayer, mysteryNumberComputer);
 
-            LOGGER.debug("Number proposed  by player: " + numberHuman); //$NON-NLS-1$
-
-            String compHumanNb = this.compareNumber(numberHuman, mysteryNumberComputer);
-            String resultatHuman = " -> Réponse : " + compHumanNb; //$NON-NLS-1$
-
-            CombineGame.getDisplay().print("Votre proposition : "); //$NON-NLS-1$
-            CombineGame.getDisplay().print(numberHuman);
-            CombineGame.getDisplay().println(resultatHuman);
-
-            if (numberHuman.equals(mysteryNumberComputer)) {
+            if (humanProposition.equals(mysteryNumberComputer)) {
                 this.victory();
+                break;
             }
 
             // Computer turn
-            if (!this.isEndGame()) {
-                List<Integer> numberComputer = computerPlayer.giveNumber(CombineGame.getMaxValueDigit());
+            List<Integer> numberComputer = this.computerTurn(computerPlayer, mysteryNumberHuman);
 
-                LOGGER.debug("Number proposed by computer: " + numberComputer); //$NON-NLS-1$
-
-                String compComputerNb = this.compareNumber(numberComputer, mysteryNumberHuman);
-                computerPlayer.addResultatMoreLess(compComputerNb);
-                String resultatComputer = " -> Réponse : " + compComputerNb; //$NON-NLS-1$
-
-                CombineGame.getDisplay().print("L'ordinateur a proposé un nombre. "); //$NON-NLS-1$
-                CombineGame.getDisplay().println(resultatComputer);
-
-                if (numberComputer.equals(mysteryNumberHuman)) {
-                    CombineGame.getDisplay().println("L'ordinateur a proposé les valeurs suivantes :"); //$NON-NLS-1$
-                    for (List<Integer> proposition : computerPlayer.getListNumberProposed()) {
-                        CombineGame.getDisplay().print(proposition);
-                        CombineGame.getDisplay().print("\n"); //$NON-NLS-1$
-                    }
-
-                    this.defeat(mysteryNumberComputer);
+            if (numberComputer.equals(mysteryNumberHuman)) {
+                CombineGame.getDisplay().println("L'ordinateur a proposé les valeurs suivantes :"); //$NON-NLS-1$
+                for (List<Integer> proposition : computerPlayer.getListNumberProposed()) {
+                    CombineGame.getDisplay().print(proposition);
+                    CombineGame.getDisplay().print("\n"); //$NON-NLS-1$
                 }
-
-                if (!numberHuman.equals(mysteryNumberComputer) && !numberComputer.equals(mysteryNumberHuman)
-                        && this.getNbRemainingTries() == 1) {
-                    this.equality();
-                }
-                this.setNbRemainingTries(this.getNbRemainingTries() - 1);
-
-                LOGGER.debug("End round - Remaining Tries : " + this.getNbRemainingTries()); //$NON-NLS-1$
+                this.defeat(mysteryNumberComputer);
             }
+            else if (this.getNbRemainingTries() == 0) {
+                this.equality();
+            }
+
+            LOGGER.debug("End round - Remaining Tries : " + this.getNbRemainingTries()); //$NON-NLS-1$
+
         }
 
     }
 
+    /**
+     * This method ask to the player to give a number, compare this number with the
+     * mystery number, display the result of the comparison and return the
+     * proposition.
+     *
+     * @param pHumanPlayer
+     *            The human player
+     * @param pMysteryNumber
+     *            the mystery number to discover
+     *
+     * @return the proposition number of the player.
+     */
+    @Override
+    public List<Integer> humanTurn(final HumanPlayer pHumanPlayer, final List<Integer> pMysteryNumber) {
+
+        // Ask human player to give a number
+        List<Integer> humanProposition = pHumanPlayer.giveNumber(CombineGame.getMaxValueDigit());
+
+        // Compare human player's proposition to mystery number
+        String comparison = this.compareNumber(humanProposition, pMysteryNumber);
+
+        // Show the human player's proposition and the result
+        String result = " -> Réponse : " + comparison; //$NON-NLS-1$
+        CombineGame.getDisplay().print("Proposition : "); //$NON-NLS-1$
+        CombineGame.getDisplay().print(humanProposition);
+        CombineGame.getDisplay().println(result);
+
+        return humanProposition;
+    }
+
+    /**
+     * This method ask to the computer to give a number, compare this number with
+     * the mystery number, save the proposition and display the result of the
+     * comparison and return the proposition.
+     *
+     * @param pComputerPlayer
+     *            The computer player
+     * @param pMysteryNumber
+     *            The mystery number to discover
+     * @return the proposition number of the computer
+     */
+    @Override
+    public List<Integer> computerTurn(final ComputerPlayer pComputerPlayer, final List<Integer> pMysteryNumber) {
+
+        // Ask computer to give a number
+        List<Integer> computerProposition = pComputerPlayer.giveNumber(CombineGame.getMaxValueDigit());
+
+        // Compare computer's proposition to mystery number
+        String comparison = this.compareNumber(computerProposition, pMysteryNumber);
+
+        // Save the result and add it to the previous results
+        pComputerPlayer.addResultatMoreLess(comparison);
+
+        // Show the computer's proposition and the result
+        String resultatComputer = " -> Réponse : " + comparison; //$NON-NLS-1$
+        CombineGame.getDisplay().print("L'ordinateur a proposé un nombre : "); //$NON-NLS-1$
+        CombineGame.getDisplay().print(computerProposition);
+        CombineGame.getDisplay().println(resultatComputer);
+
+        LOGGER.debug("Number proposed by computer: " + computerProposition); //$NON-NLS-1$
+
+        return computerProposition;
+    }
 }
