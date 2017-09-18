@@ -3,12 +3,13 @@ package games;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+
 /**
  * <b>Main Class which start combineGame</b>
  *
  *
  * @author BRUCELLA2
- * @version 1.0.3
+ * @version 1.0.4
  *
  * @see CombineGame
  */
@@ -18,6 +19,7 @@ public class Launcher {
      * Log4j2 LOGGER
      */
     private static final Logger LOGGER = LogManager.getLogger(Launcher.class);
+
 
     /**
      * Main methode of the project.
@@ -33,7 +35,8 @@ public class Launcher {
 
         LOGGER.trace("********************  Launch  *******************************"); //$NON-NLS-1$
 
-        new CombineGame();
+        CombineGame combineGame = new CombineGame();
+        combineGame.launchCombineGame();
 
         LOGGER.trace("*****************  End  ************************************"); //$NON-NLS-1$
     }

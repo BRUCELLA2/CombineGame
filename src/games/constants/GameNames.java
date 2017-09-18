@@ -24,6 +24,7 @@ public enum GameNames {
      */
     private String gameName;
 
+
     // ***** CONSTRUCTORS *****/
 
     /**
@@ -37,6 +38,7 @@ public enum GameNames {
         this.setGameName(pGameName);
     }
 
+
     // ***** GETTERS *****/
 
     /**
@@ -48,6 +50,7 @@ public enum GameNames {
 
         return this.gameName;
     }
+
 
     // ***** SETTERS *****/
 

@@ -4,7 +4,7 @@ package games.constants;
  * <b>Enumeration of the different game modes available for CombineGame</b>
  *
  * @author BRUCELLA2
- * @version 1.0.2
+ * @version 1.0.3
  */
 public enum GameModes {
     /**
@@ -35,6 +35,7 @@ public enum GameModes {
      */
     private String modeName;
 
+
     // ***** CONSTRUCTORS *****/
 
     /**
@@ -48,6 +49,7 @@ public enum GameModes {
         this.setModeName(pModeName);
     }
 
+
     // ***** GETTERS *****/
 
     /**
@@ -59,6 +61,7 @@ public enum GameModes {
 
         return this.modeName;
     }
+
 
     // ***** SETTERS *****/
 

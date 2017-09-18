@@ -4,7 +4,7 @@ package games.constants;
  * <b>Enumeration of the different navigations in the CombineGame menus</b>
  *
  * @author BRUCELLA2
- * @version 1.0.2
+ * @version 1.0.3
  */
 public enum NavigationMenu {
 
@@ -29,6 +29,7 @@ public enum NavigationMenu {
      */
     private String navigationName;
 
+
     // ***** CONSTRUCTORS *****//
     /**
      * Constructor
@@ -41,6 +42,7 @@ public enum NavigationMenu {
         this.setNavigationName(pNavigationName);
     }
 
+
     // ***** GETTERS *****//
 
     /**
@@ -52,6 +54,7 @@ public enum NavigationMenu {
 
         return this.navigationName;
     }
+
 
     // ***** SETTERS *****//
 
