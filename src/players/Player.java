@@ -1,4 +1,4 @@
-package games;
+package players;
 
 import java.util.List;
 
@@ -11,7 +11,7 @@ import org.apache.logging.log4j.Logger;
  * <br>
  *
  * @author BRUCELLA2
- * @version 1.0.8
+ * @version 1.0.9
  *
  */
 public abstract class Player {
@@ -39,16 +39,16 @@ public abstract class Player {
      * <br>
      * The name and display are initialized from the parameters provided to the constructor
      *
-     * @param pPlayerGame
+     * @param pPlayerName
      *            The player's name
      */
-    public Player(final String pPlayerGame) {
+    public Player(final String pPlayerName) {
 
         LOGGER.trace("Player construction"); //$NON-NLS-1$
 
-        this.setPlayerName(pPlayerGame);
+        this.playerName = pPlayerName;
 
-        LOGGER.trace("Player name : " + this.getPlayerName()); //$NON-NLS-1$
+        LOGGER.trace("Player name : " + this.playerName); //$NON-NLS-1$
     }
 
 

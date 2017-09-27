@@ -8,6 +8,8 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import games.constants.GameModes;
+import players.ComputerPlayer;
+import players.HumanPlayer;
 
 
 /**
@@ -22,7 +24,7 @@ import games.constants.GameModes;
  *
  *
  * @author BRUCELLA2
- * @version 1.0.10
+ * @version 1.0.11
  *
  */
 public class MoreLess extends Game {
@@ -52,9 +54,11 @@ public class MoreLess extends Game {
     public MoreLess(final GameModes pGameMode) {
 
         super(pGameMode);
-        
-        LOGGER.debug("********** START MORE LESS GAME ************"); //$NON-NLS-1$
-        LOGGER.debug("RemainingTries = " + this.getNbRemainingTries()); //$NON-NLS-1$
+
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("********** START MORE LESS GAME ************"); //$NON-NLS-1$
+            LOGGER.debug("RemainingTries = " + this.getNbRemainingTries()); //$NON-NLS-1$
+        }
     }
 
 
@@ -79,9 +83,10 @@ public class MoreLess extends Game {
     @Override
     public String compareNumber(final List<Integer> pNumberToCompare, final List<Integer> pMysteryNumber) {
 
-        LOGGER.debug("Compare " + pNumberToCompare //$NON-NLS-1$
-                + " to mysteryNumber : " + pMysteryNumber); //$NON-NLS-1$
-
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("Compare " + pNumberToCompare //$NON-NLS-1$
+                    + " to mysteryNumber : " + pMysteryNumber); //$NON-NLS-1$
+        }
         ListIterator<Integer> itProposedNumber = pNumberToCompare.listIterator();
         ListIterator<Integer> itMysteryNumber = pMysteryNumber.listIterator();
         StringBuilder bld = new StringBuilder();
@@ -98,19 +103,23 @@ public class MoreLess extends Game {
                 }
 
                 if (proposedDigit - mysteryDigit < 0) {
-                    bld.append("+"); //$NON-NLS-1$
+                    bld.append('+');
                 }
                 else if (proposedDigit - mysteryDigit > 0) {
-                    bld.append("-"); //$NON-NLS-1$
+                    bld.append('-');
                 }
                 else {
-                    bld.append("="); //$NON-NLS-1$
+                    bld.append('=');
                 }
-                LOGGER.trace("result = " + bld.toString()); //$NON-NLS-1$
+                if (LOGGER.isTraceEnabled()) {
+                    LOGGER.trace("result = " + bld.toString()); //$NON-NLS-1$
+                }
             }
         }
 
-        LOGGER.debug("Result comparison = " + bld.toString()); //$NON-NLS-1$
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("Result comparison = " + bld.toString()); //$NON-NLS-1$
+        }
         return bld.toString();
     }
 
@@ -179,7 +188,7 @@ public class MoreLess extends Game {
         CombineGame.getDisplay().print("Proposition : "); //$NON-NLS-1$
         CombineGame.getDisplay().print(humanProposition);
         CombineGame.getDisplay().println(result);
-        CombineGame.getDisplay().println("");
+        CombineGame.getDisplay().println(""); //$NON-NLS-1$
 
         return humanProposition;
     }
@@ -199,23 +208,26 @@ public class MoreLess extends Game {
     @Override
     public void playChallenger() {
 
-        LOGGER.debug("Start Challenger mode"); //$NON-NLS-1$
-
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("Start Challenger mode"); //$NON-NLS-1$
+        }
         HumanPlayer humanPlayer = new HumanPlayer("Player"); //$NON-NLS-1$
         List<Integer> mysteryNumber = this.mysteryNumberGeneration(CombineGame.getMaxValueDigit());
-        
+
         if (CombineGame.isDeveloperMode()) {
             CombineGame.getDisplay().print("Developpeur Mode : Le nombre mystère généré est : "); //$NON-NLS-1$
             CombineGame.getDisplay().println(mysteryNumber);
             CombineGame.getDisplay().println(""); //$NON-NLS-1$
         }
 
-        LOGGER.debug("Mystery Number generated = " + mysteryNumber); //$NON-NLS-1$
-
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("Mystery Number generated = " + mysteryNumber); //$NON-NLS-1$
+        }
         while (!this.isEndGame()) {
 
-            LOGGER.debug("Start round - Remaining Tries : " + this.getNbRemainingTries()); //$NON-NLS-1$
-
+            if (LOGGER.isDebugEnabled()) {
+                LOGGER.debug("Start round - Remaining Tries : " + this.getNbRemainingTries()); //$NON-NLS-1$
+            }
             // Decrease number of remaining tries at the start of each turn
             this.setNbRemainingTries(this.getNbRemainingTries() - 1);
 
@@ -228,7 +240,9 @@ public class MoreLess extends Game {
                 this.defeat(mysteryNumber);
             }
 
-            LOGGER.trace("End round - Remaining Tries : " + this.getNbRemainingTries()); //$NON-NLS-1$
+            if (LOGGER.isTraceEnabled()) {
+                LOGGER.trace("End round - Remaining Tries : " + this.getNbRemainingTries()); //$NON-NLS-1$
+            }
         }
     }
 
@@ -247,24 +261,27 @@ public class MoreLess extends Game {
     @Override
     public void playDefender() {
 
-        LOGGER.debug("Start Defender mode"); //$NON-NLS-1$
-
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("Start Defender mode"); //$NON-NLS-1$
+        }
         HumanPlayer humanPlayer = new HumanPlayer("Player"); //$NON-NLS-1$
         ComputerPlayer computerPlayer = new ComputerPlayer("Ordinateur"); //$NON-NLS-1$
         List<Integer> mysteryNumber = humanPlayer.giveNumber(CombineGame.getMaxValueDigit());
-        
+
         if (CombineGame.isDeveloperMode()) {
             CombineGame.getDisplay().print("Developpeur Mode : Le nombre mystère choisi par le joueur est : "); //$NON-NLS-1$
             CombineGame.getDisplay().println(mysteryNumber);
             CombineGame.getDisplay().println(""); //$NON-NLS-1$
         }
-        
-        LOGGER.debug("Mystery Number proposed by player = " + mysteryNumber); //$NON-NLS-1$
 
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("Mystery Number proposed by player = " + mysteryNumber); //$NON-NLS-1$
+        }
         while (!this.isEndGame()) {
 
-            LOGGER.debug("Start round - Remaining Tries : " + this.getNbRemainingTries()); //$NON-NLS-1$
-
+            if (LOGGER.isDebugEnabled()) {
+                LOGGER.debug("Start round - Remaining Tries : " + this.getNbRemainingTries()); //$NON-NLS-1$
+            }
             // Decrease number of remaining tries at the start of each turn
             this.setNbRemainingTries(this.getNbRemainingTries() - 1);
 
@@ -278,7 +295,9 @@ public class MoreLess extends Game {
                 this.victory();
             }
 
-            LOGGER.trace("End round - Remaining Tries : " + this.getNbRemainingTries()); //$NON-NLS-1$
+            if (LOGGER.isTraceEnabled()) {
+                LOGGER.trace("End round - Remaining Tries : " + this.getNbRemainingTries()); //$NON-NLS-1$
+            }
         }
     }
 
@@ -296,17 +315,19 @@ public class MoreLess extends Game {
     @Override
     public void playDuel() {
 
-        LOGGER.debug("Start Duel mode"); //$NON-NLS-1$
-
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("Start Duel mode"); //$NON-NLS-1$
+        }
         HumanPlayer humanPlayer = new HumanPlayer("Player"); //$NON-NLS-1$
         ComputerPlayer computerPlayer = new ComputerPlayer("Ordinateur"); //$NON-NLS-1$
 
         List<Integer> mysteryNumberComputer = this.mysteryNumberGeneration(CombineGame.getMaxValueDigit());
         List<Integer> mysteryNumberHuman = humanPlayer.giveNumber(CombineGame.getMaxValueDigit());
 
-        LOGGER.debug("Mystery Number computer = " + mysteryNumberComputer); //$NON-NLS-1$
-        LOGGER.debug("Mystery Number human = " + mysteryNumberHuman); //$NON-NLS-1$
-
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("Mystery Number computer = " + mysteryNumberComputer); //$NON-NLS-1$
+            LOGGER.debug("Mystery Number human = " + mysteryNumberHuman); //$NON-NLS-1$
+        }
         CombineGame.getDisplay().println("Les nombres mystères ont été créés. Que le meilleur gagne !\n"); //$NON-NLS-1$
 
         if (CombineGame.isDeveloperMode()) {
@@ -318,8 +339,9 @@ public class MoreLess extends Game {
 
         while (!this.isEndGame()) {
 
-            LOGGER.trace("Start round - Remaining Tries : " + this.getNbRemainingTries()); //$NON-NLS-1$
-
+            if (LOGGER.isTraceEnabled()) {
+                LOGGER.trace("Start round - Remaining Tries : " + this.getNbRemainingTries()); //$NON-NLS-1$
+            }
             // Decrease number of remaining tries at the start of each turn
             this.setNbRemainingTries(this.getNbRemainingTries() - 1);
 
@@ -346,7 +368,9 @@ public class MoreLess extends Game {
                 this.equality();
             }
 
-            LOGGER.debug("End round - Remaining Tries : " + this.getNbRemainingTries()); //$NON-NLS-1$
+            if (LOGGER.isDebugEnabled()) {
+                LOGGER.debug("End round - Remaining Tries : " + this.getNbRemainingTries()); //$NON-NLS-1$
+            }
 
         }
 

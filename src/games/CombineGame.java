@@ -21,7 +21,7 @@ import games.constants.GameNames;
  * argument.<br>
  *
  * @author BRUCELLA2
- * @version 1.0.9
+ * @version 1.0.10
  *
  */
 public class CombineGame {
@@ -130,7 +130,7 @@ public class CombineGame {
     /**
      * Read the properties file (config.properties) and initialize the global variables with the properties values.<br>
      * <br>
-     * Initialize Display wich will be used for all display.
+     * Initialize Display which will be used for all display.
      *
      */
     static {
@@ -447,12 +447,13 @@ public class CombineGame {
      */
     public char menuEndGameSelection() {
 
-        boolean endGameChoice = false;
+        boolean endGameChoice;
         char choice;
-        
-        LOGGER.debug("***************** END GAME ********************"); //$NON-NLS-1$
-        LOGGER.debug("Display End Game selection menu"); //$NON-NLS-1$
 
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("***************** END GAME ********************"); //$NON-NLS-1$
+            LOGGER.debug("Display End Game selection menu"); //$NON-NLS-1$
+        }
         do {
             CombineGame.getDisplay().showEndGameMenu();
             String line = this.getScanner().nextLine();
@@ -460,13 +461,16 @@ public class CombineGame {
                 choice = 'x';
             }
             else {
-                choice = line.charAt(0);
-                choice = Character.toUpperCase(choice);
+                char c = line.charAt(0);
+                choice = Character.toUpperCase(c);
             }
 
-            LOGGER.trace("User input : " + line); //$NON-NLS-1$
-            LOGGER.debug("User choice : " + choice); //$NON-NLS-1$
-
+            if (LOGGER.isTraceEnabled()) {
+                LOGGER.trace("User input : " + line); //$NON-NLS-1$
+            }
+            if (LOGGER.isDebugEnabled()) {
+                LOGGER.debug("User choice : " + choice); //$NON-NLS-1$
+            }
             switch (choice) {
                 case '1':
                     endGameChoice = true;
@@ -484,6 +488,7 @@ public class CombineGame {
                     break;
 
                 default:
+                    endGameChoice = false;
                     CombineGame.getDisplay().println("Saisie incorrecte"); //$NON-NLS-1$
                     break;
             }
@@ -513,9 +518,10 @@ public class CombineGame {
      */
     public char menuGameSelection() {
 
-        LOGGER.debug("Display Game selection menu"); //$NON-NLS-1$
-
-        boolean gameChoice = false;
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("Display Game selection menu"); //$NON-NLS-1$
+        }
+        boolean gameChoice;
         char choice;
 
         do {
@@ -525,13 +531,16 @@ public class CombineGame {
                 choice = 'x';
             }
             else {
-                choice = line.charAt(0);
-                choice = Character.toUpperCase(choice);
+                char c = line.charAt(0);
+                choice = Character.toUpperCase(c);
             }
 
-            LOGGER.trace("User input : " + line); //$NON-NLS-1$
-            LOGGER.debug("User choice : " + choice); //$NON-NLS-1$
-
+            if (LOGGER.isTraceEnabled()) {
+                LOGGER.trace("User input : " + line); //$NON-NLS-1$
+            }
+            if (LOGGER.isDebugEnabled()) {
+                LOGGER.debug("User choice : " + choice); //$NON-NLS-1$
+            }
             switch (choice) {
                 case '1':
                     gameChoice = true;
@@ -550,13 +559,15 @@ public class CombineGame {
                     break;
 
                 default:
+                    gameChoice = false;
                     CombineGame.getDisplay().println("Saisie incorrecte"); //$NON-NLS-1$
                     break;
             }
         } while (!gameChoice);
 
-        LOGGER.debug("Game Chosen : " + this.getGameChosen()); //$NON-NLS-1$
-
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("Game Chosen : " + this.getGameChosen()); //$NON-NLS-1$
+        }
         return choice;
     }
 
@@ -581,9 +592,10 @@ public class CombineGame {
      */
     public char menuModeSelection() {
 
-        LOGGER.debug("Display Mode selection menu"); //$NON-NLS-1$
-
-        boolean modeChoice = false;
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("Display Mode selection menu"); //$NON-NLS-1$
+        }
+        boolean modeChoice;
         char choice;
 
         do {
@@ -594,13 +606,16 @@ public class CombineGame {
                 choice = 'x';
             }
             else {
-                choice = line.charAt(0);
-                choice = Character.toUpperCase(choice);
+                char c = line.charAt(0);
+                choice = Character.toUpperCase(c);
             }
 
-            LOGGER.trace("User input : " + line); //$NON-NLS-1$
-            LOGGER.debug("User choice : " + choice); //$NON-NLS-1$
-
+            if (LOGGER.isTraceEnabled()) {
+                LOGGER.trace("User input : " + line); //$NON-NLS-1$
+            }
+            if (LOGGER.isDebugEnabled()) {
+                LOGGER.debug("User choice : " + choice); //$NON-NLS-1$
+            }
             switch (choice) {
                 case '1':
                     modeChoice = true;
@@ -624,14 +639,16 @@ public class CombineGame {
                     break;
 
                 default:
+                    modeChoice = false;
                     CombineGame.getDisplay().println("Saisie incorrecte"); //$NON-NLS-1$
                     break;
             }
 
         } while (!modeChoice);
 
-        LOGGER.debug("Mode Chosen : " + this.getModeChosen()); //$NON-NLS-1$
-
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("Mode Chosen : " + this.getModeChosen()); //$NON-NLS-1$
+        }
         return choice;
     }
 

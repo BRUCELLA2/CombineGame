@@ -9,7 +9,7 @@ import org.apache.logging.log4j.Logger;
  *
  *
  * @author BRUCELLA2
- * @version 1.0.4
+ * @version 1.0.5
  *
  * @see CombineGame
  */
@@ -22,7 +22,7 @@ public class Launcher {
 
 
     /**
-     * Main methode of the project.
+     * Main method of the project.
      *
      * The start of combineGame (combinations games) is done from this method.
      *

@@ -4,7 +4,7 @@ package games.constants;
  * <b>Enumeration of the game's name of CombineGame</b>
  *
  * @author BRUCELLA2
- * @version 1.0.2
+ * @version 1.0.3
  */
 public enum GameNames {
 
@@ -35,7 +35,7 @@ public enum GameNames {
      */
     GameNames(final String pGameName) {
 
-        this.setGameName(pGameName);
+        this.gameName = pGameName;
     }
 
 
@@ -49,20 +49,6 @@ public enum GameNames {
     public String getGameName() {
 
         return this.gameName;
-    }
-
-
-    // ***** SETTERS *****/
-
-    /**
-     * Allow to define the name of the game
-     *
-     * @param pGameName
-     *            Game's name
-     */
-    private void setGameName(final String pGameName) {
-
-        this.gameName = pGameName;
     }
 
 }

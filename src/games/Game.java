@@ -9,6 +9,8 @@ import org.apache.logging.log4j.Logger;
 
 import games.constants.GameModes;
 import games.constants.GameNames;
+import players.ComputerPlayer;
+import players.HumanPlayer;
 
 
 /**
@@ -25,7 +27,7 @@ import games.constants.GameNames;
  *
  *
  * @author BRUCELLA2
- * @version 1.0.10
+ * @version 1.0.11
  *
  */
 public abstract class Game {
@@ -100,14 +102,17 @@ public abstract class Game {
 
     protected Game(final GameModes pGameMode) {
 
-        LOGGER.trace("Game Construction"); //$NON-NLS-1$
-
-        this.setEndGame(false);
-        this.setGameMode(pGameMode);
+        if (LOGGER.isTraceEnabled()) {
+            LOGGER.trace("Game Construction"); //$NON-NLS-1$
+        }
+        this.endGame = false;
+        this.gameMode = pGameMode;
         this.setNbRemainingTries(CombineGame.getNbMaxTries());
 
-        LOGGER.trace("EnGame = " + this.isEndGame()); //$NON-NLS-1$
-        LOGGER.trace("GameMode = " + this.getGameMode()); //$NON-NLS-1$
+        if (LOGGER.isTraceEnabled()) {
+            LOGGER.trace("EnGame = " + this.endGame); //$NON-NLS-1$
+            LOGGER.trace("GameMode = " + this.gameMode); //$NON-NLS-1$
+        }
     }
 
 
@@ -266,8 +271,9 @@ public abstract class Game {
      */
     protected void defeat(final List<Integer> pMysteryNumber) {
 
-        LOGGER.debug("Defeat"); //$NON-NLS-1$
-
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("Defeat"); //$NON-NLS-1$
+        }
         CombineGame.getDisplay().println("\n*** Dommage ! Vous avez perdu ***\n"); //$NON-NLS-1$
 
         if (this.getGameMode() != GameModes.DEFENDER) {
@@ -277,7 +283,9 @@ public abstract class Game {
         }
 
         this.setEndGame(true);
-        LOGGER.trace("End game : " + this.isEndGame()); //$NON-NLS-1$
+        if (LOGGER.isTraceEnabled()) {
+            LOGGER.trace("End game : " + this.isEndGame()); //$NON-NLS-1$
+        }
     }
 
 
@@ -288,12 +296,15 @@ public abstract class Game {
      */
     protected void equality() {
 
-        LOGGER.debug("Equality"); //$NON-NLS-1$
-
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("Equality"); //$NON-NLS-1$
+        }
         CombineGame.getDisplay().println("\n*** Egalité - Personne n'a gagné ***\n"); //$NON-NLS-1$
         this.setEndGame(true);
 
-        LOGGER.trace("End game : " + this.isEndGame()); //$NON-NLS-1$
+        if (LOGGER.isTraceEnabled()) {
+            LOGGER.trace("End game : " + this.isEndGame()); //$NON-NLS-1$
+        }
     }
 
 
@@ -323,7 +334,9 @@ public abstract class Game {
      */
     public List<Integer> mysteryNumberGeneration(final int pMaxValueDigit) {
 
-        LOGGER.trace("Number Generation"); //$NON-NLS-1$
+        if (LOGGER.isTraceEnabled()) {
+            LOGGER.trace("Number Generation"); //$NON-NLS-1$
+        }
         ArrayList<Integer> mysteryNumber = new ArrayList<>();
         Random r = new Random();
 
@@ -368,8 +381,9 @@ public abstract class Game {
      */
     public void startGame() {
 
-        LOGGER.trace("Start game"); //$NON-NLS-1$
-
+        if (LOGGER.isTraceEnabled()) {
+            LOGGER.trace("Start game"); //$NON-NLS-1$
+        }
         if (this.getGameMode() == GameModes.CHALLENGER) {
             this.playChallenger();
         }
@@ -389,11 +403,14 @@ public abstract class Game {
      */
     protected void victory() {
 
-        LOGGER.debug("Victory"); //$NON-NLS-1$
-
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("Victory"); //$NON-NLS-1$
+        }
         CombineGame.getDisplay().println("\n*** Bravo ! Vous avez gagné ! ***\n"); //$NON-NLS-1$
         this.setEndGame(true);
 
-        LOGGER.trace("End game : " + this.isEndGame()); //$NON-NLS-1$
+        if (LOGGER.isTraceEnabled()) {
+            LOGGER.trace("End game : " + this.isEndGame()); //$NON-NLS-1$
+        }
     }
 }

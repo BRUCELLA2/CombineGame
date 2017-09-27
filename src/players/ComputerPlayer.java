@@ -1,4 +1,4 @@
-package games;
+package players;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -13,12 +13,15 @@ import java.util.Set;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import games.CombineGame;
+import games.Mastermind;
+
 
 /**
  * <b>This class represents a player simulated by the computer.</b><br>
  *
  * @author BRUCELLA2
- * @version 1.0.9
+ * @version 1.0.10
  *
  */
 public class ComputerPlayer extends Player {
@@ -437,13 +440,17 @@ public class ComputerPlayer extends Player {
     @Override
     public List<Integer> giveNumber(final int pMaxValueDigit) {
 
-        LOGGER.trace("Computer Give Number"); //$NON-NLS-1$
-        LOGGER.trace("Max Value Digit : " + pMaxValueDigit); //$NON-NLS-1$
+        if (LOGGER.isTraceEnabled()) {
+            LOGGER.trace("Computer Give Number"); //$NON-NLS-1$
+            LOGGER.trace("Max Value Digit : " + pMaxValueDigit); //$NON-NLS-1$
+        }
 
         ArrayList<Integer> number = new ArrayList<>();
         List<Integer> lastProposition;
 
-        LOGGER.trace("List Number Proposed : " + this.getListNumberProposed()); //$NON-NLS-1$
+        if (LOGGER.isTraceEnabled()) {
+            LOGGER.trace("List Number Proposed : " + this.getListNumberProposed()); //$NON-NLS-1$
+        }
 
         if (!this.getListNumberProposed().isEmpty()) {
             lastProposition = this.getListNumberProposed().get(this.getListNumberProposed().size() - 1);
@@ -451,11 +458,13 @@ public class ComputerPlayer extends Player {
         else {
             lastProposition = new ArrayList<>();
         }
-        LOGGER.trace("Last proposition : " + lastProposition); //$NON-NLS-1$
+        if (LOGGER.isTraceEnabled()) {
+            LOGGER.trace("Last proposition : " + lastProposition); //$NON-NLS-1$
+        }
+
+        Random r = new Random();
 
         for (int i = 0; i < CombineGame.getNbDigitsMystery(); i++) {
-
-            Random r = new Random();
 
             if (lastProposition.isEmpty()) {
                 number.add(Integer.valueOf(r.nextInt(pMaxValueDigit)));
@@ -475,31 +484,31 @@ public class ComputerPlayer extends Player {
                 switch (this.getResultsListMoreLess().get(this.getResultsListMoreLess().size() - 1).charAt(i)) {
 
                     case '+':
-                        LOGGER.trace("Case + "); //$NON-NLS-1$
                         this.getMinValues().set(i, lastProposition.get(i));
                         number.add(Integer.valueOf(
                                 (this.getMaxValues().get(i).intValue() + 1 - lastProposition.get(i).intValue()) / 2
                                         + lastProposition.get(i).intValue()));
                         if (LOGGER.isTraceEnabled()) {
+                            LOGGER.trace("Case + "); //$NON-NLS-1$
                             LOGGER.trace("Update min values : " + this.getMinValues()); //$NON-NLS-1$
                             LOGGER.trace("Number construction : " + number); //$NON-NLS-1$
                         }
                         break;
                     case '-':
-                        LOGGER.trace("Case - "); //$NON-NLS-1$
                         this.getMaxValues().set(i, lastProposition.get(i));
                         number.add(Integer.valueOf(lastProposition.get(i).intValue()
                                 - (lastProposition.get(i).intValue() - (this.getMinValues().get(i).intValue() - 1))
                                         / 2));
                         if (LOGGER.isTraceEnabled()) {
+                            LOGGER.trace("Case - "); //$NON-NLS-1$
                             LOGGER.trace("Update max values : " + this.getMaxValues()); //$NON-NLS-1$
                             LOGGER.trace("Number construction : " + number); //$NON-NLS-1$
                         }
                         break;
                     case '=':
-                        LOGGER.trace("Case = "); //$NON-NLS-1$
                         number.add(lastProposition.get(i));
                         if (LOGGER.isTraceEnabled()) {
+                            LOGGER.trace("Case = "); //$NON-NLS-1$
                             LOGGER.trace("Number construction : " + number); //$NON-NLS-1$
                         }
                         break;
@@ -509,7 +518,9 @@ public class ComputerPlayer extends Player {
                 }
             }
         }
-        LOGGER.trace("Number to give : " + number); //$NON-NLS-1$
+        if (LOGGER.isTraceEnabled()) {
+            LOGGER.trace("Number to give : " + number); //$NON-NLS-1$
+        }
         this.addLastProposition(number);
         return number;
     }
@@ -528,32 +539,41 @@ public class ComputerPlayer extends Player {
      */
     public List<Integer> giveNumberPattern() {
 
-        LOGGER.trace("Computer give number pattern"); //$NON-NLS-1$
-
         if (LOGGER.isTraceEnabled()) {
+            LOGGER.trace("Computer give number pattern"); //$NON-NLS-1$
             LOGGER.trace("Pool at start : " + this.getPoolMastermind()); //$NON-NLS-1$
         }
 
         // Create a pool of all combinations if the pool is empty
         if (this.getPoolMastermind().isEmpty()) {
 
-            LOGGER.debug("Pool at start empty"); //$NON-NLS-1$
+            if (LOGGER.isDebugEnabled()) {
+                LOGGER.debug("Pool at start empty"); //$NON-NLS-1$
+            }
 
             ArrayList<Integer> patternInit = new ArrayList<>();
             for (int i = 0; i < CombineGame.getNbDigitsMystery(); i++) {
                 patternInit.add(Integer.valueOf(0));
             }
             this.getPoolMastermind().add(patternInit);
-            LOGGER.trace("Pool init : " + this.getPoolMastermind()); //$NON-NLS-1$
-            LOGGER.trace("Pool size after init : " + this.getPoolMastermind().size()); //$NON-NLS-1$
+
+            if (LOGGER.isTraceEnabled()) {
+                LOGGER.trace("Pool init : " + this.getPoolMastermind()); //$NON-NLS-1$
+                LOGGER.trace("Pool size after init : " + this.getPoolMastermind().size()); //$NON-NLS-1$
+            }
             this.createPool(this.getPoolMastermind(), CombineGame.getNbDigitsMystery());
-            LOGGER.trace("Pool size after creation : " + this.getPoolMastermind().size()); //$NON-NLS-1$
+            if (LOGGER.isTraceEnabled()) {
+                LOGGER.trace("Pool size after creation : " + this.getPoolMastermind().size()); //$NON-NLS-1$
+            }
         }
 
-        LOGGER.trace("Pool size before optimization : " + this.getPoolMastermind().size()); //$NON-NLS-1$
+        if (LOGGER.isTraceEnabled()) {
+            LOGGER.trace("Pool size before optimization : " + this.getPoolMastermind().size()); //$NON-NLS-1$
+        }
         this.optimizedPool(this.getPoolMastermind());
-        LOGGER.trace("Pool size after optimization : " + this.getPoolMastermind().size()); //$NON-NLS-1$
-
+        if (LOGGER.isTraceEnabled()) {
+            LOGGER.trace("Pool size after optimization : " + this.getPoolMastermind().size()); //$NON-NLS-1$
+        }
         Random r = new Random();
         int randomIndex;
 
@@ -673,6 +693,8 @@ public class ComputerPlayer extends Player {
             }
         }
 
-        LOGGER.trace("Pool optimized : " + pPool); //$NON-NLS-1$
+        if (LOGGER.isTraceEnabled()) {
+            LOGGER.trace("Pool optimized : " + pPool); //$NON-NLS-1$
+        }
     }
 }
