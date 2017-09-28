@@ -14,7 +14,7 @@ import games.constants.NavigationMenu;
  * Currently the display is made by console output.
  *
  * @author BRUCELLA2
- * @version 1.0.4
+ * @version 1.0.5
  *
  */
 public class Display {
@@ -117,6 +117,23 @@ public class Display {
 
 
     /**
+     * Allow to display a array of int without terminate the line.
+     *
+     * @param pTabInt
+     *            array of int to display
+     */
+    public void print(final int[] pTabInt) {
+
+        StringBuilder bld = new StringBuilder();
+
+        for (int i = 0; i < pTabInt.length; i++) {
+            bld.append(pTabInt[i]);
+        }
+        System.out.print(bld);
+    }
+
+
+    /**
      * Allow to display a ArrayList of Integer with terminate the line.
      *
      * @param pArrayList
@@ -133,6 +150,23 @@ public class Display {
         }
 
         System.out.println(bld.toString());
+    }
+
+
+    /**
+     * Allow to display a array of int with terminate the line.
+     *
+     * @param pTabInt
+     *            array of int to display
+     */
+    public void println(final int[] pTabInt) {
+
+        StringBuilder bld = new StringBuilder();
+
+        for (int i = 0; i < pTabInt.length; i++) {
+            bld.append(pTabInt[i]);
+        }
+        System.out.println(bld);
     }
 
 

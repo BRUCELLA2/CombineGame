@@ -1,7 +1,5 @@
 package players;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Scanner;
 
 import org.apache.logging.log4j.LogManager;
@@ -14,7 +12,7 @@ import games.CombineGame;
  * <b>This class represents a human player</b>
  *
  * @author BRUCELLA2
- * @version 1.0.9
+ * @version 1.1.0
  */
 public class HumanPlayer extends Player {
 
@@ -47,21 +45,21 @@ public class HumanPlayer extends Player {
 // ***** METHODS *****//
 
     /**
-     * This method allows to get the number entered by the user and return is as an ArrayList of integer.<br>
+     * This method allows to get the number entered by the user and return is as an array of int.<br>
      * <br>
-     * Return an empty ArrayList if the input is not valid (too long, no digit character, digit not in the game rules)
+     * Return an empty array if the input is not valid (too long, no digit character, digit not in the game rules)
      *
      * @param pMaxValueDigit
      *            The max value digit
-     * @return A number in the form of an ArrayList of integer
+     * @return A number in the form of an array of int.
      */
-    protected ArrayList<Integer> fetchNumberInput(final int pMaxValueDigit) {
+    protected int[] fetchNumberInput(final int pMaxValueDigit) {
 
         if (LOGGER.isTraceEnabled()) {
             LOGGER.trace("Get Number input"); //$NON-NLS-1$
         }
         String str;
-        ArrayList<Integer> number = new ArrayList<>();
+        int[] number = new int[CombineGame.getNbDigitsMystery()];
 
         @SuppressWarnings("resource")
         Scanner scan = new Scanner(System.in);
@@ -78,45 +76,44 @@ public class HumanPlayer extends Player {
                 if (LOGGER.isTraceEnabled()) {
                     LOGGER.trace("char : " + str.charAt(i)); //$NON-NLS-1$
                 }
-                if (Character.isDigit(str.charAt(i))) {
 
+                if (Character.isDigit(str.charAt(i))) {
                     int digit = Character.getNumericValue(str.charAt(i));
                     if (LOGGER.isTraceEnabled()) {
                         LOGGER.trace("digit : " + digit); //$NON-NLS-1$
                     }
                     if (digit <= pMaxValueDigit) {
-                        number.add(Integer.valueOf(digit));
+                        number[i] = digit;
                         if (LOGGER.isTraceEnabled()) {
                             LOGGER.trace("number : " + number); //$NON-NLS-1$
                         }
                     }
                     else {
-                        number.clear();
                         if (LOGGER.isTraceEnabled()) {
                             LOGGER.trace("number returned : " + number); //$NON-NLS-1$
                         }
-                        return number;
+                        return new int[0];
                     }
                 }
                 else {
-                    number.clear();
                     if (LOGGER.isTraceEnabled()) {
                         LOGGER.trace("number returned : " + number); //$NON-NLS-1$
                     }
-                    return number;
+                    return new int[0];
                 }
             }
         }
         else {
-            number.clear();
             if (LOGGER.isTraceEnabled()) {
                 LOGGER.trace("number returned : " + number); //$NON-NLS-1$
             }
-            return number;
+            return new int[0];
         }
+
         if (LOGGER.isTraceEnabled()) {
             LOGGER.trace("number returned : " + number); //$NON-NLS-1$
         }
+
         return number;
     }
 
@@ -124,21 +121,21 @@ public class HumanPlayer extends Player {
     /**
      * This method asks the user to provide a number via the display.<br>
      * <br>
-     * This number is retrieved as String and transformed into an ArrayList of integer.
+     * This number is retrieved as String and transformed into an array of int.
      *
      * @param pMaxValueDigit
      *            The max value digit
      *
-     * @return A number in the form of an ArrayList of integer
+     * @return A number in the form of an array of int.
      */
     @Override
-    public List<Integer> giveNumber(final int pMaxValueDigit) {
+    public int[] giveNumber(final int pMaxValueDigit) {
 
         if (LOGGER.isTraceEnabled()) {
             LOGGER.trace("Human Give number"); //$NON-NLS-1$
             LOGGER.trace("Max value digit = " + pMaxValueDigit); //$NON-NLS-1$
         }
-        ArrayList<Integer> number;
+        int[] number;
 
         do {
             CombineGame.getDisplay().println("\nQuel est le nombre mystère : "); //$NON-NLS-1$
@@ -147,11 +144,11 @@ public class HumanPlayer extends Player {
             if (LOGGER.isDebugEnabled()) {
                 LOGGER.debug("Number Input : " + number); //$NON-NLS-1$
             }
-            if (number.isEmpty()) {
+            if (number.length == 0) {
                 CombineGame.getDisplay().println("Saisie incorrecte"); //$NON-NLS-1$
             }
 
-        } while (number.isEmpty());
+        } while (number.length == 0);
 
         return number;
     }

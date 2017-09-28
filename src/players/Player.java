@@ -1,7 +1,5 @@
 package players;
 
-import java.util.List;
-
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -11,7 +9,7 @@ import org.apache.logging.log4j.Logger;
  * <br>
  *
  * @author BRUCELLA2
- * @version 1.0.9
+ * @version 1.1.0
  *
  */
 public abstract class Player {
@@ -86,16 +84,16 @@ public abstract class Player {
 // ***** METHODS *****//
 
     /**
-     * This method is used to obtain a number in the form of an ArrayList of integer.<br>
+     * This method is used to obtain a number in the form of an array of int.<br>
      * <br>
      * This number has a limited number of digits.<br>
      * This method is redefined in the different daughter's classes.
      *
      * @param pMaxValueDigit
      *            The max value digit
-     * @return A number in the form of an ArrayList of integer
+     * @return A number in the form of an array of int.
      *
      */
-    public abstract List<Integer> giveNumber(int pMaxValueDigit);
+    public abstract int[] giveNumber(int pMaxValueDigit);
 
 }

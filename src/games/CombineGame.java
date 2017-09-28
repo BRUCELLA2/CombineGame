@@ -21,7 +21,7 @@ import games.constants.GameNames;
  * argument.<br>
  *
  * @author BRUCELLA2
- * @version 1.0.10
+ * @version 1.1.0
  *
  */
 public class CombineGame {
@@ -137,8 +137,8 @@ public class CombineGame {
 
         Properties prop = new Properties();
 
-        try (InputStream input = CombineGame.class.getClassLoader()
-                .getResourceAsStream("resources/config.properties")) { //$NON-NLS-1$
+        try (InputStream input =
+                CombineGame.class.getClassLoader().getResourceAsStream("resources/config.properties")) { //$NON-NLS-1$
             prop.load(input);
         } catch (IOException e) {
             LOGGER.error("Loading config properties Error"); //$NON-NLS-1$

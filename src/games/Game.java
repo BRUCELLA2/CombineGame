@@ -1,7 +1,5 @@
 package games;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Random;
 
 import org.apache.logging.log4j.LogManager;
@@ -22,12 +20,12 @@ import players.HumanPlayer;
  * A game is initiated by starting with the game mode provided as a constructor's parameter (call of the play methods
  * {@link #playChallenger()} {@link #playDefender()} {@link #playDuel()})<br>
  * A game can generate a mystery number {@link #mysteryNumberGeneration(int)}<br>
- * A game can compare a proposal provided with the mystery number {@link #compareNumber(List, List)}<br>
- * A game can initiate a message of victory or defeat {@link #victory()} {@link #defeat(List)}<br>
+ * A game can compare a proposal provided with the mystery number {@link #compareNumber(int[], int[])}<br>
+ * A game can initiate a message of victory or defeat {@link #victory()} {@link #defeat(int[])}<br>
  *
  *
  * @author BRUCELLA2
- * @version 1.0.11
+ * @version 1.1.0
  *
  */
 public abstract class Game {
@@ -244,7 +242,7 @@ public abstract class Game {
      *
      * @return The result of the comparison in the form of a String
      */
-    public abstract String compareNumber(List<Integer> pNumberToCompare, List<Integer> pMysteryNumber);
+    public abstract String compareNumber(int[] pNumberToCompare, int[] pMysteryNumber);
 
 
     /**
@@ -258,7 +256,7 @@ public abstract class Game {
      *
      * @return The proposition of the computer player
      */
-    protected abstract List<Integer> computerTurn(ComputerPlayer pComputerPlayer, List<Integer> pMysteryNumber);
+    protected abstract int[] computerTurn(ComputerPlayer pComputerPlayer, int[] pMysteryNumber);
 
 
     /**
@@ -269,7 +267,7 @@ public abstract class Game {
      *            The mystery Number not discovered during the game
      *
      */
-    protected void defeat(final List<Integer> pMysteryNumber) {
+    protected void defeat(final int[] pMysteryNumber) {
 
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("Defeat"); //$NON-NLS-1$
@@ -319,7 +317,7 @@ public abstract class Game {
      *
      * @return The proposition of the human player
      */
-    protected abstract List<Integer> humanTurn(HumanPlayer pHumanPlayer, List<Integer> pMysteryNumber);
+    protected abstract int[] humanTurn(HumanPlayer pHumanPlayer, int[] pMysteryNumber);
 
 
     /**
@@ -332,16 +330,17 @@ public abstract class Game {
      *            The max value of each digit
      * @return The mystery Number generated
      */
-    public List<Integer> mysteryNumberGeneration(final int pMaxValueDigit) {
+    public int[] mysteryNumberGeneration(final int pMaxValueDigit) {
 
         if (LOGGER.isTraceEnabled()) {
             LOGGER.trace("Number Generation"); //$NON-NLS-1$
         }
-        ArrayList<Integer> mysteryNumber = new ArrayList<>();
+        int[] mysteryNumber = new int[CombineGame.getNbDigitsMystery()];
         Random r = new Random();
 
         for (int i = 0; i < CombineGame.getNbDigitsMystery(); i++) {
-            mysteryNumber.add(Integer.valueOf(r.nextInt(pMaxValueDigit + 1)));
+
+            mysteryNumber[i] = r.nextInt(pMaxValueDigit + 1);
 
             if (LOGGER.isTraceEnabled()) {
                 LOGGER.trace(mysteryNumber);

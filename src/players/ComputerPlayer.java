@@ -1,6 +1,7 @@
 package players;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -21,7 +22,7 @@ import games.Mastermind;
  * <b>This class represents a player simulated by the computer.</b><br>
  *
  * @author BRUCELLA2
- * @version 1.0.10
+ * @version 1.1.0
  *
  */
 public class ComputerPlayer extends Player {
@@ -34,32 +35,30 @@ public class ComputerPlayer extends Player {
     private static final Logger LOGGER = LogManager.getLogger(ComputerPlayer.class);
 
     /**
-     * List of numbers proposed by the ComputerPlayer in the form of an ArrayList.<br>
+     * List of numbers proposed by the ComputerPlayer in the form of an array of int.<br>
      * <br>
-     * The items in the list are ArrayList of integer.
+     * The items in the list are array of int.
      *
      * @see #getListNumberProposed()
      * @see #setListNumberProposed(List)
      */
-    private List<List<Integer>> listNumberProposed = new ArrayList<>();
+    private List<int[]> listNumberProposed = new ArrayList<>();
 
     /**
-     * Lists the maximums for each number constituting the mystery number<br>
+     * Array of the maximums for each number constituting the mystery number<br>
      *
      * @see #getMaxValues()
-     * @see #setMaxValues(List)
-     *
+     * @see #setMaxValues(int[])
      */
-    private List<Integer> maxValues = new ArrayList<>();
+    private int[] maxValues = new int[CombineGame.getNbDigitsMystery()];
 
     /**
-     * Lists the minimums for each number constituting the mystery number<br>
+     * Array of the minimums for each number constituting the mystery number<br>
      *
      * @see #getMinValues()
-     * @see #setMinValues(List)
-     *
+     * @see #setMinValues(int[])
      */
-    private List<Integer> minValues = new ArrayList<>();
+    private int[] minValues = new int[CombineGame.getNbDigitsMystery()];
 
     /**
      * List of possibles combinations for Mastermind game
@@ -67,7 +66,7 @@ public class ComputerPlayer extends Player {
      * @see #getPoolMastermind()
      * @see #setPoolMastermind(List)
      */
-    private List<List<Integer>> poolMastermind = new ArrayList<>();
+    private List<int[]> poolMastermind = new ArrayList<>();
 
     /**
      * This map contains the proposition (key) and number of digits in the bad position (value)
@@ -75,7 +74,7 @@ public class ComputerPlayer extends Player {
      * @see #getResultsBadPos()
      * @see #setResultsBadPos(Map)
      */
-    private Map<List<Integer>, Integer> resultsBadPos = new HashMap<>();
+    private Map<int[], Integer> resultsBadPos = new HashMap<>();
 
     /**
      * This map contains the proposition (key) and number of digits in the right position (value)
@@ -83,7 +82,7 @@ public class ComputerPlayer extends Player {
      * @see #getResultsGoodPos()
      * @see #setResultsGoodPos(Map)
      */
-    private Map<List<Integer>, Integer> resultsGoodPos = new HashMap<>();
+    private Map<int[], Integer> resultsGoodPos = new HashMap<>();
 
     /**
      * List of results obtained by comparing the proposed numbers with the mystery number in More Less game.<br>
@@ -118,40 +117,40 @@ public class ComputerPlayer extends Player {
     /**
      * Returns the list of proposed numbers.<br>
      * <br>
-     * The list items are in the form of ArrayList of integer.
+     * The list items are in the form of array of int.
      *
      * @return the list of proposed numbers.
      *
      * @see #setListNumberProposed(List)
-     * @see #addLastProposition(List)
+     * @see #addLastProposition(int[])
      */
-    public List<List<Integer>> getListNumberProposed() {
+    public List<int[]> getListNumberProposed() {
 
         return this.listNumberProposed;
     }
 
 
     /**
-     * Returns the list of maximum values of the digits constituting the mystery number
+     * Returns the array of the maximum values of the digits constituting the mystery number
      *
-     * @return the list of maximum values of the digits constituting the mystery number
+     * @return the array of the maximum values of the digits constituting the mystery number
      *
-     * @see #setMaxValues(List)
+     * @see #setMaxValues(int[])
      */
-    public List<Integer> getMaxValues() {
+    public int[] getMaxValues() {
 
         return this.maxValues;
     }
 
 
     /**
-     * Returns the list of minimum values of the digits constituting the mystery number
+     * Returns the array of the minimum values of the digits constituting the mystery number
      *
-     * @return the list of minimum values of the digits constituting the mystery number
+     * @return the array of the minimum values of the digits constituting the mystery number
      *
-     * @see #setMinValues(List)
+     * @see #setMinValues(int[])
      */
-    public List<Integer> getMinValues() {
+    public int[] getMinValues() {
 
         return this.minValues;
     }
@@ -164,7 +163,7 @@ public class ComputerPlayer extends Player {
      *
      * @see #setPoolMastermind(List)
      */
-    public List<List<Integer>> getPoolMastermind() {
+    public List<int[]> getPoolMastermind() {
 
         return this.poolMastermind;
     }
@@ -177,7 +176,7 @@ public class ComputerPlayer extends Player {
      *
      * @see #setResultsBadPos(Map)
      */
-    public Map<List<Integer>, Integer> getResultsBadPos() {
+    public Map<int[], Integer> getResultsBadPos() {
 
         return this.resultsBadPos;
     }
@@ -190,7 +189,7 @@ public class ComputerPlayer extends Player {
      *
      * @see #setResultsGoodPos(Map)
      */
-    public Map<List<Integer>, Integer> getResultsGoodPos() {
+    public Map<int[], Integer> getResultsGoodPos() {
 
         return this.resultsGoodPos;
     }
@@ -217,43 +216,43 @@ public class ComputerPlayer extends Player {
     /**
      * Allows to define the list of numbers already proposed.<br>
      * <br>
-     * To add an item to the list you must use {@link #addLastProposition(List)}
+     * To add an item to the list you must use {@link #addLastProposition(int[])}
      *
      * @param pListNumberProposed
      *            the list of numbers already proposed
      *
      * @see #getListNumberProposed()
-     * @see #addLastProposition(List)
+     * @see #addLastProposition(int[])
      */
-    public void setListNumberProposed(final List<List<Integer>> pListNumberProposed) {
+    public void setListNumberProposed(final List<int[]> pListNumberProposed) {
 
         this.listNumberProposed = pListNumberProposed;
     }
 
 
     /**
-     * Allows to define the list of maximum values for the digits constituting the mystery number
+     * Allows to define the array of the maximum values for the digits constituting the mystery number
      *
      * @param pMaxValues
-     *            List of maximum values for the digits constituting the mystery number
+     *            Array of the maximum values for the digits constituting the mystery number
      *
      * @see #getMaxValues()
      */
-    public void setMaxValues(final List<Integer> pMaxValues) {
+    public void setMaxValues(final int[] pMaxValues) {
 
         this.maxValues = pMaxValues;
     }
 
 
     /**
-     * Allows to define the list of minimum values for the digits constituting the mystery number
+     * Allows to define the array of the minimum values for the digits constituting the mystery number
      *
      * @param pMinValues
-     *            List of minimum values for the digits constituting the mystery number
+     *            Array of the minimum values for the digits constituting the mystery number
      *
      * @see #getMinValues()
      */
-    public void setMinValues(final List<Integer> pMinValues) {
+    public void setMinValues(final int[] pMinValues) {
 
         this.minValues = pMinValues;
     }
@@ -267,7 +266,7 @@ public class ComputerPlayer extends Player {
      *
      * @see #getPoolMastermind()
      */
-    public void setPoolMastermind(final List<List<Integer>> pPoolMastermind) {
+    public void setPoolMastermind(final List<int[]> pPoolMastermind) {
 
         this.poolMastermind = pPoolMastermind;
     }
@@ -281,7 +280,7 @@ public class ComputerPlayer extends Player {
      *
      * @see #getResultsBadPos()
      */
-    public void setResultsBadPos(final Map<List<Integer>, Integer> pResultsBadPos) {
+    public void setResultsBadPos(final Map<int[], Integer> pResultsBadPos) {
 
         this.resultsBadPos = pResultsBadPos;
     }
@@ -295,7 +294,7 @@ public class ComputerPlayer extends Player {
      *
      * @see #getResultsGoodPos()
      */
-    public void setResultsGoodPos(final Map<List<Integer>, Integer> pResultsGoodPos) {
+    public void setResultsGoodPos(final Map<int[], Integer> pResultsGoodPos) {
 
         this.resultsGoodPos = pResultsGoodPos;
     }
@@ -329,7 +328,7 @@ public class ComputerPlayer extends Player {
      * @param pBadPos
      *            The number of digits in bad position
      */
-    public void addBadResultMastermind(final List<Integer> pProposition, final int pBadPos) {
+    public void addBadResultMastermind(final int[] pProposition, final int pBadPos) {
 
         this.resultsBadPos.put(pProposition, Integer.valueOf(pBadPos));
     }
@@ -343,7 +342,7 @@ public class ComputerPlayer extends Player {
      * @param pGoodPos
      *            The number of digits in good position
      */
-    public void addGoodResultMastermind(final List<Integer> pProposition, final int pGoodPos) {
+    public void addGoodResultMastermind(final int[] pProposition, final int pGoodPos) {
 
         this.resultsGoodPos.put(pProposition, Integer.valueOf(pGoodPos));
     }
@@ -352,12 +351,12 @@ public class ComputerPlayer extends Player {
     /**
      * This method allows to add the number proposed in the last proposal to the list of results.<br>
      * <br>
-     * A proposal is an ArrayList of the integer. This method is used internally by {@link #giveNumber(int)}
+     * A proposal is an array of int. This method is used internally by {@link #giveNumber(int)}
      *
      * @param pLastProposition
      *            number proposed in the last proposal
      */
-    private void addLastProposition(final List<Integer> pLastProposition) {
+    private void addLastProposition(final int[] pLastProposition) {
 
         this.getListNumberProposed().add(pLastProposition);
     }
@@ -390,23 +389,24 @@ public class ComputerPlayer extends Player {
      *            Number of digit constituting a combination
      *
      */
-    private void createPool(final List<List<Integer>> pPool, final int nbDigitCombination) {
+    private void createPool(final List<int[]> pPool, final int nbDigitCombination) {
 
         LOGGER.trace("CreatePool"); //$NON-NLS-1$
         LOGGER.trace("pPool : " + pPool); //$NON-NLS-1$
         LOGGER.trace("NbDigitCombination = " + nbDigitCombination); //$NON-NLS-1$
 
-        List<List<Integer>> newPool = new ArrayList<>(pPool);
-        ListIterator<List<Integer>> liPool = newPool.listIterator();
+        List<int[]> newPool = new ArrayList<>(pPool);
+        ListIterator<int[]> liPool = newPool.listIterator();
         pPool.clear();
 
         while (liPool.hasNext()) {
 
-            List<Integer> numberPool = liPool.next();
+            int[] numberPool = liPool.next();
 
             for (int i = 0; i <= CombineGame.getNbColors(); i++) {
-                ArrayList<Integer> number = new ArrayList<>(numberPool);
-                number.set(nbDigitCombination - 1, Integer.valueOf(i));
+                int[] number = new int[CombineGame.getNbDigitsMystery()];
+                System.arraycopy(numberPool, 0, number, 0, CombineGame.getNbDigitsMystery());
+                number[nbDigitCombination - 1] = i;
                 pPool.add(number);
 
                 if (LOGGER.isTraceEnabled()) {
@@ -428,25 +428,25 @@ public class ComputerPlayer extends Player {
 
 
     /**
-     * This method enables to the ComputerPlayer to provide a number in the form of an ArrayList of integer.<br>
+     * This method enables to the ComputerPlayer to provide a number in the form of an array of int.<br>
      * <br>
      * This number is added to the list of proposed numbers.<br>
      *
      * @param pMaxValueDigit
      *            The max value digit
      *
-     * @return A number in the form of an ArrayList of integer
+     * @return A number in the form of an array of int.
      */
     @Override
-    public List<Integer> giveNumber(final int pMaxValueDigit) {
+    public int[] giveNumber(final int pMaxValueDigit) {
 
         if (LOGGER.isTraceEnabled()) {
             LOGGER.trace("Computer Give Number"); //$NON-NLS-1$
             LOGGER.trace("Max Value Digit : " + pMaxValueDigit); //$NON-NLS-1$
         }
 
-        ArrayList<Integer> number = new ArrayList<>();
-        List<Integer> lastProposition;
+        int[] number = new int[CombineGame.getNbDigitsMystery()];
+        int[] lastProposition = new int[0];
 
         if (LOGGER.isTraceEnabled()) {
             LOGGER.trace("List Number Proposed : " + this.getListNumberProposed()); //$NON-NLS-1$
@@ -455,9 +455,7 @@ public class ComputerPlayer extends Player {
         if (!this.getListNumberProposed().isEmpty()) {
             lastProposition = this.getListNumberProposed().get(this.getListNumberProposed().size() - 1);
         }
-        else {
-            lastProposition = new ArrayList<>();
-        }
+
         if (LOGGER.isTraceEnabled()) {
             LOGGER.trace("Last proposition : " + lastProposition); //$NON-NLS-1$
         }
@@ -466,11 +464,11 @@ public class ComputerPlayer extends Player {
 
         for (int i = 0; i < CombineGame.getNbDigitsMystery(); i++) {
 
-            if (lastProposition.isEmpty()) {
-                number.add(Integer.valueOf(r.nextInt(pMaxValueDigit)));
+            if (lastProposition.length == 0) {
+                number[i] = r.nextInt(pMaxValueDigit);
 
-                this.getMaxValues().add(Integer.valueOf(CombineGame.getMaxValueDigit()));
-                this.getMinValues().add(Integer.valueOf(0));
+                this.getMaxValues()[i] = CombineGame.getMaxValueDigit();
+                this.getMinValues()[i] = 0;
 
                 if (LOGGER.isTraceEnabled()) {
                     LOGGER.trace("Construction of MaxValue for each digit : " + this.getMaxValues()); //$NON-NLS-1$
@@ -484,21 +482,18 @@ public class ComputerPlayer extends Player {
                 switch (this.getResultsListMoreLess().get(this.getResultsListMoreLess().size() - 1).charAt(i)) {
 
                     case '+':
-                        this.getMinValues().set(i, lastProposition.get(i));
-                        number.add(Integer.valueOf(
-                                (this.getMaxValues().get(i).intValue() + 1 - lastProposition.get(i).intValue()) / 2
-                                        + lastProposition.get(i).intValue()));
+                        this.getMinValues()[i] = lastProposition[i];
+                        number[i] = (this.getMaxValues()[i] + 1 - lastProposition[i]) / 2 + lastProposition[i];
                         if (LOGGER.isTraceEnabled()) {
                             LOGGER.trace("Case + "); //$NON-NLS-1$
                             LOGGER.trace("Update min values : " + this.getMinValues()); //$NON-NLS-1$
                             LOGGER.trace("Number construction : " + number); //$NON-NLS-1$
                         }
                         break;
+
                     case '-':
-                        this.getMaxValues().set(i, lastProposition.get(i));
-                        number.add(Integer.valueOf(lastProposition.get(i).intValue()
-                                - (lastProposition.get(i).intValue() - (this.getMinValues().get(i).intValue() - 1))
-                                        / 2));
+                        this.getMaxValues()[i] = lastProposition[i];
+                        number[i] = lastProposition[i] - (lastProposition[i] - (this.getMinValues()[i] - 1)) / 2;
                         if (LOGGER.isTraceEnabled()) {
                             LOGGER.trace("Case - "); //$NON-NLS-1$
                             LOGGER.trace("Update max values : " + this.getMaxValues()); //$NON-NLS-1$
@@ -506,7 +501,7 @@ public class ComputerPlayer extends Player {
                         }
                         break;
                     case '=':
-                        number.add(lastProposition.get(i));
+                        number[i] = lastProposition[i];
                         if (LOGGER.isTraceEnabled()) {
                             LOGGER.trace("Case = "); //$NON-NLS-1$
                             LOGGER.trace("Number construction : " + number); //$NON-NLS-1$
@@ -527,17 +522,17 @@ public class ComputerPlayer extends Player {
 
 
     /**
-     * This method enables to the ComputerPlayer to provide a number pattern in the form of an ArrayList of integer.<br>
+     * This method enables to the ComputerPlayer to provide a number pattern in the form of an array of int.<br>
      * <br>
      * This number is chose in a pool of possible combinations. This pool is updated before the number is chose based on
      * the precedent proposition and result (good position / bad position)
      *
-     * @return A number in the form of an ArrayList of integer
+     * @return A number in the form of an array of int.
      *
      * @see #createPool(List, int)
      * @see #optimizedPool(List)
      */
-    public List<Integer> giveNumberPattern() {
+    public int[] giveNumberPattern() {
 
         if (LOGGER.isTraceEnabled()) {
             LOGGER.trace("Computer give number pattern"); //$NON-NLS-1$
@@ -551,9 +546,9 @@ public class ComputerPlayer extends Player {
                 LOGGER.debug("Pool at start empty"); //$NON-NLS-1$
             }
 
-            ArrayList<Integer> patternInit = new ArrayList<>();
+            int[] patternInit = new int[CombineGame.getNbDigitsMystery()];
             for (int i = 0; i < CombineGame.getNbDigitsMystery(); i++) {
-                patternInit.add(Integer.valueOf(0));
+                patternInit[i] = 0;
             }
             this.getPoolMastermind().add(patternInit);
 
@@ -596,34 +591,31 @@ public class ComputerPlayer extends Player {
      * @param pPool
      *            The pool of combinations that will be optimized
      */
-    private void optimizedPool(final List<List<Integer>> pPool) {
+    private void optimizedPool(final List<int[]> pPool) {
 
         if (LOGGER.isTraceEnabled()) {
             LOGGER.trace("Optimized pool"); //$NON-NLS-1$
             LOGGER.trace("Pool to optimized : " + pPool); //$NON-NLS-1$
         }
 
-        // TODO Think to add a score to each pool element during the optimization to
-        // chose the best proposition
+        ListIterator<int[]> liPool;
 
-        ListIterator<List<Integer>> liPool;
+        Set<Entry<int[], Integer>> setResultsGoodPos = this.getResultsGoodPos().entrySet();
+        Iterator<Entry<int[], Integer>> liResultsGoodPos = setResultsGoodPos.iterator();
 
-        Set<Entry<List<Integer>, Integer>> setResultsGoodPos = this.getResultsGoodPos().entrySet();
-        Iterator<Entry<List<Integer>, Integer>> liResultsGoodPos = setResultsGoodPos.iterator();
-
-        Set<Entry<List<Integer>, Integer>> setResultsBadPos = this.getResultsBadPos().entrySet();
-        Iterator<Entry<List<Integer>, Integer>> liResultsBadPos = setResultsBadPos.iterator();
+        Set<Entry<int[], Integer>> setResultsBadPos = this.getResultsBadPos().entrySet();
+        Iterator<Entry<int[], Integer>> liResultsBadPos = setResultsBadPos.iterator();
 
         while (liResultsGoodPos.hasNext() && liResultsBadPos.hasNext()) {
 
-            Map.Entry<List<Integer>, Integer> mapResultGoodPos = liResultsGoodPos.next();
-            Map.Entry<List<Integer>, Integer> mapResultBadPos = liResultsBadPos.next();
+            Map.Entry<int[], Integer> mapResultGoodPos = liResultsGoodPos.next();
+            Map.Entry<int[], Integer> mapResultBadPos = liResultsBadPos.next();
             liPool = pPool.listIterator();
 
             while (liPool.hasNext()) {
                 int goodPos = 0;
                 int badPos = 0;
-                List<Integer> numberPool = liPool.next();
+                int[] numberPool = liPool.next();
 
                 goodPos = Mastermind.findNbDigitsGoodPos(numberPool, mapResultGoodPos.getKey());
                 badPos = Mastermind.findNbDigitInMystery(numberPool, mapResultBadPos.getKey()) - goodPos;
@@ -673,7 +665,7 @@ public class ComputerPlayer extends Player {
                     }
                     liPool.remove();
                 } // New proposition need to be different than old propositions
-                else if (numberPool.equals(mapResultGoodPos.getKey())) {
+                else if (Arrays.equals(numberPool, mapResultGoodPos.getKey())) {
                     if (LOGGER.isTraceEnabled()) {
                         LOGGER.trace("number is the number result"); //$NON-NLS-1$
                         LOGGER.trace("remove : " + numberPool); //$NON-NLS-1$

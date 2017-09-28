@@ -1,7 +1,6 @@
 package games;
 
-import java.util.List;
-import java.util.ListIterator;
+import java.util.Arrays;
 import java.util.Scanner;
 
 import org.apache.logging.log4j.LogManager;
@@ -24,7 +23,7 @@ import players.HumanPlayer;
  *
  *
  * @author BRUCELLA2
- * @version 1.0.11
+ * @version 1.1.0
  *
  */
 public class MoreLess extends Game {
@@ -81,39 +80,27 @@ public class MoreLess extends Game {
      * @return The result of the comparison in the form of a String
      */
     @Override
-    public String compareNumber(final List<Integer> pNumberToCompare, final List<Integer> pMysteryNumber) {
+    public String compareNumber(final int[] pNumberToCompare, final int[] pMysteryNumber) {
 
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("Compare " + pNumberToCompare //$NON-NLS-1$
                     + " to mysteryNumber : " + pMysteryNumber); //$NON-NLS-1$
         }
-        ListIterator<Integer> itProposedNumber = pNumberToCompare.listIterator();
-        ListIterator<Integer> itMysteryNumber = pMysteryNumber.listIterator();
+
         StringBuilder bld = new StringBuilder();
+        for (int i = 0; i < CombineGame.getNbDigitsMystery(); i++) {
 
-        while (itProposedNumber.hasNext()) {
-            while (itMysteryNumber.hasNext()) {
-
-                int proposedDigit = itProposedNumber.next().intValue();
-                int mysteryDigit = itMysteryNumber.next().intValue();
-
-                if (LOGGER.isTraceEnabled()) {
-                    LOGGER.trace("proposedDigit = " + proposedDigit); //$NON-NLS-1$
-                    LOGGER.trace("mysteryDigit = " + mysteryDigit); //$NON-NLS-1$
-                }
-
-                if (proposedDigit - mysteryDigit < 0) {
-                    bld.append('+');
-                }
-                else if (proposedDigit - mysteryDigit > 0) {
-                    bld.append('-');
-                }
-                else {
-                    bld.append('=');
-                }
-                if (LOGGER.isTraceEnabled()) {
-                    LOGGER.trace("result = " + bld.toString()); //$NON-NLS-1$
-                }
+            if (pNumberToCompare[i] - pMysteryNumber[i] < 0) {
+                bld.append('+');
+            }
+            else if (pNumberToCompare[i] - pMysteryNumber[i] > 0) {
+                bld.append('-');
+            }
+            else {
+                bld.append('=');
+            }
+            if (LOGGER.isTraceEnabled()) {
+                LOGGER.trace("result = " + bld.toString()); //$NON-NLS-1$
             }
         }
 
@@ -135,13 +122,13 @@ public class MoreLess extends Game {
      * @return the proposition number of the computer
      */
     @Override
-    public List<Integer> computerTurn(final ComputerPlayer pComputerPlayer, final List<Integer> pMysteryNumber) {
+    public int[] computerTurn(final ComputerPlayer pComputerPlayer, final int[] pMysteryNumber) {
 
         @SuppressWarnings("resource")
         Scanner scan = new Scanner(System.in);
 
         // Ask computer to give a number
-        List<Integer> computerProposition = pComputerPlayer.giveNumber(CombineGame.getMaxValueDigit());
+        int[] computerProposition = pComputerPlayer.giveNumber(CombineGame.getMaxValueDigit());
 
         // Compare computer's proposition to mystery number
         String comparison = this.compareNumber(computerProposition, pMysteryNumber);
@@ -175,10 +162,10 @@ public class MoreLess extends Game {
      * @return the proposition number of the player.
      */
     @Override
-    public List<Integer> humanTurn(final HumanPlayer pHumanPlayer, final List<Integer> pMysteryNumber) {
+    public int[] humanTurn(final HumanPlayer pHumanPlayer, final int[] pMysteryNumber) {
 
         // Ask human player to give a number
-        List<Integer> humanProposition = pHumanPlayer.giveNumber(CombineGame.getMaxValueDigit());
+        int[] humanProposition = pHumanPlayer.giveNumber(CombineGame.getMaxValueDigit());
 
         // Compare human player's proposition to mystery number
         String comparison = this.compareNumber(humanProposition, pMysteryNumber);
@@ -203,7 +190,7 @@ public class MoreLess extends Game {
      *
      * @see #mysteryNumberGeneration(int)
      * @see #victory()
-     * @see #defeat(List)
+     * @see #defeat(int[])
      */
     @Override
     public void playChallenger() {
@@ -212,7 +199,7 @@ public class MoreLess extends Game {
             LOGGER.debug("Start Challenger mode"); //$NON-NLS-1$
         }
         HumanPlayer humanPlayer = new HumanPlayer("Player"); //$NON-NLS-1$
-        List<Integer> mysteryNumber = this.mysteryNumberGeneration(CombineGame.getMaxValueDigit());
+        int[] mysteryNumber = this.mysteryNumberGeneration(CombineGame.getMaxValueDigit());
 
         if (CombineGame.isDeveloperMode()) {
             CombineGame.getDisplay().print("Developpeur Mode : Le nombre mystère généré est : "); //$NON-NLS-1$
@@ -231,9 +218,9 @@ public class MoreLess extends Game {
             // Decrease number of remaining tries at the start of each turn
             this.setNbRemainingTries(this.getNbRemainingTries() - 1);
 
-            List<Integer> proposition = this.humanTurn(humanPlayer, mysteryNumber);
+            int[] proposition = this.humanTurn(humanPlayer, mysteryNumber);
 
-            if (proposition.equals(mysteryNumber)) {
+            if (Arrays.equals(proposition, mysteryNumber)) {
                 this.victory();
             }
             else if (this.getNbRemainingTries() == 0) {
@@ -266,7 +253,7 @@ public class MoreLess extends Game {
         }
         HumanPlayer humanPlayer = new HumanPlayer("Player"); //$NON-NLS-1$
         ComputerPlayer computerPlayer = new ComputerPlayer("Ordinateur"); //$NON-NLS-1$
-        List<Integer> mysteryNumber = humanPlayer.giveNumber(CombineGame.getMaxValueDigit());
+        int[] mysteryNumber = humanPlayer.giveNumber(CombineGame.getMaxValueDigit());
 
         if (CombineGame.isDeveloperMode()) {
             CombineGame.getDisplay().print("Developpeur Mode : Le nombre mystère choisi par le joueur est : "); //$NON-NLS-1$
@@ -285,13 +272,13 @@ public class MoreLess extends Game {
             // Decrease number of remaining tries at the start of each turn
             this.setNbRemainingTries(this.getNbRemainingTries() - 1);
 
-            List<Integer> number = this.computerTurn(computerPlayer, mysteryNumber);
+            int[] number = this.computerTurn(computerPlayer, mysteryNumber);
 
-            if (number.equals(mysteryNumber)) {
+            if (Arrays.equals(number, mysteryNumber)) {
                 this.defeat(mysteryNumber);
             }
 
-            if (!number.equals(mysteryNumber) && this.getNbRemainingTries() == 0) {
+            if (!Arrays.equals(number, mysteryNumber) && this.getNbRemainingTries() == 0) {
                 this.victory();
             }
 
@@ -321,8 +308,8 @@ public class MoreLess extends Game {
         HumanPlayer humanPlayer = new HumanPlayer("Player"); //$NON-NLS-1$
         ComputerPlayer computerPlayer = new ComputerPlayer("Ordinateur"); //$NON-NLS-1$
 
-        List<Integer> mysteryNumberComputer = this.mysteryNumberGeneration(CombineGame.getMaxValueDigit());
-        List<Integer> mysteryNumberHuman = humanPlayer.giveNumber(CombineGame.getMaxValueDigit());
+        int[] mysteryNumberComputer = this.mysteryNumberGeneration(CombineGame.getMaxValueDigit());
+        int[] mysteryNumberHuman = humanPlayer.giveNumber(CombineGame.getMaxValueDigit());
 
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("Mystery Number computer = " + mysteryNumberComputer); //$NON-NLS-1$
@@ -346,19 +333,19 @@ public class MoreLess extends Game {
             this.setNbRemainingTries(this.getNbRemainingTries() - 1);
 
             // Human turn
-            List<Integer> humanProposition = this.humanTurn(humanPlayer, mysteryNumberComputer);
+            int[] humanProposition = this.humanTurn(humanPlayer, mysteryNumberComputer);
 
-            if (humanProposition.equals(mysteryNumberComputer)) {
+            if (Arrays.equals(humanProposition, mysteryNumberComputer)) {
                 this.victory();
                 break;
             }
 
             // Computer turn
-            List<Integer> numberComputer = this.computerTurn(computerPlayer, mysteryNumberHuman);
+            int[] numberComputer = this.computerTurn(computerPlayer, mysteryNumberHuman);
 
-            if (numberComputer.equals(mysteryNumberHuman)) {
+            if (Arrays.equals(numberComputer, mysteryNumberHuman)) {
                 CombineGame.getDisplay().println("L'ordinateur a proposé les valeurs suivantes :"); //$NON-NLS-1$
-                for (List<Integer> proposition : computerPlayer.getListNumberProposed()) {
+                for (int[] proposition : computerPlayer.getListNumberProposed()) {
                     CombineGame.getDisplay().print(proposition);
                     CombineGame.getDisplay().print("\n"); //$NON-NLS-1$
                 }
