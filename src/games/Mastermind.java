@@ -489,10 +489,10 @@ public class Mastermind extends Game {
         }
         if (CombineGame.isDeveloperMode()) {
             CombineGame.getDisplay().print("Developpeur Mode : " //$NON-NLS-1$
-                    + "le nombre mystère généré par l'ordinateur est : "); //$NON-NLS-1$
+                    + "le nombre mystère généré par le joueur est : "); //$NON-NLS-1$
             CombineGame.getDisplay().println(humanMysteryNumber);
             CombineGame.getDisplay().print("Developpeur Mode : " //$NON-NLS-1$
-                    + "le nombre mystère généré par le jouer est : "); //$NON-NLS-1$
+                    + "le nombre mystère généré par l'ordinateur est : "); //$NON-NLS-1$
             CombineGame.getDisplay().println(computerMysteryNumber);
         }
 
@@ -518,7 +518,7 @@ public class Mastermind extends Game {
             int[] computerProposition = this.computerTurn(computer, humanMysteryNumber);
 
             if (Arrays.equals(computerProposition, humanMysteryNumber)) {
-                this.defeat(humanMysteryNumber);
+                this.defeat(computerMysteryNumber);
             }
             else if (this.getNbRemainingTries() == 0) {
                 this.equality();
